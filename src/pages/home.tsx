@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import ProgressBar from "../components/ProgressBar";
+import ProgressBar from "../components/progressBar";
 
 function Home() {
   let [existingLinks, setExistingLinks]: any = useState([]);

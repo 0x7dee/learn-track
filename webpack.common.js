@@ -11,10 +11,10 @@ module.exports = {
         contentScript: path.resolve('src/contentScript/contentScript.ts'),
         /* Pages */
         home: path.resolve('src/pages/home.tsx'),
+        newTracker: path.resolve('src/pages/newTracker.tsx'),
         /* Components */
-        newTracker: path.resolve('src/components/NewTracker.tsx'),
-        progressBar: path.resolve('src/components/ProgressBar.tsx'),
-        tracker: path.resolve('src/components/Tracker.tsx'),
+        progressBar: path.resolve('src/components/progressBar.tsx'),
+        tracker: path.resolve('src/components/tracker.tsx'),
     },
     module: {
         rules: [
@@ -49,9 +49,9 @@ module.exports = {
             'popup',
             'options',
             'home',
-            'NewTracker',
-            'Tracker',
-            'ProgressBar'
+            'newTracker',
+            'tracker',
+            'progressBar'
         ])
     ],
     resolve: {
