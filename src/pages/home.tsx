@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ProgressBar from "../components/progressBar";
+import './home.scss'
 
 function Home() {
   let [existingLinks, setExistingLinks]: any = useState([]);
@@ -52,7 +53,6 @@ function Home() {
           urls: any;
           title:
             | boolean
-            | React.ReactChild
             | React.ReactFragment
             | React.ReactPortal
             | null

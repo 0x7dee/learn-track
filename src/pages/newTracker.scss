@@ -1,0 +1,14 @@
+.displayUrls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    &--icon {
+        height: 1.5rem;
+        width: 1.5rem;
+    }
+
+    &--remove {
+        color: red;
+    }
+}

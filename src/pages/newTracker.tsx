@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-
+import './newTracker.scss'
 
 const NewTracker: any = () => {
   
@@ -93,6 +93,8 @@ const NewTracker: any = () => {
           chrome.storage.sync.set({"links": [newLink, ...existingLinks.links]})
         }
       }
+    } else {
+      chrome.storage.sync.set({"links": [newLink]})
     }
 
     
