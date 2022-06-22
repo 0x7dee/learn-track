@@ -11,13 +11,13 @@ const NewTracker: any = () => {
   const [time, setTime] = useState<number[]>([0,0]);
 
   let dayOptions = [
-    { label: 'Monday', value: 'monday' },
-    { label: 'Tuesday', value: 'tuesday' },
-    { label: 'Wednesday', value: 'wednesday' },
-    { label: 'Thursday', value: 'thursday' },
-    { label: 'Friday', value: 'friday' },
-    { label: 'Saturday', value: 'saturday' },
-    { label: 'Sunday', value: 'sunday' },
+    { label: 'Mon', value: 'monday' },
+    { label: 'Tues', value: 'tuesday' },
+    { label: 'Wed', value: 'wednesday' },
+    { label: 'Thurs', value: 'thursday' },
+    { label: 'Fri', value: 'friday' },
+    { label: 'Sat', value: 'saturday' },
+    { label: 'Sun', value: 'sunday' },
   ]
 
 
@@ -110,6 +110,7 @@ const NewTracker: any = () => {
 
         { /* Title */ }
         <label>Title</label>
+        <br />
         <input 
             placeholder="Enter title" 
             type="text" 
@@ -120,6 +121,7 @@ const NewTracker: any = () => {
         { /* URLS */ }
         <div className="urls">
             <label>URLs</label>
+            <br />
             <input 
                 placeholder="Enter URL" 
                 type="text" 

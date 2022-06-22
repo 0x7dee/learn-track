@@ -41,6 +41,18 @@ function Home() {
     getLinks();
   }, [existingLinks]);
 
+  useEffect(() => {
+    const secondInterval = setInterval(() => {
+      chrome.storage.sync.get('timer', (res) => {
+        const time: HTMLElement | null = document.getElementById('time')
+        if (time) {
+          time.textContent = res.timer
+        }
+      })
+    }, 1000)
+    return () => clearInterval(secondInterval)
+  }, [])
+
   const getLinks = async () => {
     const existingLinks = await chrome.storage.sync.get("links");
     setExistingLinks(existingLinks.links);
@@ -51,20 +63,17 @@ function Home() {
       return existingLinks.map(
         (link: {
           urls: any;
-          title:
-            | boolean
-            | React.ReactFragment
-            | React.ReactPortal
-            | null
-            | undefined;
+          title: string
         }) => (
-          <div className="homepage__link">
-            <img
-              className="homepage__link--icon"
-              src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${link.urls[0]}`}
-              alt="favicon"
-            />
-            <p>{link.title}</p>
+          <div className="homepage__link" key={link.title}>
+            <div className="homepage__link__details">
+              <img
+                className="homepage__link__details--icon"
+                src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${link.urls[0]}`}
+                alt="favicon"
+              />
+              <p className="homepage__link__details--title">{link.title}</p>
+            </div>
             <ProgressBar />
           </div>
         )
@@ -81,6 +90,7 @@ function Home() {
         <Link to="/new">New</Link>
       </nav>
       {displayLinks()}
+      <p id="time"></p>
     </div>
   );
 }
