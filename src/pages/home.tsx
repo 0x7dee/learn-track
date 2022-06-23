@@ -43,15 +43,27 @@ function Home() {
 
   useEffect(() => {
     const secondInterval = setInterval(() => {
+      /*
       chrome.storage.sync.get('timer', (res) => {
         const time: HTMLElement | null = document.getElementById('time')
         if (time) {
           time.textContent = res.timer
         }
       })
+      */
+      updateLinkProgress()
     }, 1000)
     return () => clearInterval(secondInterval)
   }, [])
+
+  const updateLinkProgress = () => {
+
+  }
+
+  const displayUrl = () => {
+    let url: any = chrome.storage.sync.get('url');
+    
+  }
 
   const getLinks = async () => {
     const existingLinks = await chrome.storage.sync.get("links");

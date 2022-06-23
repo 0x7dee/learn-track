@@ -8,7 +8,9 @@ const NewTracker: any = () => {
   const [url, setUrl] = useState<string>('');
   const [urls, setUrls] = useState<string[]>([]);
   const [days, setDays] = useState<string[]>([]);
-  const [time, setTime] = useState<number[]>([0,0]);
+  const [time, setTime] = useState<number>(0);
+  const [hours, setHours] = useState<number>(0);
+  const [mins, setMins] = useState<number>(0);
 
   let dayOptions = [
     { label: 'Mon', value: 'monday' },
@@ -72,11 +74,15 @@ const NewTracker: any = () => {
 
   const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    let time = (hours * 60 * 60) + (mins * 60)
+
     const newLink = {
       title,
       urls,
       days,
-      time
+      time,
+      timeLapsed: 0
     }
 
     const existingLinks = await chrome.storage.sync.get("links");
@@ -145,8 +151,8 @@ const NewTracker: any = () => {
         { /* Amount of time */ }
         <label>Time</label>
         <br />
-        <input onChange={(e) => setTime([parseInt(e.target.value), time[1]])} type="number" placeholder="hours" />:
-        <input onChange={(e) => setTime([time[0], parseInt(e.target.value)])} type="number" placeholder="minutes" />
+        <input onChange={(e) => setHours(parseInt(e.target.value))} type="number" placeholder="hours" />:
+        <input onChange={(e) => setMins(parseInt(e.target.value))} type="number" placeholder="minutes" />
 
         <button>Submit</button>
     </form>
