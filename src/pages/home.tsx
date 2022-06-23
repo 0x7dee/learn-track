@@ -7,66 +7,14 @@ function Home() {
   let [existingLinks, setExistingLinks]: any = useState([]);
 
   useEffect(() => {
-    /**
-     * We can't use "chrome.runtime.sendMessage" for sending messages from React.
-     * For sending messages from React we need to specify which tab to send it to.
-     */
-    chrome.tabs &&
-      chrome.tabs.query(
-        {
-          active: true,
-          currentWindow: true,
-        },
-        (tabs) => {
-          /**
-           * Sends a single message to the content script(s) in the specified tab,
-           * with an optional callback to run when a response is sent back.
-           *
-           * The runtime.onMessage event is fired in each content script running
-           * in the specified tab for the current extension.
-           */
-          /*
-      chrome.tabs.sendMessage(
-        tabs[0].id || 0,
-        { type: 'GET_DOM' } as DOMMessage,
-        (response: DOMMessageResponse) => {
-
-        });
-        */
-        }
-      );
-  });
-
-  useEffect(() => {
-    getLinks();
-  }, [existingLinks]);
-
-  useEffect(() => {
-    const secondInterval = setInterval(() => {
-      /*
-      chrome.storage.sync.get('timer', (res) => {
-        const time: HTMLElement | null = document.getElementById('time')
-        if (time) {
-          time.textContent = res.timer
-        }
-      })
-      */
-      updateLinkProgress()
+    const secondInterval = setInterval(async () => {
+      getLinks();
     }, 1000)
     return () => clearInterval(secondInterval)
   }, [])
 
-  const updateLinkProgress = () => {
-
-  }
-
-  const displayUrl = () => {
-    let url: any = chrome.storage.sync.get('url');
-    
-  }
-
   const getLinks = async () => {
-    const existingLinks = await chrome.storage.sync.get("links");
+    const existingLinks = await chrome.storage.local.get("links");
     setExistingLinks(existingLinks.links);
   };
 
@@ -74,8 +22,10 @@ function Home() {
     if (existingLinks) {
       return existingLinks.map(
         (link: {
-          urls: any;
-          title: string
+          urls: any,
+          title: string,
+          timeLapsed: number,
+          time: number
         }) => (
           <div className="homepage__link" key={link.title}>
             <div className="homepage__link__details">
@@ -86,7 +36,11 @@ function Home() {
               />
               <p className="homepage__link__details--title">{link.title}</p>
             </div>
-            <ProgressBar />
+            <ProgressBar 
+              title={link.title} 
+              time={link.time} 
+              timeLapsed={link.timeLapsed} 
+            />
           </div>
         )
       );

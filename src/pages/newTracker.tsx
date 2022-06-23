@@ -51,17 +51,17 @@ const NewTracker: any = () => {
   }
 
   const getData = async () => {
-    const data = await chrome.storage.sync.get("links"); 
+    const data = await chrome.storage.local.get("links"); 
     console.log(data.links);
   }
 
   const clearData = async () => {
-    await chrome.storage.sync.set({"links": []});
+    await chrome.storage.local.set({"links": []});
   }
 
   const linkAlreadyExists = async (newLinkTitle: string, linkArrayName: string) => {
 
-    let existingLinks = await chrome.storage.sync.get(linkArrayName);
+    let existingLinks = await chrome.storage.local.get(linkArrayName);
 
     existingLinks.links.forEach((link: { title: string; }) => {
       if ( newLinkTitle === link.title ) {
@@ -85,22 +85,22 @@ const NewTracker: any = () => {
       timeLapsed: 0
     }
 
-    const existingLinks = await chrome.storage.sync.get("links");
+    const existingLinks = await chrome.storage.local.get("links");
 
     if ( existingLinks && Array.isArray(existingLinks.links) ) {
       // Array is empty
       if (!existingLinks.links.length) {
-        chrome.storage.sync.set({"links": [newLink]})
+        chrome.storage.local.set({"links": [newLink]})
       } else if ( existingLinks.links.length > 0 ) {
         // Check if link already exists
         if ( await linkAlreadyExists(newLink.title, "links") ) {
           console.log("Link already exists...")
         } else {
-          chrome.storage.sync.set({"links": [newLink, ...existingLinks.links]})
+          chrome.storage.local.set({"links": [newLink, ...existingLinks.links]})
         }
       }
     } else {
-      chrome.storage.sync.set({"links": [newLink]})
+      chrome.storage.local.set({"links": [newLink]})
     }
 
     

@@ -18,19 +18,19 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
         
        /* Update current tab */
        let tab = await getCurrentTab();
-       chrome.storage.sync.set({tab})   
+       chrome.storage.local.set({tab})   
 
-       let lastTab = await chrome.storage.sync.get('tab');
+       let lastTab = await chrome.storage.local.get('tab');
        //console.log(lastTab.tab.url)
 
        /* Get link data and match to current url */
-       let getLinkData = await chrome.storage.sync.get('links');
+       let getLinkData = await chrome.storage.local.get('links');
        updateLapsedTime(getLinkData.links, lastTab)
     }
 })
 
-chrome.storage.sync.get('timer', (res) => {
-    chrome.storage.sync.set({ timer: 'timer' in res ? res.timer : 0 })
+chrome.storage.local.get('timer', (res) => {
+    chrome.storage.local.set({ timer: 'timer' in res ? res.timer : 0 })
 })
 
 async function getCurrentTab() {
@@ -47,7 +47,7 @@ const updateLapsedTime = async (linkData: any, lastTab: any) => {
             if( compareUrls(url, lastTab.tab.url)) {
                 let updatedLinkData = linkData;
                 updatedLinkData[index].timeLapsed += 1
-                chrome.storage.sync.set({'links': updatedLinkData})
+                chrome.storage.local.set({'links': updatedLinkData})
             }
         })
         index += 1
