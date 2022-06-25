@@ -4,14 +4,15 @@ import '../index.css'
 
 const NewTracker: any = () => {
   
-  const [title, setTitle] = useState<string>('');
-  const [url, setUrl] = useState<string>('');
-  const [urls, setUrls] = useState<string[]>([]);
-  const [days, setDays] = useState<string[]>([]);
-  const [time, setTime] = useState<number>(0);
-  const [hours, setHours] = useState<number>(0);
-  const [mins, setMins] = useState<number>(0);
-  const [errors, setErrors] = useState<string[]>([]);
+  const [title, setTitle] = useState<string>('')
+  const [url, setUrl] = useState<string>('')
+  const [urls, setUrls] = useState<string[]>([])
+  const [days, setDays] = useState<string[]>([])
+  const [time, setTime] = useState<number>(0)
+  const [hours, setHours] = useState<number>(0)
+  const [mins, setMins] = useState<number>(0)
+  const [errors, setErrors] = useState<string[]>([])
+  const [success, setSuccess] = useState<string>('')
 
   let dayOptions = [
     { label: 'Mon', value: 'monday' },
@@ -77,18 +78,37 @@ const NewTracker: any = () => {
 
     if ( existingLinks && Array.isArray(existingLinks.links) ) {
       let linkIsValid = await validateLink(newLink, existingLinks.links)
-      if ( !linkIsValid ) {
-        alert("Link is not valid!")
-        return
-      }
-
+      if ( !linkIsValid ) return
+      
       // Array is empty
-      if ( linkIsValid && existingLinks.links.length > 0 ) {
+      if ( existingLinks.links.length > 0 ) {
         chrome.storage.local.set({"links": [newLink, ...existingLinks.links]})
+        createdLinkSuccessful()
       }
     } else {
       chrome.storage.local.set({"links": [newLink]})
+      createdLinkSuccessful()
     }
+  }
+
+  const createdLinkSuccessful = () => {
+
+    dayOptions.forEach(day => {
+      let refreshDay = document.getElementById(day.value) as HTMLInputElement
+      if ( refreshDay ) {
+        refreshDay.checked = false
+      }
+    })
+
+    setTitle('')
+    setUrl('')
+    setUrls([])
+    setDays([])
+    setTime(0)
+    setHours(0)
+    setMins(0)
+    setErrors([])
+    setSuccess("New link created successfully!")
   }
 
   const validateLink = async (link: any, links: any) => {
@@ -107,7 +127,7 @@ const NewTracker: any = () => {
     if ( days.length < 1 ) errors.push("No days are selected")
 
     /* Check time, timeElapsed exists */
-    if ( time < 1 || timeLapsed !== 0 ) errors.push("Time must exist and be greater than 1")
+    if ( !time || time < 1 || timeLapsed !== 0 ) errors.push("Time must exist and be greater than 1")
 
     if ( errors.length > 0 ) {
       setErrors(errors)
@@ -119,14 +139,17 @@ const NewTracker: any = () => {
   }
 
   const displayErrors = () => {
-    
     let allErrors = null
     if ( errors ) {
       allErrors = errors.map(error => (
-        <p>{error}</p>
+        <p key={error}>{error}</p>
       ))
     }
     return <div id="errors" className="text-red-600">{allErrors}</div>
+  }
+
+  const displaySuccess = () => {
+    if ( success ) return <div id="success" className="text-green-600">{success}</div>
   }
 
 
@@ -181,6 +204,7 @@ const NewTracker: any = () => {
     </form>
 
     { displayErrors() }
+    { displaySuccess() }
     
     <button onClick={ () => getData() }>get data</button>
     <button onClick={ () => clearData() }>clear data</button>
