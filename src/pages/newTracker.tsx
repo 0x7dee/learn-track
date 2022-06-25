@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import './newTracker.scss'
+import '../index.css'
 
 const NewTracker: any = () => {
   
@@ -38,10 +38,10 @@ const NewTracker: any = () => {
 
   const showUrls = () => {
     return urls.map(url => (
-        <div key={url} className="displayUrls">
-            <img className="displayUrls--icon" src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${url}`} alt="favicon" />
+        <div key={url} className="flex flex-row align-items-center">
+            <img className="h-5 w-5" src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${url}`} alt="favicon" />
             <p>{url}</p>
-            <div className="displayUrls--remove" onClick={() => removeUrl(url)}>x</div>
+            <div className="text-red-600" onClick={() => removeUrl(url)}>x</div>
         </div>
     ))
   }
@@ -108,7 +108,7 @@ const NewTracker: any = () => {
 
 
   return (
-    <>
+    <div className="w-96 h-96">
     <h1>NewTracker</h1>
     <Link to="/">Home</Link>
 
@@ -139,7 +139,7 @@ const NewTracker: any = () => {
 
         { /* Days of the week */ }
   
-        <div className="days">
+        <div className="flex flex-row align-items-center mt-10 mb-10">
             { dayOptions.map(option => (
                 <div className="days--day" key={option.value}>
                   <input name={option.label} onClick={ () => addDay(option.value) } id={option.value} type="radio" value={option.value} />
@@ -159,7 +159,7 @@ const NewTracker: any = () => {
     
     <button onClick={ () => getData() }>get data</button>
     <button onClick={ () => clearData() }>clear data</button>
-    </>  
+    </div>  
   )
 }
 

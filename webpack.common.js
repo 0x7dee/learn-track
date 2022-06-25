@@ -13,7 +13,6 @@ module.exports = {
         home: path.resolve('src/pages/home.tsx'),
         newTracker: path.resolve('src/pages/newTracker.tsx'),
         /* Components */
-        progressBar: path.resolve('src/components/progressBar.tsx'),
         tracker: path.resolve('src/components/tracker.tsx'),
     },
     module: {
@@ -24,8 +23,8 @@ module.exports = {
                 exclude: /node_modules/,
             },
             {
-                use: ['style-loader', 'css-loader', 'sass-loader'],
-                test: /\.s[ac]ss$/i
+                use: ['style-loader', 'css-loader', 'postcss-loader'],
+                test: /\.css$/i
             },
             {
                 type: 'asset/resource',
@@ -50,8 +49,7 @@ module.exports = {
             'options',
             'home',
             'newTracker',
-            'tracker',
-            'progressBar'
+            'tracker'
         ])
     ],
     resolve: {

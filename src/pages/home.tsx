@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import ProgressBar from "../components/progressBar";
-import './home.scss'
+import '../index.css';
+
 
 function Home() {
   let [existingLinks, setExistingLinks]: any = useState([]);
@@ -38,7 +38,7 @@ function Home() {
     if (loading) {
       return <p>Loading...</p>
     }
-    if (existingLinks) {
+    if (existingLinks && existingLinks.length > 0) {
       return existingLinks.map(
         (link: {
           urls: any,
@@ -46,16 +46,16 @@ function Home() {
           timeLapsed: number,
           time: number
         }) => (
-          <div className="homepage__link" key={link.title}>
-            <div className="homepage__link__details">
+          <div className="grid grid-cols-5 align-items-center mb-5" key={link.title}>
+            <div className="col-span-1 flex flex-row justify-items-start align-items-center">
               <img
-                className="homepage__link__details--icon"
+                className="h-5 w-5"
                 src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${link.urls[0]}`}
                 alt="favicon"
               />
-              <p className="homepage__link__details--title">{link.title}</p>
+              <p className="justify-self-center">{link.title}</p>
             </div>
-            <div className="progressBar" style={{ width: "100%", height: "100%", border: "1px solid black" }}>
+            <div className="col-span-4" style={{ width: "100%", height: "100%", border: "1px solid black" }}>
               <div 
                 id={`${link.title}-progress`} 
                 className="progressBar--progress" 
@@ -71,7 +71,7 @@ function Home() {
   };
 
   return (
-    <div className="App">
+    <div className="w-96 h-96">
       <h1>Time Tracker</h1>
       <nav>
         <Link to="/new">New</Link>

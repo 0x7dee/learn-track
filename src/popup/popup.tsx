@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import Home from '../pages/home';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import NewTracker from '../pages/newTracker';
-import './popup.scss'
 
 const test = <img src="icon.png" alt="icon" />
 
