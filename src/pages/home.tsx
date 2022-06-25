@@ -5,20 +5,39 @@ import './home.scss'
 
 function Home() {
   let [existingLinks, setExistingLinks]: any = useState([]);
+  let [loading, setLoading] = useState(true)
 
+  
   useEffect(() => {
+    
     const secondInterval = setInterval(async () => {
-      getLinks();
+      updateLinks();
+      if (loading) {
+        setLoading(false)
+      }
     }, 1000)
     return () => clearInterval(secondInterval)
+    
   }, [])
 
-  const getLinks = async () => {
+  const updateLinks = async () => {
     const existingLinks = await chrome.storage.local.get("links");
     setExistingLinks(existingLinks.links);
   };
 
+  const calculateTime = (time: number, timeLapsed: number) => {
+    let width = "100%"
+    if (timeLapsed <= time) {
+      width = Math.ceil((timeLapsed / time) * 100).toString() + "%"
+    }
+    console.log(`width: ${width}`)
+    return width
+  }
+
   const displayLinks = () => {
+    if (loading) {
+      return <p>Loading...</p>
+    }
     if (existingLinks) {
       return existingLinks.map(
         (link: {
@@ -36,11 +55,13 @@ function Home() {
               />
               <p className="homepage__link__details--title">{link.title}</p>
             </div>
-            <ProgressBar 
-              title={link.title} 
-              time={link.time} 
-              timeLapsed={link.timeLapsed} 
-            />
+            <div className="progressBar" style={{ width: "100%", height: "100%", border: "1px solid black" }}>
+              <div 
+                id={`${link.title}-progress`} 
+                className="progressBar--progress" 
+                style={{ width: calculateTime(link.time, link.timeLapsed), height: "100%", backgroundColor: "red" }}
+              />
+            </div>
           </div>
         )
       );

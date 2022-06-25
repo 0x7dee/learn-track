@@ -1,19 +1,18 @@
 import React, { useEffect } from 'react'
 import './progressBar.scss'
 
-const ProgressBar = ({ title, time, timeLapsed }: any) => {
-
+const ProgressBar = ({ title, time }: any) => {
+  
   useEffect(() => {
-    const secondInterval = setInterval(async () => {
-      let progressBar = document.getElementById(`${title}-progress`)
-      if (progressBar && timeLapsed && time && (timeLapsed <= time)) {
-        progressBar.style.width = `${Math.ceil((timeLapsed / time) * 100)}%`
-      } else if ( progressBar && timeLapsed && time && timeLapsed >= time ) {
-        progressBar.style.width = `100%`
-      }
-    }, 1000)
-    return () => clearInterval(secondInterval)
-  }, [])
+   
+    console.log(`time progressBar.tsx: ${time}`)
+    let progressBar = document.getElementById(`${title}-progress`)
+    if (progressBar) {
+      progressBar.style.width = `${time}%`
+    }
+  
+  }, [time])
+  
 
   return (
     <div className="progressBar">

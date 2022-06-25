@@ -42,12 +42,15 @@ async function getCurrentTab() {
 
 const updateLapsedTime = async (linkData: any, lastTab: any) => {
     let index = 0
-    linkData.forEach((link: { urls: any[]; }) => {
+    linkData.forEach((link: { urls: any[], title: string }) => {
         link.urls.forEach((url: any) => {
-            if( compareUrls(url, lastTab.tab.url)) {
+            let timeLeft = linkData[index].timeLapsed <= linkData[index].time
+
+            /* Compare current url to urls specified in link, if there is no time left then ignore */
+            if( timeLeft && compareUrls(url, lastTab.tab.url) ) {
                 let updatedLinkData = linkData;
                 updatedLinkData[index].timeLapsed += 1
-                chrome.storage.local.set({'links': updatedLinkData})
+                chrome.storage.local.set({'links': updatedLinkData})   
             }
         })
         index += 1
