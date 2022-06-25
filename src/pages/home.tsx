@@ -30,7 +30,6 @@ function Home() {
     if (timeLapsed <= time) {
       width = Math.ceil((timeLapsed / time) * 100).toString() + "%"
     }
-    console.log(`width: ${width}`)
     return width
   }
 
@@ -55,11 +54,11 @@ function Home() {
               />
               <p className="justify-self-center">{link.title}</p>
             </div>
-            <div className="col-span-4" style={{ width: "100%", height: "100%", border: "1px solid black" }}>
+            <div className={`col-span-4 w-full h-full border-2 border-black`}>
               <div 
                 id={`${link.title}-progress`} 
-                className="progressBar--progress" 
-                style={{ width: calculateTime(link.time, link.timeLapsed), height: "100%", backgroundColor: "red" }}
+                className={`h-full bg-orange-400`}
+                style={{ width: calculateTime(link.time, link.timeLapsed) }}
               />
             </div>
           </div>

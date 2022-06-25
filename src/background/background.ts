@@ -42,6 +42,8 @@ async function getCurrentTab() {
 
 const updateLapsedTime = async (linkData: any, lastTab: any) => {
     let index = 0
+    if ( !linkData ) return
+    
     linkData.forEach((link: { urls: any[], title: string }) => {
         link.urls.forEach((url: any) => {
             let timeLeft = linkData[index].timeLapsed <= linkData[index].time
