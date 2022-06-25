@@ -12,8 +12,7 @@ module.exports = {
         /* Pages */
         home: path.resolve('src/pages/home.tsx'),
         newTracker: path.resolve('src/pages/newTracker.tsx'),
-        /* Components */
-        tracker: path.resolve('src/components/tracker.tsx'),
+        tracker: path.resolve('src/pages/tracker.tsx'),
     },
     module: {
         rules: [

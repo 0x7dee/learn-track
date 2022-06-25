@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import '../index.css';
+import Tracker from "./tracker";
 
 
 function Home() {
-  let [existingLinks, setExistingLinks]: any = useState([]);
-  let [loading, setLoading] = useState(true)
+  const [existingLinks, setExistingLinks]: any = useState([])
+  const [loading, setLoading] = useState(true)
+  const [openDetail, setOpenDetail] = useState(false)
+  const [link, setLink]: any = useState(null)
+  
 
   
   useEffect(() => {
@@ -34,9 +38,14 @@ function Home() {
   }
 
   const displayLinks = () => {
-    if (loading) {
+    if ( loading ) {
       return <p>Loading...</p>
     }
+
+    if ( openDetail ) {
+      return <Tracker link={link} setOpenDetail={setOpenDetail} />
+    }
+
     if (existingLinks && existingLinks.length > 0) {
       return existingLinks.map(
         (link: {
@@ -45,23 +54,29 @@ function Home() {
           timeLapsed: number,
           time: number
         }) => (
-          <div className="grid grid-cols-5 align-items-center mb-5" key={link.title}>
-            <div className="col-span-1 flex flex-row justify-items-start align-items-center">
-              <img
-                className="h-5 w-5"
-                src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${link.urls[0]}`}
-                alt="favicon"
-              />
-              <p className="justify-self-center">{link.title}</p>
+          
+            <div 
+              onClick={() => {
+                setOpenDetail(true)
+                setLink(link)
+              }} className="grid grid-cols-5 align-items-center mb-5 cursor-pointer" key={link.title}>
+              <div className="col-span-1 flex flex-row justify-items-start align-items-center">
+                <img
+                  className="h-5 w-5"
+                  src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${link.urls[0]}`}
+                  alt="favicon"
+                />
+                <h1 className="justify-self-center">{link.title}</h1>
+              </div>
+              <div className={`col-span-4 w-full h-full border-2 border-black`}>
+                <div 
+                  id={`${link.title}-progress`} 
+                  className={`h-full bg-orange-400`}
+                  style={{ width: calculateTime(link.time, link.timeLapsed) }}
+                />
+              </div>
             </div>
-            <div className={`col-span-4 w-full h-full border-2 border-black`}>
-              <div 
-                id={`${link.title}-progress`} 
-                className={`h-full bg-orange-400`}
-                style={{ width: calculateTime(link.time, link.timeLapsed) }}
-              />
-            </div>
-          </div>
+        
         )
       );
     } else {
@@ -71,12 +86,11 @@ function Home() {
 
   return (
     <div className="w-96 h-96">
-      <h1>Time Tracker</h1>
+      <h1 className="text-3xl font-sans">Time Tracker</h1>
       <nav>
         <Link to="/new">New</Link>
       </nav>
       {displayLinks()}
-      <p id="time"></p>
     </div>
   );
 }

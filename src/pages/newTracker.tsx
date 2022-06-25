@@ -127,7 +127,8 @@ const NewTracker: any = () => {
     if ( days.length < 1 ) errors.push("No days are selected")
 
     /* Check time, timeElapsed exists */
-    if ( !time || time < 1 || timeLapsed !== 0 ) errors.push("Time must exist and be greater than 1")
+    if ( !time ) errors.push("Time must not be empty")
+    if ( time < 1 || timeLapsed !== 0 ) errors.push("Time must be greater than 1")
 
     if ( errors.length > 0 ) {
       setErrors(errors)
@@ -155,7 +156,7 @@ const NewTracker: any = () => {
 
   return (
     <div className="w-96 h-96">
-    <h1>NewTracker</h1>
+    <h1 className='text-3xl'>NewTracker</h1>
     <Link to="/">Home</Link>
 
     <form onSubmit={e => submitForm(e)}>
