@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import '../index.css'
 
-const NewTracker: any = () => {
+const NewTracker: any = ({ setOpenCreateLink }: any) => {
   
   const [title, setTitle] = useState<string>('')
   const [url, setUrl] = useState<string>('')
@@ -156,8 +156,6 @@ const NewTracker: any = () => {
 
   return (
     <div className="w-96 h-96">
-    <h1 className='text-3xl'>NewTracker</h1>
-    <Link to="/">Home</Link>
 
     <form onSubmit={e => submitForm(e)}>
 
@@ -207,6 +205,7 @@ const NewTracker: any = () => {
     { displayErrors() }
     { displaySuccess() }
     
+    <button onClick={ () => setOpenCreateLink(false) }>Close</button>
     <button onClick={ () => getData() }>get data</button>
     <button onClick={ () => clearData() }>clear data</button>
     </div>  

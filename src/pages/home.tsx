@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import '../index.css';
+import NewTracker from "./newTracker";
 import Tracker from "./tracker";
 
 
@@ -8,8 +9,10 @@ function Home() {
   const [existingLinks, setExistingLinks]: any = useState([])
   const [loading, setLoading] = useState(true)
   const [openDetail, setOpenDetail] = useState(false)
+  const [openCreateLink, setOpenCreateLink] = useState(false)
   const [link, setLink]: any = useState(null)
   
+  const navigate = useNavigate()
 
   
   useEffect(() => {
@@ -46,6 +49,10 @@ function Home() {
       return <Tracker link={link} setOpenDetail={setOpenDetail} />
     }
 
+    if ( openCreateLink ) {
+      return <NewTracker setOpenCreateLink={setOpenCreateLink} />
+    }
+
     if (existingLinks && existingLinks.length > 0) {
       return existingLinks.map(
         (link: {
@@ -57,8 +64,8 @@ function Home() {
           
             <div 
               onClick={() => {
-                setOpenDetail(true)
                 setLink(link)
+                setOpenDetail(true)
               }} className="grid grid-cols-5 align-items-center mb-5 cursor-pointer" key={link.title}>
               <div className="col-span-1 flex flex-row justify-items-start align-items-center">
                 <img
@@ -88,7 +95,7 @@ function Home() {
     <div className="w-96 h-96">
       <h1 className="text-3xl font-sans">Time Tracker</h1>
       <nav>
-        <Link to="/new">New</Link>
+        <button className="bg-orange-500" onClick={() => setOpenCreateLink(true)}>Add New Link</button>
       </nav>
       {displayLinks()}
     </div>
