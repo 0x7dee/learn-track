@@ -46,7 +46,7 @@ function Home() {
     }
 
     if ( openDetail ) {
-      return <Tracker link={link} setOpenDetail={setOpenDetail} />
+      return <Tracker link={link} setOpenDetail={setOpenDetail} setOpenCreateLink={setOpenCreateLink} />
     }
 
     if ( openCreateLink ) {
@@ -65,6 +65,7 @@ function Home() {
             <div 
               onClick={() => {
                 setLink(link)
+                setOpenCreateLink(false)
                 setOpenDetail(true)
               }} className="grid grid-cols-5 align-items-center mb-5 cursor-pointer" key={link.title}>
               <div className="col-span-1 flex flex-row justify-items-start align-items-center">
@@ -95,7 +96,12 @@ function Home() {
     <div className="w-96 h-96">
       <h1 className="text-3xl font-sans">Time Tracker</h1>
       <nav>
-        <button className="bg-orange-500" onClick={() => setOpenCreateLink(true)}>Add New Link</button>
+        <button 
+          className="bg-orange-500" 
+          onClick={() => { 
+            setOpenCreateLink(true) 
+            setOpenDetail(false)
+          }}>Add New Link</button>
       </nav>
       {displayLinks()}
     </div>
