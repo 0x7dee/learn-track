@@ -79,8 +79,6 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
         refreshDay.checked = false
       }
     })
-
-    resetState()
     setSuccess("New link created successfully!")
   }
 
@@ -134,7 +132,6 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
     if ( existingLinks.links ) {
       existingLinks.links = existingLinks.links.filter((link: { title: string }) => link.title !== editTitle)
       chrome.storage.local.set({"links": [...existingLinks.links]})
-      resetState()
       setSuccess('Deleted link successfully!')
     } else {
       setErrors(['Unable to delete link...'])
@@ -163,20 +160,19 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
       let linkIsValid = await validateLink(newLink, existingLinks.links)
       if ( !linkIsValid ) return
 
-      
       if ( existingLinks.links.length > 0 ) {
-
         if ( editMode ) {
           existingLinks.links = existingLinks.links.filter(link => link.title !== editTitle)
         } 
+
         chrome.storage.local.set({"links": [newLink, ...existingLinks.links]})
-        resetState()
         createdLinkSuccessful()
+        resetState()
       }
     } else {
       chrome.storage.local.set({"links": [newLink]})
-      resetState()
       createdLinkSuccessful()
+      resetState()
     }
   }
 
@@ -204,7 +200,6 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
       </ div>
     )) 
   }
-
 
   return (
     <div>
