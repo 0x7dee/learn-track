@@ -36,13 +36,17 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
     { label: 'Sun', value: 'sunday' },
   ]
 
-  const addUrl = (input: string) => {
+  const updateUrlInput = (input: string) => {
     if (/\s+$/.test(input)) {
-        setUrls([url, ...urls]);
-        setUrl('');
+        addUrl()
     } else {
         setUrl(input);
     }
+  }
+
+  const addUrl  = () => {
+      setUrls([url, ...urls]);
+      setUrl('');
   }
 
   const removeUrl = (url: string) => {
@@ -51,8 +55,8 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
 
   const displayUrls = () => {
     return urls.map(url => (
-        <div key={url} className="flex flex-row align-items-center">
-            <img className="h-5 w-5" src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${url}`} alt="favicon" />
+        <div key={url} className="flex flex-row align-items-center mb-1">
+            <img className="h-5 w-5 mr-1" src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${url}`} alt="favicon" />
             <p>{url}</p>
             <div className="text-red-600" onClick={() => removeUrl(url)}>x</div>
         </div>
@@ -210,34 +214,43 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
     <form onSubmit={e => submitForm(e)}>
 
         { /* Title */ }
-        <label>Title</label>
-        <br />
-        <input 
-            className='h-8 w-1/2'
-            placeholder="Enter title" 
-            type="text" 
-            value={title} 
-            onChange={(e) => setTitle(e.target.value)} 
-        />
+        <div className="title mb-3">
+          <label className='text-base'>Title</label>
+          <br />
+          <input 
+              className='h-8 w-1/2'
+              placeholder="Enter title" 
+              type="text" 
+              value={title} 
+              onChange={(e) => setTitle(e.target.value)} 
+          />
+        </div>
+        
 
         { /* URLS */ }
-        <div className="urls">
-            <label>URLs</label>
+        <div className="urls mb-3">
+            <label className='text-base'>URLs</label>
             <br />
-            <input 
-                className='h-8 w-1/2'
-                placeholder="Enter URL" 
-                type="text" 
-                value={url}
-                onChange={(e) => addUrl(e.target.value)} 
-            />
+            <div className="urls__input flex flex-row">
+              <input 
+                  className='h-8 w-1/2'
+                  placeholder="Add URL" 
+                  type="text" 
+                  value={url}
+                  onChange={(e) => updateUrlInput(e.target.value)} 
+              />
+              <button onClick={(e) => {
+                e.preventDefault()
+                addUrl()
+              }} className='bg-purple-400 w-3'>+</button>
+            </div>
             { displayUrls() }
         </div>
 
         { /* Days of the week */ }
   
-        <div className='days'>
-            <label>Days</label>
+        <div className='days mb-3'>
+            <label className='text-base'>Days</label>
             <br />
             <div className="flex flex-row items-center justify-between">
             { displayDays() }
@@ -245,19 +258,20 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
         </div>
 
         { /* Amount of time */ }
-        <label>Time</label>
-        <br />
-        <input onChange={(e) => setHours(parseInt(e.target.value))} value={hours} type="number" placeholder="hours" />:
-        <input onChange={(e) => setMins(parseInt(e.target.value))} value={mins} type="number" placeholder="minutes" />
-
-        <br />
+        <div className="time mb-3">
+          <label className='text-base'>Time</label>
+          <br />
+          <input onChange={(e) => setHours(parseInt(e.target.value))} value={hours} type="number" placeholder="hours" />:
+          <input onChange={(e) => setMins(parseInt(e.target.value))} value={mins} type="number" placeholder="minutes" />
+        </div>
+        
         <button className='bg-purple-200 mt-2 text-base'>{ editMode ? 'Update' : 'Submit' }</button>
     </form>
 
     { displayErrors() }
     { displaySuccess() }
     
-    { editMode ? (<button className='bg-red-500' onClick={ () => deleteLink() }>Delete</button>) : (<></>) }
+    { editMode ? (<button className='bg-red-400 text-base mt-2 mb-5' onClick={ () => deleteLink() }>Delete</button>) : (<></>) }
 
     </div>  
   )

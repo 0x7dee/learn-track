@@ -63,7 +63,7 @@ function Home() {
 
   const displayNavigation = () => {
     return (
-      <nav>
+      <nav className="relative">
         <button 
           className='bg-yellow-500'
           onClick={() => { 
@@ -80,6 +80,7 @@ function Home() {
             setEditMode(false)
             setLink(null)
           }}>Add New Link</button>
+          <button className="absolute right-1" onClick={ () => clearData() }>Clear all</button>
       </nav>
     )
   }
@@ -119,7 +120,6 @@ function Home() {
           mins: number,
           hours: number
         }) => (
-          
             <div 
               onClick={() => {
                 setLink(link)
@@ -143,9 +143,9 @@ function Home() {
               </div>
               <div className="time col-span-2">{ timeLeft(link.time, link.timeLapsed) }</div>
             </div>
-        
         )
       );
+      
     } else {
       return <p>No links available...</p>;
     }
@@ -156,7 +156,6 @@ function Home() {
       <h1 className="text-3xl font-sans">Time Tracker</h1>
       { displayNavigation() }
       { displayPage() }
-      <button className="absolute bottom-1" onClick={ () => clearData() }>Clear all</button>
     </div>
   );
 }
