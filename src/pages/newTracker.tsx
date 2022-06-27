@@ -21,6 +21,8 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
       setEditTitle(link.title)
       setUrls(link.urls)
       setDays(link.days)
+      setMins(link.mins)
+      setHours(link.hours)
     }
   }, [])
 
@@ -55,11 +57,6 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
             <div className="text-red-600" onClick={() => removeUrl(url)}>x</div>
         </div>
     ))
-  }
-
-  const getData = async () => {
-    const data = await chrome.storage.local.get("links"); 
-    console.log(data.links);
   }
 
   const resetState = () => {
@@ -154,6 +151,8 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
       urls,
       days,
       time,
+      mins,
+      hours,
       timeLapsed: 0
     }
 
@@ -249,8 +248,8 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
         { /* Amount of time */ }
         <label>Time</label>
         <br />
-        <input onChange={(e) => setHours(parseInt(e.target.value))} type="number" placeholder="hours" />:
-        <input onChange={(e) => setMins(parseInt(e.target.value))} type="number" placeholder="minutes" />
+        <input onChange={(e) => setHours(parseInt(e.target.value))} value={hours} type="number" placeholder="hours" />:
+        <input onChange={(e) => setMins(parseInt(e.target.value))} value={mins} type="number" placeholder="minutes" />
 
         <br />
         <button className='bg-purple-200 mt-2 text-base'>{ editMode ? 'Update' : 'Submit' }</button>
@@ -260,9 +259,6 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
     { displaySuccess() }
     
     { editMode ? (<button className='bg-red-500' onClick={ () => deleteLink() }>Delete</button>) : (<></>) }
-    
-    { /* Used for debugging purposes */ }
-    <button onClick={ () => getData() }>get data</button>
 
     </div>  
   )
