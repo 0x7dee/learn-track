@@ -5,6 +5,7 @@ import { FiEdit } from 'react-icons/fi'
 const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, setEditMode }: any) => {
   
   const [title, setTitle] = useState<string>('')
+  const [editTitle, setEditTitle] = useState<string>('')
   const [url, setUrl] = useState<string>('')
   const [urls, setUrls] = useState<string[]>([])
   const [days, setDays] = useState<string[]>([])
@@ -17,6 +18,7 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
   useEffect(() => {
     if (link && editMode) {
       setTitle(link.title)
+      setEditTitle(link.title)
       setUrls(link.urls)
       setDays(link.days)
     }
@@ -85,9 +87,11 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
     let errors: string[] = [];
 
     /* Check if title already exists */
-    await links.map((link: { title: string; }) => {
-      if (link.title == title) errors.push("title already exists")
-    })
+    if (!editMode) {
+      await links.map((link: { title: string; }) => {
+        if (link.title == title) errors.push("title already exists")
+      })
+    }
     
     /* Make sure urls exist */
     if ( urls.length < 1 ) errors.push("No urls are set")
@@ -137,12 +141,17 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
 
     const existingLinks = await chrome.storage.local.get("links");
 
+    /* If array already exists then add the new link */
     if ( existingLinks && Array.isArray(existingLinks.links) ) {
       let linkIsValid = await validateLink(newLink, existingLinks.links)
       if ( !linkIsValid ) return
+
       
-      // Array is empty
       if ( existingLinks.links.length > 0 ) {
+
+        if ( editMode ) {
+          existingLinks.links = existingLinks.links.filter(link => link.title !== editTitle)
+        } 
         chrome.storage.local.set({"links": [newLink, ...existingLinks.links]})
         createdLinkSuccessful()
       }
@@ -170,7 +179,7 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
           id={option.value} 
           type="checkbox" 
           value={option.value} 
-          checked={ editMode && link && link.days.includes(option.value) ? true : false } 
+          checked={ days.includes(option.value) ? true : false } 
         />
         <label htmlFor={option.value}>{option.label}</label>
       </ div>

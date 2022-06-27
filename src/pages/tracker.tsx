@@ -43,13 +43,13 @@ const Tracker = ({ link, setOpenTracker, setOpenNewTracker, editMode, setEditMod
         <div className="tracker__title relative">
           { displayTitle() }
         </div>
-        
-        <div className="grid relative">
-            { displayDays() }
-        </div>
 
         <div className="tracker__urls relative">
             { displayUrls() }
+        </div>
+
+        <div className="grid relative">
+            { displayDays() }
         </div>
     </div>
     
