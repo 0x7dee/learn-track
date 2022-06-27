@@ -28,12 +28,33 @@ function Home() {
     setExistingLinks(existingLinks.links);
   };
 
-  const calculateTime = (time: number, timeLapsed: number) => {
+  const updateProgressBar = (time: number, timeLapsed: number) => {
     let width = "100%"
     if (timeLapsed <= time) {
       width = Math.ceil((timeLapsed / time) * 100).toString() + "%"
     }
     return width
+  }
+
+  const timeLeft = (time: number, timeLapsed: number) => {
+    /* 7500 sec, 125 mins, 2hr 5mins */
+    let secondsLeft = time - timeLapsed
+    let hoursLeft = Math.floor(secondsLeft / 60 / 60)
+    let minsLeft = Math.floor(secondsLeft / 60) - (hoursLeft * 60)
+
+    if (timeLapsed < time) {
+      if (secondsLeft < 60) return `${secondsLeft}secs`
+      
+      if ( hoursLeft === 0 && minsLeft > 0 ) {
+        return `${minsLeft}mins`
+      } else if ( hoursLeft > 0 && minsLeft === 0 ) {
+        return `${hoursLeft}hr`
+      }
+
+      return `${hoursLeft}hr ${minsLeft}mins`
+    } else {
+      return "Complete"
+    }
   }
 
   const clearData = async () => {
@@ -94,7 +115,9 @@ function Home() {
           urls: any,
           title: string,
           timeLapsed: number,
-          time: number
+          time: number,
+          mins: number,
+          hours: number
         }) => (
           
             <div 
@@ -102,22 +125,23 @@ function Home() {
                 setLink(link)
                 setOpenNewTracker(false)
                 setOpenTracker(true)
-              }} className="grid grid-cols-5 align-items-center mb-5 cursor-pointer" key={link.title}>
-              <div className="col-span-1 flex flex-row justify-items-start align-items-center">
+              }} className="grid grid-cols-10 align-items-center mb-5 cursor-pointer" key={link.title}>
+              <div className="col-span-3 grid grid-cols-4">
                 <img
-                  className="h-5 w-5"
+                  className="h-5 w-5 self-start col-span-1"
                   src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${link.urls[0]}`}
                   alt="favicon"
                 />
-                <h1 className="justify-self-center">{link.title}</h1>
+                <h1 className="self-center col-span-3">{link.title}</h1>
               </div>
-              <div className={`col-span-4 w-full h-full border-2 border-black`}>
+              <div className={`col-span-5 w-full h-full border-2 border-black`}>
                 <div 
                   id={`${link.title}-progress`} 
                   className={`h-full bg-orange-400`}
-                  style={{ width: calculateTime(link.time, link.timeLapsed) }}
+                  style={{ width: updateProgressBar(link.time, link.timeLapsed) }}
                 />
               </div>
+              <div className="time col-span-2">{ timeLeft(link.time, link.timeLapsed) }</div>
             </div>
         
         )

@@ -130,8 +130,12 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
     
     const existingLinks = await chrome.storage.local.get("links");
     if ( existingLinks.links ) {
-      existingLinks.links = existingLinks.links.filter((link: { title: string }) => link.title !== editTitle)
-      chrome.storage.local.set({"links": [...existingLinks.links]})
+      if ( existingLinks.links.length === 1 ) {
+        chrome.storage.local.set({"links": null})
+      } else {
+        existingLinks.links = existingLinks.links.filter((link: { title: string }) => link.title !== editTitle)
+        chrome.storage.local.set({"links": [...existingLinks.links]})
+      }
       setSuccess('Deleted link successfully!')
     } else {
       setErrors(['Unable to delete link...'])
