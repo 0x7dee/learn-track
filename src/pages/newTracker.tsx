@@ -62,6 +62,18 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
     console.log(data.links);
   }
 
+  const resetState = () => {
+    setTitle('')
+    setEditTitle('')
+    setUrl('')
+    setUrls([])
+    setDays([])
+    setTime(0)
+    setHours(0)
+    setMins(0)
+    setErrors([])
+  }
+
   const createdLinkSuccessful = () => {
 
     dayOptions.forEach(day => {
@@ -71,14 +83,7 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
       }
     })
 
-    setTitle('')
-    setUrl('')
-    setUrls([])
-    setDays([])
-    setTime(0)
-    setHours(0)
-    setMins(0)
-    setErrors([])
+    resetState()
     setSuccess("New link created successfully!")
   }
 
@@ -126,6 +131,19 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
     if ( success ) return <div id="success" className="text-green-600">{success}</div>
   }
 
+  const deleteLink = async () => {
+    
+    const existingLinks = await chrome.storage.local.get("links");
+    if ( existingLinks.links ) {
+      existingLinks.links = existingLinks.links.filter((link: { title: string }) => link.title !== editTitle)
+      chrome.storage.local.set({"links": [...existingLinks.links]})
+      resetState()
+      setSuccess('Deleted link successfully!')
+    } else {
+      setErrors(['Unable to delete link...'])
+    }
+  }
+
   const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
@@ -153,10 +171,12 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
           existingLinks.links = existingLinks.links.filter(link => link.title !== editTitle)
         } 
         chrome.storage.local.set({"links": [newLink, ...existingLinks.links]})
+        resetState()
         createdLinkSuccessful()
       }
     } else {
       chrome.storage.local.set({"links": [newLink]})
+      resetState()
       createdLinkSuccessful()
     }
   }
@@ -238,6 +258,8 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
 
     { displayErrors() }
     { displaySuccess() }
+    
+    { editMode ? (<button className='bg-red-500' onClick={ () => deleteLink() }>Delete</button>) : (<></>) }
     
     { /* Used for debugging purposes */ }
     <button onClick={ () => getData() }>get data</button>
