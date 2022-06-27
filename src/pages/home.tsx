@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import '../index.css';
 import NewTracker from "./newTracker";
 import Tracker from "./tracker";
@@ -8,15 +7,12 @@ import Tracker from "./tracker";
 function Home() {
   const [existingLinks, setExistingLinks]: any = useState([])
   const [loading, setLoading] = useState(true)
-  const [openDetail, setOpenDetail] = useState(false)
-  const [openCreateLink, setOpenCreateLink] = useState(false)
+  const [openTracker, setOpenTracker] = useState(false)
+  const [openNewTracker, setOpenNewTracker] = useState(false)
   const [link, setLink]: any = useState(null)
-  
-  const navigate = useNavigate()
-
+  const [editMode, setEditMode] = useState(false)
   
   useEffect(() => {
-    
     const secondInterval = setInterval(async () => {
       updateLinks();
       if (loading) {
@@ -40,17 +36,56 @@ function Home() {
     return width
   }
 
-  const displayLinks = () => {
+  const clearData = async () => {
+    await chrome.storage.local.set({"links": null});
+  }
+
+  const displayNavigation = () => {
+    return (
+      <nav>
+        <button 
+          className='bg-yellow-500'
+          onClick={() => { 
+            setOpenNewTracker(false) 
+            setOpenTracker(false)
+            setEditMode(false)
+            setLink(null)
+          }}>Home</button>
+        <button 
+          className="bg-orange-500 mb-3" 
+          onClick={() => { 
+            setOpenNewTracker(true) 
+            setOpenTracker(false)
+            setEditMode(false)
+            setLink(null)
+          }}>Add New Link</button>
+      </nav>
+    )
+  }
+
+  const displayPage = () => {
     if ( loading ) {
       return <p>Loading...</p>
     }
 
-    if ( openDetail ) {
-      return <Tracker link={link} setOpenDetail={setOpenDetail} setOpenCreateLink={setOpenCreateLink} />
+    if ( openTracker ) {
+      return <Tracker 
+                link={link} 
+                setOpenTracker={setOpenTracker} 
+                setOpenNewTracker={setOpenNewTracker} 
+                editMode={editMode} 
+                setEditMode={setEditMode}
+              />
     }
 
-    if ( openCreateLink ) {
-      return <NewTracker setOpenCreateLink={setOpenCreateLink} />
+    if ( openNewTracker ) {
+      return <NewTracker 
+                link={link} 
+                setOpenTracker={setOpenTracker} 
+                setOpenNewTracker={setOpenNewTracker} 
+                editMode={editMode}
+                setEditMode={setEditMode}
+              />
     }
 
     if (existingLinks && existingLinks.length > 0) {
@@ -65,8 +100,8 @@ function Home() {
             <div 
               onClick={() => {
                 setLink(link)
-                setOpenCreateLink(false)
-                setOpenDetail(true)
+                setOpenNewTracker(false)
+                setOpenTracker(true)
               }} className="grid grid-cols-5 align-items-center mb-5 cursor-pointer" key={link.title}>
               <div className="col-span-1 flex flex-row justify-items-start align-items-center">
                 <img
@@ -93,17 +128,11 @@ function Home() {
   };
 
   return (
-    <div className="w-96 h-96">
+    <div className="w-96 h-96 p-5">
       <h1 className="text-3xl font-sans">Time Tracker</h1>
-      <nav>
-        <button 
-          className="bg-orange-500" 
-          onClick={() => { 
-            setOpenCreateLink(true) 
-            setOpenDetail(false)
-          }}>Add New Link</button>
-      </nav>
-      {displayLinks()}
+      { displayNavigation() }
+      { displayPage() }
+      <button className="absolute bottom-1" onClick={ () => clearData() }>Clear all</button>
     </div>
   );
 }

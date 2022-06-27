@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
 import '../index.css'
+import { FiEdit } from 'react-icons/fi'
 
-const NewTracker: any = ({ setOpenCreateLink }: any) => {
+const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, setEditMode }: any) => {
   
   const [title, setTitle] = useState<string>('')
   const [url, setUrl] = useState<string>('')
@@ -14,6 +14,14 @@ const NewTracker: any = ({ setOpenCreateLink }: any) => {
   const [errors, setErrors] = useState<string[]>([])
   const [success, setSuccess] = useState<string>('')
 
+  useEffect(() => {
+    if (link && editMode) {
+      setTitle(link.title)
+      setUrls(link.urls)
+      setDays(link.days)
+    }
+  }, [])
+
   let dayOptions = [
     { label: 'Mon', value: 'monday' },
     { label: 'Tues', value: 'tuesday' },
@@ -23,7 +31,6 @@ const NewTracker: any = ({ setOpenCreateLink }: any) => {
     { label: 'Sat', value: 'saturday' },
     { label: 'Sun', value: 'sunday' },
   ]
-
 
   const addUrl = (input: string) => {
     if (/\s+$/.test(input)) {
@@ -38,7 +45,7 @@ const NewTracker: any = ({ setOpenCreateLink }: any) => {
     setUrls(urls.filter(x => x !== url))
   }
 
-  const showUrls = () => {
+  const displayUrls = () => {
     return urls.map(url => (
         <div key={url} className="flex flex-row align-items-center">
             <img className="h-5 w-5" src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${url}`} alt="favicon" />
@@ -48,47 +55,9 @@ const NewTracker: any = ({ setOpenCreateLink }: any) => {
     ))
   }
 
-  const addDay = (day: string) => {
-    setDays([day, ...days]);
-  }
-
   const getData = async () => {
     const data = await chrome.storage.local.get("links"); 
     console.log(data.links);
-  }
-
-  const clearData = async () => {
-    await chrome.storage.local.set({"links": null});
-  }
-
-  const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    let time = (hours * 60 * 60) + (mins * 60)
-
-    const newLink = {
-      title,
-      urls,
-      days,
-      time,
-      timeLapsed: 0
-    }
-
-    const existingLinks = await chrome.storage.local.get("links");
-
-    if ( existingLinks && Array.isArray(existingLinks.links) ) {
-      let linkIsValid = await validateLink(newLink, existingLinks.links)
-      if ( !linkIsValid ) return
-      
-      // Array is empty
-      if ( existingLinks.links.length > 0 ) {
-        chrome.storage.local.set({"links": [newLink, ...existingLinks.links]})
-        createdLinkSuccessful()
-      }
-    } else {
-      chrome.storage.local.set({"links": [newLink]})
-      createdLinkSuccessful()
-    }
   }
 
   const createdLinkSuccessful = () => {
@@ -153,16 +122,71 @@ const NewTracker: any = ({ setOpenCreateLink }: any) => {
     if ( success ) return <div id="success" className="text-green-600">{success}</div>
   }
 
+  const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    let time = (hours * 60 * 60) + (mins * 60)
+
+    const newLink = {
+      title,
+      urls,
+      days,
+      time,
+      timeLapsed: 0
+    }
+
+    const existingLinks = await chrome.storage.local.get("links");
+
+    if ( existingLinks && Array.isArray(existingLinks.links) ) {
+      let linkIsValid = await validateLink(newLink, existingLinks.links)
+      if ( !linkIsValid ) return
+      
+      // Array is empty
+      if ( existingLinks.links.length > 0 ) {
+        chrome.storage.local.set({"links": [newLink, ...existingLinks.links]})
+        createdLinkSuccessful()
+      }
+    } else {
+      chrome.storage.local.set({"links": [newLink]})
+      createdLinkSuccessful()
+    }
+  }
+
+  const addDay = (e: React.ChangeEvent<HTMLInputElement>, day: string) => {
+    if ( e.target.checked && !days.includes(day) ) {
+      setDays([day, ...days]);
+    } else {
+      let removeDay = days.filter(d => d != day)
+      setDays(removeDay)
+    }
+  }
+
+  const displayDays = () => {
+    return dayOptions.map(option => (
+      <div key={option.value}>
+        <input 
+          name={option.label} 
+          onChange={ (e) => addDay(e, option.value) } 
+          id={option.value} 
+          type="checkbox" 
+          value={option.value} 
+          checked={ editMode && link && link.days.includes(option.value) ? true : false } 
+        />
+        <label htmlFor={option.value}>{option.label}</label>
+      </ div>
+    )) 
+  }
+
 
   return (
-    <div className="w-96 h-96">
-
+    <div>
     <form onSubmit={e => submitForm(e)}>
 
         { /* Title */ }
         <label>Title</label>
         <br />
         <input 
+            className='h-8 w-1/2'
             placeholder="Enter title" 
             type="text" 
             value={title} 
@@ -174,23 +198,23 @@ const NewTracker: any = ({ setOpenCreateLink }: any) => {
             <label>URLs</label>
             <br />
             <input 
+                className='h-8 w-1/2'
                 placeholder="Enter URL" 
                 type="text" 
                 value={url}
                 onChange={(e) => addUrl(e.target.value)} 
             />
-            { showUrls() }
+            { displayUrls() }
         </div>
 
         { /* Days of the week */ }
   
-        <div className="flex flex-row align-items-center mt-10 mb-10">
-            { dayOptions.map(option => (
-                <div className="days--day" key={option.value}>
-                  <input name={option.label} onClick={ () => addDay(option.value) } id={option.value} type="radio" value={option.value} />
-                  <label htmlFor={option.value}>{option.label}</label>
-                </ div>
-            )) }
+        <div className='days'>
+            <label>Days</label>
+            <br />
+            <div className="flex flex-row items-center justify-between">
+            { displayDays() }
+            </div>
         </div>
 
         { /* Amount of time */ }
@@ -199,15 +223,16 @@ const NewTracker: any = ({ setOpenCreateLink }: any) => {
         <input onChange={(e) => setHours(parseInt(e.target.value))} type="number" placeholder="hours" />:
         <input onChange={(e) => setMins(parseInt(e.target.value))} type="number" placeholder="minutes" />
 
-        <button>Submit</button>
+        <br />
+        <button className='bg-purple-200 mt-2 text-base'>{ editMode ? 'Update' : 'Submit' }</button>
     </form>
 
     { displayErrors() }
     { displaySuccess() }
     
-    <button onClick={ () => setOpenCreateLink(false) }>Close</button>
+    { /* Used for debugging purposes */ }
     <button onClick={ () => getData() }>get data</button>
-    <button onClick={ () => clearData() }>clear data</button>
+
     </div>  
   )
 }

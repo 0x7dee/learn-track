@@ -1,10 +1,12 @@
 let url: string = '';
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+    /*
     console.log({msg})
     console.log({sender})
     url = sender.url || ''
     sendResponse('From the background script')
+    */
 })
 
 

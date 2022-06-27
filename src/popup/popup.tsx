@@ -15,9 +15,6 @@ ReactDOM.render(<React.StrictMode>
     <MemoryRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route 
-          path="/new" element={<NewTracker /> } 
-        />
       </Routes>
     </MemoryRouter>
   </React.StrictMode>, root)
