@@ -8,9 +8,23 @@ const Tracker = ({ link, setOpenTracker, setOpenNewTracker, editMode, setEditMod
 
   const displayDays = () => {
     if ( link.days ) {
-        return link.days.map((day: string) => (
-            <p key={day}>{day}</p>
-        ))
+        return link.days.map((day: string, index: number, row: string | any[]) => {
+            if ( index + 1 === row.length ) {
+              return (
+                <>
+                  <p className='mx-1' key={day}>{day}</p>
+                </>
+              )
+            } else {
+              return (
+                <>
+                  <p className='mx-1' key={day}>{day}</p>
+                  <p>&#x2022;</p>
+                </>
+              )
+            }
+            
+        })
     }
   }
 
@@ -46,15 +60,9 @@ const Tracker = ({ link, setOpenTracker, setOpenNewTracker, editMode, setEditMod
   }
 
   const displayTime = () => {
-    if (!link.hours || link.hours === 0) return <p>{`${link.mins}mins per day`}</p>
-    if (!link.mins || link.mins === 0) return <p>{`${link.hours}hr per day`}</p>
-    return <p>{`${link.hours}hr ${link.mins}mins per day`}</p>
-  }
-
-  const editBtn = () => {
-    return <FiEdit onClick={() => {
-      
-    }} className="cursor-pointer z-10" />
+    if (!link.hours || link.hours === 0) return <p>{`${link.mins} mins per day`}</p>
+    if (!link.mins || link.mins === 0) return <p>{`${link.hours} hr per day`}</p>
+    return <p>{`${link.hours}hr ${link.mins} mins per day`}</p>
   }
 
   const deleteLink = async () => {
@@ -76,20 +84,22 @@ const Tracker = ({ link, setOpenTracker, setOpenNewTracker, editMode, setEditMod
   return (
     <div className="tracker w-full h-full relative">
         
-        <div className="tracker__title relative grid grid-cols-2 items-center mb-3">
+        <div className="tracker__title relative grid grid-cols-2 items-center mb-6">
           { displayTitle() }
           { displayTime() }
         </div>
 
-        <div className="tracker__urls relative mb-3">
-            { displayUrls() }
-        </div>
+        <div className="tracker__main-details">
+          <div className="tracker__urls relative mb-6">
+              { displayUrls() }
+          </div>
 
-        <div className="grid relative">
-            { displayDays() }
+          <div className="flex flex-row flex-wrap relative">
+              { displayDays() }
+          </div>
         </div>
-
-        <div className="edit-delete fixed bottom-1 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-row items-center">
+        
+        <div className="edit-delete fixed bottom-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-row items-center">
         <button 
             className='w-28 border-2 text-green-400 border-green-400 rounded-md mt-2 text-base py-1 px-2 mb-5 mr-2' 
             onClick={ () => {

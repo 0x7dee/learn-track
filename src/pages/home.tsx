@@ -11,6 +11,7 @@ function Home() {
   const [openNewTracker, setOpenNewTracker] = useState(false)
   const [link, setLink]: any = useState(null)
   const [editMode, setEditMode] = useState(false)
+  const [onlyShowToday, setOnlyShowToday] = useState(true)
   
   useEffect(() => {
     const secondInterval = setInterval(async () => {
@@ -106,6 +107,9 @@ function Home() {
     }
 
     if (existingLinks && existingLinks.length > 0) {
+      let todaysDate = new Date();
+      let todaysDay = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][todaysDate.getDay()]
+
       return existingLinks.map(
         (link: {
           urls: any,
@@ -113,34 +117,40 @@ function Home() {
           timeLapsed: number,
           time: number,
           mins: number,
-          hours: number
-        }) => (
+          hours: number,
+          days: string[]
+        }) => {
+            
+            if ( onlyShowToday && !link.days.includes(todaysDay) ) return
+
+            return (
             <div 
               onClick={() => {
                 setLink(link)
                 setOpenNewTracker(false)
                 setOpenTracker(true)
-              }} className="grid grid-cols-11 items-center mb-5 cursor-pointer" key={link.title}>
-              <div className="col-span-3 grid grid-cols-4">
-                <img
-                  className="h-5 w-5 self-start col-span-1"
-                  src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${link.urls[0]}`}
-                  alt="favicon"
-                />
-                <h1 className="self-center col-span-3">{link.title}</h1>
-              </div>
-              <div className={`col-span-5 w-full h-3/4 border-2 ${ link.time > link.timeLapsed ? ('border-slate-200') : ('border-none') } rounded-full overflow-hidden`}>
-                <div 
-                  id={`${link.title}-progress`} 
-                  className={`h-full transition linear delay-500 ${ link.time > link.timeLapsed ? ('bg-blue-400') : ('bg-green-400') }`}
-                  style={{ width: updateProgressBar(link.time, link.timeLapsed) }}
-                />
-              </div>
-              <div className="time col-span-3 justify-self-end items-center">
-                <p>{ timeLeft(link.time, link.timeLapsed) }</p>
-              </div>
+              }} className="grid grid-cols-12 content-center mb-5 cursor-pointer" key={link.title}>
+                <div className="col-span-4 grid grid-cols-4 self-center content-center">
+                  <img
+                    className="h-5 w-5 justify-self-start self-center col-span-1"
+                    src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${link.urls[0]}`}
+                    alt="favicon"
+                  />
+                  <h1 className="self-center col-span-3">{link.title}</h1>
+                </div>
+                <div className={`flex flex-row items-center self-center col-span-5 w-full h-4 border-2 ${ link.time > link.timeLapsed ? ('border-slate-200') : ('border-none') } rounded-full overflow-hidden`}>
+                  <div 
+                    id={`${link.title}-progress`} 
+                    className={`h-full transition linear delay-500 ${ link.time > link.timeLapsed ? ('bg-blue-400') : ('bg-green-400') }`}
+                    style={{ width: updateProgressBar(link.time, link.timeLapsed) }}
+                  />
+                </div>
+                <div className="time col-span-3 justify-self-end items-center self-center">
+                  <p>{ timeLeft(link.time, link.timeLapsed) }</p>
+                </div>
             </div>
-        )
+            )
+        }
       );
       
     } else {
@@ -155,6 +165,10 @@ function Home() {
         { displayNavigation() }
       </div>
       <div className="displayPage p-5 pr-8 pl-8">
+        <div className="displayPage__toggle mb-6 flex flex-row">
+          <p onClick={ () => setOnlyShowToday(true) } className={`mr-2 cursor-pointer ${ onlyShowToday ? 'underline' : '' }`}>Today</p>
+          <p onClick={ () => setOnlyShowToday(false) } className={`cursor-pointer ${ !onlyShowToday ? 'underline' : '' }`}>Show all</p>
+        </div>
         { displayPage() }
       </div>
     </div>

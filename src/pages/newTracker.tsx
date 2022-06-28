@@ -135,6 +135,7 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
     e.preventDefault()
 
     let time = (hours * 60 * 60) + (mins * 60)
+    let timeLapsed = 0;
 
     const newLink = {
       title,
@@ -143,7 +144,7 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
       time,
       mins,
       hours,
-      timeLapsed: 0
+      timeLapsed
     }
 
     const existingLinks = await chrome.storage.local.get("links");
