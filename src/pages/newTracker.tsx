@@ -10,8 +10,8 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
   const [urls, setUrls] = useState<string[]>([])
   const [days, setDays] = useState<string[]>([])
   const [time, setTime] = useState<number>(0)
-  const [hours, setHours] = useState<number>(0)
-  const [mins, setMins] = useState<number>(0)
+  const [hours, setHours] = useState<any>(null)
+  const [mins, setMins] = useState<any>(null)
   const [errors, setErrors] = useState<string[]>([])
   const [success, setSuccess] = useState<string>('')
 
@@ -26,15 +26,16 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
     }
   }, [])
 
-  let dayOptions = [
-    { label: 'Mon', value: 'monday' },
-    { label: 'Tues', value: 'tuesday' },
-    { label: 'Wed', value: 'wednesday' },
-    { label: 'Thurs', value: 'thursday' },
-    { label: 'Fri', value: 'friday' },
-    { label: 'Sat', value: 'saturday' },
-    { label: 'Sun', value: 'sunday' },
-  ]
+  let dayOptions = {
+    Mon: 'monday',
+    Tues: 'tuesday',
+    Wed: 'wednesday',
+    Thurs: 'thursday',
+    Fri: 'friday',
+    Sat: 'saturday',
+    Sun: 'sunday'
+  }
+  
 
   const updateUrlInput = (input: string) => {
     if (/\s+$/.test(input)) {
@@ -57,8 +58,8 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
     return urls.map(url => (
         <div key={url} className="flex flex-row align-items-center mb-1">
             <img className="h-5 w-5 mr-1" src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${url}`} alt="favicon" />
-            <p>{url}</p>
-            <div className="text-red-600" onClick={() => removeUrl(url)}>x</div>
+            <p className='mr-3'>{url}</p>
+            <div className="text-red-600 cursor-pointer" onClick={() => removeUrl(url)}>x</div>
         </div>
     ))
   }
@@ -77,8 +78,8 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
 
   const createdLinkSuccessful = () => {
 
-    dayOptions.forEach(day => {
-      let refreshDay = document.getElementById(day.value) as HTMLInputElement
+    Object.keys(dayOptions).forEach((key, index) => {
+      let refreshDay = document.getElementById(dayOptions[key as keyof typeof dayOptions]) as HTMLInputElement
       if ( refreshDay ) {
         refreshDay.checked = false
       }
@@ -194,17 +195,18 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
   }
 
   const displayDays = () => {
-    return dayOptions.map(option => (
-      <div key={option.value}>
+    return Object.keys(dayOptions).map((key, index) => (
+      <div className='flex flex-row flex-wrap align-items-center' key={key}>
         <input 
-          name={option.label} 
-          onChange={ (e) => addDay(e, option.value) } 
-          id={option.value} 
+          className='mr-1 rounded-full'
+          name={key} 
+          onChange={ (e) => addDay(e, dayOptions[key as keyof typeof dayOptions]) } 
+          id={dayOptions[key as keyof typeof dayOptions]} 
           type="checkbox" 
-          value={option.value} 
-          checked={ days.includes(option.value) ? true : false } 
+          value={dayOptions[key as keyof typeof dayOptions]} 
+          checked={ days.includes(dayOptions[key as keyof typeof dayOptions]) ? true : false } 
         />
-        <label htmlFor={option.value}>{option.label}</label>
+        <label htmlFor={dayOptions[key as keyof typeof dayOptions]}>{key}</label>
       </ div>
     )) 
   }
@@ -218,7 +220,7 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
           <label className='text-base'>Title</label>
           <br />
           <input 
-              className='h-8 w-1/2'
+              className='h-8 w-1/2 border-2 border-gray-200 rounded-md pl-2 pr-2'
               placeholder="Enter title" 
               type="text" 
               value={title} 
@@ -231,9 +233,9 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
         <div className="urls mb-3">
             <label className='text-base'>URLs</label>
             <br />
-            <div className="urls__input flex flex-row">
+            <div className="urls__input flex flex-row mb-2">
               <input 
-                  className='h-8 w-1/2'
+                  className='h-8 w-1/2 border-2 border-gray-200 rounded-md pl-2 pr-2 mr-1'
                   placeholder="Add URL" 
                   type="text" 
                   value={url}
@@ -242,7 +244,7 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
               <button onClick={(e) => {
                 e.preventDefault()
                 addUrl()
-              }} className='bg-purple-400 w-3'>+</button>
+              }} className='bg-blue-400 hover:bg-blue-700 text-white text-base w-8 rounded-md border-none flex items-center justify-center'>+</button>
             </div>
             { displayUrls() }
         </div>
@@ -252,7 +254,7 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
         <div className='days mb-3'>
             <label className='text-base'>Days</label>
             <br />
-            <div className="flex flex-row items-center justify-between">
+            <div className="flex flex-row align-items-center justify-between">
             { displayDays() }
             </div>
         </div>
@@ -261,8 +263,10 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
         <div className="time mb-3">
           <label className='text-base'>Time</label>
           <br />
-          <input onChange={(e) => setHours(parseInt(e.target.value))} value={hours} type="number" placeholder="hours" />:
-          <input onChange={(e) => setMins(parseInt(e.target.value))} value={mins} type="number" placeholder="minutes" />
+          <div className="time__input">
+            <input className='w-20 p-1 border-2 border-gray-200 rounded-md pl-2 pr-2' onChange={(e) => setHours(parseInt(e.target.value))} value={hours} type="number" min={0} max={23} placeholder="hours" />
+            <input className='w-20 p-1 border-2 border-gray-200 rounded-md pl-2 pr-2' onChange={(e) => setMins(parseInt(e.target.value))} value={mins} type="number" min={0} max={59} placeholder="minutes" />
+          </div>   
         </div>
         
         <button className='bg-purple-200 mt-2 text-base'>{ editMode ? 'Update' : 'Submit' }</button>

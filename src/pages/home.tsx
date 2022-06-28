@@ -65,7 +65,7 @@ function Home() {
     return (
       <nav className="relative">
         <button 
-          className='bg-yellow-500'
+          className={`${!openNewTracker && !openTracker ? 'underline' : ''} mr-2`}
           onClick={() => { 
             setOpenNewTracker(false) 
             setOpenTracker(false)
@@ -73,7 +73,7 @@ function Home() {
             setLink(null)
           }}>Home</button>
         <button 
-          className="bg-orange-500 mb-3" 
+          className={`${openNewTracker && !openTracker ? 'underline' : ''} mb-3`}
           onClick={() => { 
             setOpenNewTracker(true) 
             setOpenTracker(false)
@@ -125,7 +125,7 @@ function Home() {
                 setLink(link)
                 setOpenNewTracker(false)
                 setOpenTracker(true)
-              }} className="grid grid-cols-10 align-items-center mb-5 cursor-pointer" key={link.title}>
+              }} className="grid grid-cols-10 items-center mb-5 cursor-pointer" key={link.title}>
               <div className="col-span-3 grid grid-cols-4">
                 <img
                   className="h-5 w-5 self-start col-span-1"
@@ -134,14 +134,16 @@ function Home() {
                 />
                 <h1 className="self-center col-span-3">{link.title}</h1>
               </div>
-              <div className={`col-span-5 w-full h-full border-2 border-black`}>
+              <div className={`col-span-5 w-full h-3/4 border-2 ${ link.time > link.timeLapsed ? ('border-slate-200') : ('border-green-400') } rounded-full overflow-hidden`}>
                 <div 
                   id={`${link.title}-progress`} 
-                  className={`h-full bg-orange-400`}
+                  className={`h-full ${ link.time > link.timeLapsed ? ('bg-blue-400') : ('bg-green-400') }`}
                   style={{ width: updateProgressBar(link.time, link.timeLapsed) }}
                 />
               </div>
-              <div className="time col-span-2">{ timeLeft(link.time, link.timeLapsed) }</div>
+              <div className="time col-span-2 justify-self-end items-center">
+                <p>{ timeLeft(link.time, link.timeLapsed) }</p>
+              </div>
             </div>
         )
       );
@@ -152,10 +154,14 @@ function Home() {
   };
 
   return (
-    <div className="w-96 h-96 p-5">
-      <h1 className="text-3xl font-sans">Time Tracker</h1>
-      { displayNavigation() }
-      { displayPage() }
+    <div className="w-96 h-[32rem]">
+      <div className="header bg-slate-100 p-5 pr-8 pl-8">
+        <h1 className="text-3xl font-sans mb-1">Time Tracker</h1>
+        { displayNavigation() }
+      </div>
+      <div className="displayPage p-5 pr-8 pl-8">
+        { displayPage() }
+      </div>
     </div>
   );
 }
