@@ -131,22 +131,6 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
     if ( success ) return <div id="success" className="text-green-600">{success}</div>
   }
 
-  const deleteLink = async () => {
-    
-    const existingLinks = await chrome.storage.local.get("links");
-    if ( existingLinks.links ) {
-      if ( existingLinks.links.length === 1 ) {
-        chrome.storage.local.set({"links": null})
-      } else {
-        existingLinks.links = existingLinks.links.filter((link: { title: string }) => link.title !== editTitle)
-        chrome.storage.local.set({"links": [...existingLinks.links]})
-      }
-      setSuccess('Deleted link successfully!')
-    } else {
-      setErrors(['Unable to delete link...'])
-    }
-  }
-
   const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
@@ -220,7 +204,7 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
           <label className='text-base'>Title</label>
           <br />
           <input 
-              className='h-8 w-1/2 border-2 border-gray-200 rounded-md pl-2 pr-2'
+              className='h-8 w-full border-2 border-gray-200 rounded-md pl-2 pr-2'
               placeholder="Enter title" 
               type="text" 
               value={title} 
@@ -233,9 +217,9 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
         <div className="urls mb-3">
             <label className='text-base'>URLs</label>
             <br />
-            <div className="urls__input flex flex-row mb-2">
+            <div className="urls__input mb-2 grid grid-cols-10">
               <input 
-                  className='h-8 w-1/2 border-2 border-gray-200 rounded-md pl-2 pr-2 mr-1'
+                  className='h-8 col-span-9 border-2 border-gray-200 rounded-md pl-2 pr-2 mr-1'
                   placeholder="Add URL" 
                   type="text" 
                   value={url}
@@ -244,7 +228,7 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
               <button onClick={(e) => {
                 e.preventDefault()
                 addUrl()
-              }} className='bg-blue-400 hover:bg-blue-700 text-white text-base w-8 rounded-md border-none flex items-center justify-center'>+</button>
+              }} className='col-span-1 bg-blue-400 hover:bg-blue-700 text-white text-base w-8 rounded-md border-none flex items-center justify-center'>+</button>
             </div>
             { displayUrls() }
         </div>
@@ -269,13 +253,11 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
           </div>   
         </div>
         
-        <button className='bg-purple-200 mt-2 text-base'>{ editMode ? 'Update' : 'Submit' }</button>
+        <button className='border-2 text-blue-400 border-blue-400 rounded-md mt-2 text-base py-1 px-2'>{ editMode ? 'Update' : 'Submit' }</button>
     </form>
 
     { displayErrors() }
     { displaySuccess() }
-    
-    { editMode ? (<button className='bg-red-400 text-base mt-2 mb-5' onClick={ () => deleteLink() }>Delete</button>) : (<></>) }
 
     </div>  
   )

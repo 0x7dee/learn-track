@@ -3,6 +3,8 @@ import { FiEdit } from 'react-icons/fi'
 
 
 const Tracker = ({ link, setOpenTracker, setOpenNewTracker, editMode, setEditMode }: any) => {
+  const [errors, setErrors] = useState<string[]>([])
+  const [success, setSuccess] = useState<string>('')
 
   const displayDays = () => {
     if ( link.days ) {
@@ -25,27 +27,55 @@ const Tracker = ({ link, setOpenTracker, setOpenNewTracker, editMode, setEditMod
     }
   }
 
+  const displayErrors = () => {
+    let allErrors = null
+    if ( errors ) {
+      allErrors = errors.map(error => (
+        <p key={error}>{error}</p>
+      ))
+    }
+    return <div id="errors" className="text-red-600">{allErrors}</div>
+  }
+
+  const displaySuccess = () => {
+    if ( success ) return <div id="success" className="text-green-600">{success}</div>
+  }
+
   const displayTitle = () => {
     return <h1 className='text-lg'>{link.title}</h1>
   }
 
   const displayTime = () => {
-    if (link.hours === 0) return <p>{`${link.mins}mins per day`}</p>
-    if (link.mins === 0) return <p>{`${link.hours}hr per day`}</p>
+    if (!link.hours || link.hours === 0) return <p>{`${link.mins}mins per day`}</p>
+    if (!link.mins || link.mins === 0) return <p>{`${link.hours}hr per day`}</p>
     return <p>{`${link.hours}hr ${link.mins}mins per day`}</p>
   }
 
   const editBtn = () => {
     return <FiEdit onClick={() => {
-      setOpenNewTracker(true)
-      setOpenTracker(false)
-      setEditMode(true)
-    }} className="absolute top-1 right-1 cursor-pointer z-10" />
+      
+    }} className="cursor-pointer z-10" />
+  }
+
+  const deleteLink = async () => {
+    
+    const existingLinks = await chrome.storage.local.get("links");
+    if ( existingLinks.links ) {
+      if ( existingLinks.links.length === 1 ) {
+        chrome.storage.local.set({"links": null})
+      } else {
+        existingLinks.links = existingLinks.links.filter((l: { title: string }) => l.title !== link.title)
+        chrome.storage.local.set({"links": [...existingLinks.links]})
+      }
+      setSuccess('Deleted link successfully!')
+    } else {
+      setErrors(['Unable to delete link...'])
+    }
   }
 
   return (
     <div className="tracker w-full h-full relative">
-        { editBtn() }
+        
         <div className="tracker__title relative grid grid-cols-2 items-center mb-3">
           { displayTitle() }
           { displayTime() }
@@ -59,7 +89,23 @@ const Tracker = ({ link, setOpenTracker, setOpenNewTracker, editMode, setEditMod
             { displayDays() }
         </div>
 
+        <div className="edit-delete fixed bottom-1 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-row items-center">
+        <button 
+            className='w-28 border-2 text-green-400 border-green-400 rounded-md mt-2 text-base py-1 px-2 mb-5 mr-2' 
+            onClick={ () => {
+              setOpenNewTracker(true)
+              setOpenTracker(false)
+              setEditMode(true)
+            } }
+          >Edit</button>
+          <button 
+            className='w-28 border-2 text-red-400 border-red-400 rounded-md mt-2 text-base py-1 px-2 mb-5' 
+            onClick={ () => deleteLink() }
+          >Delete</button>
+        </div>
         
+        { displaySuccess() }
+        { displayErrors() }
     </div>
     
   )

@@ -1,4 +1,5 @@
 let url: string = '';
+let currentDay: string = '';
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     /*
@@ -40,22 +41,37 @@ async function getCurrentTab() {
     // `tab` will either be a `tabs.Tab` instance or `undefined`.
     let [tab] = await chrome.tabs.query(queryOptions);
     return tab;
-  }
+}
+
+const resetAllTimeLapsed = async (links: any) => {
+    let resetLinks = links;
+    await resetLinks.forEach((link: any, index: number) => {
+        link[index].timeLapsed = 0;
+    });
+    chrome.storage.local.set({'links': resetLinks})
+}
 
 const updateLapsedTime = async (linkData: any, lastTab: any) => {
     let index = 0
     if ( !linkData ) return
 
+    let todaysDate = new Date();
+    let todaysDay = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][todaysDate.getDay()]
+    
+    /* If it's a new day then reset time lapsed for all links */
+    let newDay = todaysDay === currentDay ? false : true
+    if ( newDay ) resetAllTimeLapsed(linkData)
+    currentDay = todaysDay
+
+    /* Increment timeLapsed */
     linkData.forEach((link: { urls: any[], title: string }) => {
         link.urls.forEach((url: any) => {
             let timeLeft = linkData[index].timeLapsed <= linkData[index].time
-
-            let todaysDate = new Date();
-            let todaysDay = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][todaysDate.getDay()]
+            let urlsIsValid = compareUrls(url, lastTab.tab.url)
             let isStudyDay = linkData[index].days.indexOf(todaysDay) > -1
 
             /* Compare current url to urls specified in link, if there is no time left then ignore */
-            if( timeLeft && compareUrls(url, lastTab.tab.url) && isStudyDay ) {
+            if( timeLeft && urlsIsValid && isStudyDay ) {
                 let updatedLinkData = linkData;
                 updatedLinkData[index].timeLapsed += 1
                 chrome.storage.local.set({'links': updatedLinkData})   

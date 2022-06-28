@@ -57,10 +57,6 @@ function Home() {
     }
   }
 
-  const clearData = async () => {
-    await chrome.storage.local.set({"links": null});
-  }
-
   const displayNavigation = () => {
     return (
       <nav className="relative">
@@ -80,7 +76,6 @@ function Home() {
             setEditMode(false)
             setLink(null)
           }}>Add New Link</button>
-          <button className="absolute right-1" onClick={ () => clearData() }>Clear all</button>
       </nav>
     )
   }
@@ -125,7 +120,7 @@ function Home() {
                 setLink(link)
                 setOpenNewTracker(false)
                 setOpenTracker(true)
-              }} className="grid grid-cols-10 items-center mb-5 cursor-pointer" key={link.title}>
+              }} className="grid grid-cols-11 items-center mb-5 cursor-pointer" key={link.title}>
               <div className="col-span-3 grid grid-cols-4">
                 <img
                   className="h-5 w-5 self-start col-span-1"
@@ -134,14 +129,14 @@ function Home() {
                 />
                 <h1 className="self-center col-span-3">{link.title}</h1>
               </div>
-              <div className={`col-span-5 w-full h-3/4 border-2 ${ link.time > link.timeLapsed ? ('border-slate-200') : ('border-green-400') } rounded-full overflow-hidden`}>
+              <div className={`col-span-5 w-full h-3/4 border-2 ${ link.time > link.timeLapsed ? ('border-slate-200') : ('border-none') } rounded-full overflow-hidden`}>
                 <div 
                   id={`${link.title}-progress`} 
-                  className={`h-full ${ link.time > link.timeLapsed ? ('bg-blue-400') : ('bg-green-400') }`}
+                  className={`h-full transition linear delay-500 ${ link.time > link.timeLapsed ? ('bg-blue-400') : ('bg-green-400') }`}
                   style={{ width: updateProgressBar(link.time, link.timeLapsed) }}
                 />
               </div>
-              <div className="time col-span-2 justify-self-end items-center">
+              <div className="time col-span-3 justify-self-end items-center">
                 <p>{ timeLeft(link.time, link.timeLapsed) }</p>
               </div>
             </div>
