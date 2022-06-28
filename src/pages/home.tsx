@@ -81,6 +81,17 @@ function Home() {
     )
   }
 
+  const displayLinkToggle = () => {
+    if (!openTracker && !openNewTracker) {
+      return (
+        <div className="displayPage__toggle mb-6 flex flex-row">
+          <p onClick={ () => setOnlyShowToday(true) } className={`mr-2 cursor-pointer ${ onlyShowToday ? 'underline' : '' }`}>Today</p>
+          <p onClick={ () => setOnlyShowToday(false) } className={`cursor-pointer ${ !onlyShowToday ? 'underline' : '' }`}>Show all</p>
+        </div>
+      )
+    }
+  }
+
   const displayPage = () => {
     if ( loading ) {
       return <p>Loading...</p>
@@ -165,10 +176,7 @@ function Home() {
         { displayNavigation() }
       </div>
       <div className="displayPage p-5 pr-8 pl-8">
-        <div className="displayPage__toggle mb-6 flex flex-row">
-          <p onClick={ () => setOnlyShowToday(true) } className={`mr-2 cursor-pointer ${ onlyShowToday ? 'underline' : '' }`}>Today</p>
-          <p onClick={ () => setOnlyShowToday(false) } className={`cursor-pointer ${ !onlyShowToday ? 'underline' : '' }`}>Show all</p>
-        </div>
+        { displayLinkToggle() }
         { displayPage() }
       </div>
     </div>
