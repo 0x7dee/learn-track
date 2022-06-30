@@ -1,5 +1,4 @@
 let url: string = '';
-let currentDay: string = '';
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     /*
@@ -44,11 +43,14 @@ async function getCurrentTab() {
 }
 
 const resetAllTimeLapsed = async (links: any) => {
-    let resetLinks = links;
-    await resetLinks.forEach((link: any, index: number) => {
-        link[index].timeLapsed = 0;
-    });
-    chrome.storage.local.set({'links': resetLinks})
+    let existingLinks = await chrome.storage.local.get('links')
+    if ( existingLinks.links ) {
+        let updateTimeLinks = existingLinks.links
+        updateTimeLinks.forEach((link: { timeLapsed: number; }) => {
+        link.timeLapsed = 0
+        })
+        await chrome.storage.local.set({ links: updateTimeLinks })
+    }
 }
 
 const updateLapsedTime = async (linkData: any, lastTab: any) => {
@@ -56,19 +58,20 @@ const updateLapsedTime = async (linkData: any, lastTab: any) => {
     if ( !linkData ) return
 
     let todaysDate = new Date();
-    let todaysDay = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][todaysDate.getDay()]
+    let today = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][todaysDate.getDay()]
+    let getCurrentDay = await chrome.storage.local.get('currentDay')
+    let currentDay = getCurrentDay.currentDay ? getCurrentDay.currentDay : ''
     
     /* If it's a new day then reset time lapsed for all links */
-    let newDay = todaysDay === currentDay ? false : true
-    if ( newDay ) resetAllTimeLapsed(linkData)
-    currentDay = todaysDay
+    if ( today !== currentDay ) resetAllTimeLapsed(linkData)
+    await chrome.storage.local.set({ currentDay: today })
 
     /* Increment timeLapsed */
     linkData.forEach((link: { urls: any[], title: string }) => {
         link.urls.forEach((url: any) => {
             let timeLeft = linkData[index].timeLapsed <= linkData[index].time
             let urlsIsValid = compareUrls(url, lastTab.tab.url)
-            let isStudyDay = linkData[index].days.indexOf(todaysDay) > -1
+            let isStudyDay = linkData[index].days.indexOf(today) > -1
 
             /* Compare current url to urls specified in link, if there is no time left then ignore */
             if( timeLeft && urlsIsValid && isStudyDay ) {

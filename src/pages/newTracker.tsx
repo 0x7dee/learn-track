@@ -155,6 +155,7 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
       if ( !linkIsValid ) return
 
       if ( existingLinks.links.length > 0 ) {
+
         if ( editMode ) {
           existingLinks.links = existingLinks.links.filter(link => link.title !== editTitle)
         } 

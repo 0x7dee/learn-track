@@ -70,13 +70,13 @@ function Home() {
             setLink(null)
           }}>Home</button>
         <button 
-          className={`${openNewTracker && !openTracker ? 'underline' : ''} mb-3`}
+          className={`${openNewTracker && !openTracker ? 'underline' : ''} mb-3 mr-2`}
           onClick={() => { 
             setOpenNewTracker(true) 
             setOpenTracker(false)
             setEditMode(false)
             setLink(null)
-          }}>Add New Link</button>
+          }}>Add New</button>
       </nav>
     )
   }

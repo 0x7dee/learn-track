@@ -60,9 +60,9 @@ const Tracker = ({ link, setOpenTracker, setOpenNewTracker, editMode, setEditMod
   }
 
   const displayTime = () => {
-    if (!link.hours || link.hours === 0) return <p>{`${link.mins} mins per day`}</p>
-    if (!link.mins || link.mins === 0) return <p>{`${link.hours} hr per day`}</p>
-    return <p>{`${link.hours}hr ${link.mins} mins per day`}</p>
+    if (!link.hours || link.hours === 0) return <p className='justify-self-end'>{`${link.mins} mins per day`}</p>
+    if (!link.mins || link.mins === 0) return <p className='justify-self-end'>{`${link.hours} hr per day`}</p>
+    return <p className='justify-self-end'>{`${link.hours}hr ${link.mins} mins per day`}</p>
   }
 
   const deleteLink = async () => {
