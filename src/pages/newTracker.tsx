@@ -257,9 +257,10 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
         <div className="time mb-3">
           <label className='text-base'>Time</label>
           <br />
-          <div className="time__input">
+          <div className="time__input flex flex-row items-center">
+            <div className="flex flex-col">
             <input 
-              className='w-20 p-1 border-2 border-gray-200 rounded-md pl-2 pr-2' 
+              className='w-20 p-1 border-2 border-gray-200 rounded-md pl-2 pr-2 mr-1' 
               onChange={(e) => setHours(parseInt(e.target.value))} 
               value={hours} 
               type="number" 
@@ -267,15 +268,21 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
               max={23} 
               placeholder="hours" 
             />
-            <input 
-              className='w-20 p-1 border-2 border-gray-200 rounded-md pl-2 pr-2' 
-              onChange={(e) => setMins(parseInt(e.target.value))} 
-              value={mins} 
-              type="number" 
-              min={0} 
-              max={59} 
-              placeholder="minutes" 
-            />
+            <p className='mr-1 ml-1 justify-end'>Hours</p>
+            </div>
+            <div className="flex flex-col">
+              <input 
+                className='w-20 p-1 border-2 border-gray-200 rounded-md pl-2 pr-2' 
+                onChange={(e) => setMins(parseInt(e.target.value))} 
+                value={mins} 
+                type="number" 
+                min={0} 
+                max={59} 
+                placeholder="minutes" 
+              />
+              <p className='ml-1 justify-end'>Minutes</p>
+            </div>
+            
           </div>   
         </div>
         
