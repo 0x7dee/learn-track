@@ -10,8 +10,8 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
   const [urls, setUrls] = useState<string[]>([])
   const [days, setDays] = useState<string[]>([])
   const [time, setTime] = useState<number>(0)
-  const [hours, setHours] = useState<any>(null)
-  const [mins, setMins] = useState<any>(null)
+  const [hours, setHours] = useState<any>(0)
+  const [mins, setMins] = useState<any>(0)
   const [errors, setErrors] = useState<string[]>([])
   const [success, setSuccess] = useState<string>('')
 
@@ -147,7 +147,7 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
       timeLapsed
     }
 
-    const existingLinks = await chrome.storage.local.get("links");
+    const existingLinks: any = await chrome.storage.local.get("links");
 
     /* If array already exists then add the new link */
     if ( existingLinks && Array.isArray(existingLinks.links) ) {
@@ -157,7 +157,15 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
       if ( existingLinks.links.length > 0 ) {
 
         if ( editMode ) {
-          existingLinks.links = existingLinks.links.filter(link => link.title !== editTitle)
+          // find link and get lapsed time
+          await existingLinks.links.forEach((link: { title: string, timeLapsed: number }) => {
+            if (link.title == editTitle) {
+              newLink.timeLapsed = link.timeLapsed
+              return
+            }
+          })        
+          // remove old link
+          existingLinks.links = await existingLinks.links.filter((link: { title: string }) => link.title !== editTitle)
         } 
 
         chrome.storage.local.set({"links": [newLink, ...existingLinks.links]})
@@ -250,8 +258,24 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
           <label className='text-base'>Time</label>
           <br />
           <div className="time__input">
-            <input className='w-20 p-1 border-2 border-gray-200 rounded-md pl-2 pr-2' onChange={(e) => setHours(parseInt(e.target.value))} value={hours} type="number" min={0} max={23} placeholder="hours" />
-            <input className='w-20 p-1 border-2 border-gray-200 rounded-md pl-2 pr-2' onChange={(e) => setMins(parseInt(e.target.value))} value={mins} type="number" min={0} max={59} placeholder="minutes" />
+            <input 
+              className='w-20 p-1 border-2 border-gray-200 rounded-md pl-2 pr-2' 
+              onChange={(e) => setHours(parseInt(e.target.value))} 
+              value={hours} 
+              type="number" 
+              min={0} 
+              max={23} 
+              placeholder="hours" 
+            />
+            <input 
+              className='w-20 p-1 border-2 border-gray-200 rounded-md pl-2 pr-2' 
+              onChange={(e) => setMins(parseInt(e.target.value))} 
+              value={mins} 
+              type="number" 
+              min={0} 
+              max={59} 
+              placeholder="minutes" 
+            />
           </div>   
         </div>
         

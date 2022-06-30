@@ -130,17 +130,18 @@ function Home() {
           mins: number,
           hours: number,
           days: string[]
-        }) => {
+        }, index: number) => {
             
             if ( onlyShowToday && !link.days.includes(todaysDay) ) return
 
             return (
             <div 
+              key={`${link.title}-${index}-homepage`}
               onClick={() => {
                 setLink(link)
                 setOpenNewTracker(false)
                 setOpenTracker(true)
-              }} className="grid grid-cols-12 content-center mb-5 cursor-pointer" key={link.title}>
+              }} className="grid grid-cols-12 content-center mb-5 cursor-pointer" >
                 <div className="col-span-4 grid grid-cols-4 self-center content-center">
                   <img
                     className="h-5 w-5 justify-self-start self-center col-span-1"

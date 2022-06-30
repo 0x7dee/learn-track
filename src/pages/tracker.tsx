@@ -10,17 +10,13 @@ const Tracker = ({ link, setOpenTracker, setOpenNewTracker, editMode, setEditMod
     if ( link.days ) {
         return link.days.map((day: string, index: number, row: string | any[]) => {
             if ( index + 1 === row.length ) {
-              return (
-                <>
-                  <p className='mx-1' key={day}>{day}</p>
-                </>
-              )
+              return <p className='mx-1' key={`${day}-${index}`}>{day}</p>
             } else {
               return (
-                <>
-                  <p className='mx-1' key={day}>{day}</p>
+                <div className='flex flex-row' key={`${day}-${index}-with-dot`}>
+                  <p className='mx-1' >{day}</p>
                   <p>&#x2022;</p>
-                </>
+                </div>
               )
             }
             
@@ -30,9 +26,9 @@ const Tracker = ({ link, setOpenTracker, setOpenNewTracker, editMode, setEditMod
 
   const displayUrls = () => {
     if ( link.urls ) {
-        return link.urls.map((url: string) => {
+        return link.urls.map((url: string, index: number) => {
           return (
-            <div key={url} className="url flex flex-row align-items-center mb-1">
+            <div key={`${url}-${index}`} className="url flex flex-row align-items-center mb-1">
               <img className="h-5 w-5 mr-2" src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${url}`} alt="favicon" />
               <p>{url}</p>
             </div>
