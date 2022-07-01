@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import '../index.css'
-import { FiEdit } from 'react-icons/fi'
 
-const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, setEditMode }: any) => {
+const NewTracker: any = ({ link, editMode }: any) => {
   
   const [title, setTitle] = useState<string>('')
   const [editTitle, setEditTitle] = useState<string>('')
@@ -36,7 +35,6 @@ const NewTracker: any = ({ link, setOpenNewTracker, setOpenTracker, editMode, se
     Sun: 'sunday'
   }
   
-
   const updateUrlInput = (input: string) => {
     if (/\s+$/.test(input)) {
         addUrl()

@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import { FiEdit } from 'react-icons/fi'
+import React, { useState } from 'react'
 
 
-const Tracker = ({ link, setOpenTracker, setOpenNewTracker, editMode, setEditMode }: any) => {
+const Tracker = ({ link, setOpenTracker, setOpenNewTracker, setEditMode }: any) => {
   const [errors, setErrors] = useState<string[]>([])
   const [success, setSuccess] = useState<string>('')
 
@@ -29,8 +28,8 @@ const Tracker = ({ link, setOpenTracker, setOpenNewTracker, editMode, setEditMod
         return link.urls.map((url: string, index: number) => {
           return (
             <div key={`${url}-${index}`} className="url flex flex-row align-items-center mb-1">
-              <img className="h-5 w-5 mr-2" src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${url}`} alt="favicon" />
-              <p>{url}</p>
+              <img className="h-5 w-5 mr-2" src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${url}`} alt="favicon" />           
+              <a href={`${url}`} target='_blank' className='flex flex-row items-center'><p className='mr-2'>{url}</p></a>
             </div>
           )   
     })

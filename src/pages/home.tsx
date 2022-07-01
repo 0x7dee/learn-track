@@ -102,7 +102,6 @@ function Home() {
                 link={link} 
                 setOpenTracker={setOpenTracker} 
                 setOpenNewTracker={setOpenNewTracker} 
-                editMode={editMode} 
                 setEditMode={setEditMode}
               />
     }
@@ -110,10 +109,7 @@ function Home() {
     if ( openNewTracker ) {
       return <NewTracker 
                 link={link} 
-                setOpenTracker={setOpenTracker} 
-                setOpenNewTracker={setOpenNewTracker} 
                 editMode={editMode}
-                setEditMode={setEditMode}
               />
     }
 

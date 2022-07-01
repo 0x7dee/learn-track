@@ -9,8 +9,6 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     */
 })
 
-
-/* Timer to capture current time at each url */
 chrome.alarms.create('urlTimer', {
     periodInMinutes: 1 / 60
 })
