@@ -52,7 +52,7 @@ const Tracker = ({ link, setOpenTracker, setOpenNewTracker, setEditMode }: any) 
           return (
             <div key={`${url}-${index}`} className="url flex flex-row align-items-center mb-1">
               <img className="h-5 w-5 mr-2" src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${url}`} alt="favicon" />           
-              <a href={`${url}`} target='_blank' className='flex flex-row items-center'><p className='mr-2'>{ formatUrl(url) }</p></a>
+              <a href={`${url}`} target='_blank' className='flex flex-row items-center'><p className='mr-2'>{ url }</p></a>
             </div>
           )   
     })
@@ -119,7 +119,7 @@ const Tracker = ({ link, setOpenTracker, setOpenNewTracker, setEditMode }: any) 
         
         <div className="edit-delete fixed bottom-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-row items-center">
         <button 
-            className='w-28 border-2 text-green-400 border-green-400 rounded-md mt-2 text-base py-1 px-2 mb-5 mr-2' 
+            className='w-28 border text-green-400 border-green-400 rounded-md mt-2 text-sm py-1 px-2 mb-5 mr-2 hover:text-neutral-100 hover:bg-green-400 transition ease-in-out duration-300' 
             onClick={ () => {
               setOpenNewTracker(true)
               setOpenTracker(false)
@@ -127,7 +127,7 @@ const Tracker = ({ link, setOpenTracker, setOpenNewTracker, setEditMode }: any) 
             } }
           >Edit</button>
           <button 
-            className='w-28 border-2 text-red-400 border-red-400 rounded-md mt-2 text-base py-1 px-2 mb-5' 
+            className='w-28 border text-red-400 border-red-400 rounded-md mt-2 text-sm py-1 px-2 mb-5 hover:text-neutral-100 hover:bg-red-400 transition ease-in-out duration-300' 
             onClick={ () => deleteLink() }
           >Delete</button>
         </div>

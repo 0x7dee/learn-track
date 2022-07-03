@@ -62,9 +62,9 @@ function Home() {
 
   const displayNavigation = () => {
     return (
-      <nav className="relative">
+      <nav className="relative flex flex-row items-center mt-2">
         <button 
-          className={`${!openNewTracker && !openTracker ? 'underline' : ''} mr-2`}
+          className={`${!openNewTracker && !openTracker ? 'text-black' : 'text-slate-400'} mr-2`}
           onClick={() => { 
             setOpenNewTracker(false) 
             setOpenTracker(false)
@@ -72,7 +72,7 @@ function Home() {
             setLink(null)
           }}>Home</button>
         <button 
-          className={`${openNewTracker && !openTracker ? 'underline' : ''} mb-3 mr-2`}
+          className={`${openNewTracker && !openTracker ? 'text-black' : 'text-slate-400'} mr-2`}
           onClick={() => { 
             setOpenNewTracker(true) 
             setOpenTracker(false)
@@ -87,11 +87,18 @@ function Home() {
     if (!openTracker && !openNewTracker) {
       return (
         <div className="displayPage__toggle mb-6 flex flex-row">
-          <p onClick={ () => setOnlyShowToday(true) } className={`mr-2 cursor-pointer ${ onlyShowToday ? 'underline' : '' }`}>Today</p>
-          <p onClick={ () => setOnlyShowToday(false) } className={`cursor-pointer ${ !onlyShowToday ? 'underline' : '' }`}>Show all {`(${ existingLinks ? existingLinks.length : '0' })`}</p>
+          <p onClick={ () => setOnlyShowToday(true) } className={`mr-2 cursor-pointer ${ onlyShowToday ? 'text-black' : 'text-slate-400' }`}>Today</p>
+          <p onClick={ () => setOnlyShowToday(false) } className={`cursor-pointer ${ !onlyShowToday ? 'text-black' : 'text-slate-400' }`}>Show all {`(${ existingLinks ? existingLinks.length : '0' })`}</p>
         </div>
       )
     }
+  }
+
+  const shortenTitle = (title: string) => {
+    if ( title.length > 10 ) {
+      return title.slice(0, 8) + '...'
+    }
+    return title
   }
 
   const displayPage = () => {
@@ -152,15 +159,15 @@ function Home() {
                     src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${link.urls[0]}`}
                     alt="favicon"
                   />
-                  <h1 className="self-center col-span-3">{link.title}</h1>
+                  <h1 className="self-center col-span-3">{shortenTitle(link.title)}</h1>
                 </div>
-                <div className={`flex flex-row items-center self-center col-span-5 w-full h-4 border-2 ${ link.time > link.timeLapsed ? ('border-slate-200') : ('border-none') } rounded-full overflow-hidden`}>
+                <div className={`flex flex-row items-center self-center col-span-5 w-full h-3 border ${ link.time > link.timeLapsed ? ('border-neutral-200') : ('border-none') } rounded-full overflow-hidden`}>
                   <div 
                     id={`${link.title}-progress`} 
-                    className={`h-full transition linear delay-500 ${ link.time > link.timeLapsed ? ('bg-blue-400') : ('bg-green-400') }`}
+                    className={`h-full transition linear delay-500 ${ link.time > link.timeLapsed ? ('bg-sky-200') : ('bg-green-300') }`}
                     style={{ width: updateProgressBar(link.time, link.timeLapsed) }}
                   />
-                </div>
+                </div>     
                 <div className="time col-span-3 justify-self-end items-center self-center">
                   <p>{ timeLeft(link.time, link.timeLapsed) }</p>
                 </div>
@@ -176,8 +183,8 @@ function Home() {
 
   return (
     <div className="w-96 h-[32rem]">
-      <div className="header bg-slate-100 p-5 pr-8 pl-8">
-        <h1 className="text-3xl font-sans mb-1">Time Tracker</h1>
+      <div className="header bg-neutral-50 pt-6 pb-6 pr-8 pl-8 border-dashed border-b-2">
+        <h1 className="text-3xl font-serif mb-1">Trackly</h1>
         { displayNavigation() }
       </div>
       <div className="displayPage p-5 pr-8 pl-8">

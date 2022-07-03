@@ -33,7 +33,6 @@ const NewTracker: any = ({ link, editMode }: any) => {
   const [mins, setMins] = useState<any>(0)
   const [errors, setErrors] = useState<string[]>([])
   const [success, setSuccess] = useState<string>('')
-  const [protocol, setProtocol] = useState<string>('https://')
 
   useEffect(() => {
     if (link && editMode) {
@@ -49,7 +48,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
   const updateUrlInput = (input: string) => {
     {/* spacebar will add url */}
     if (/\s+$/.test(input)) {
-        addUrl(protocol + formatUrl(url))
+        addUrl(formatUrl(url))
     } else {
         setUrl(input);
     }
@@ -234,9 +233,10 @@ const NewTracker: any = ({ link, editMode }: any) => {
           <label className='text-base'>Title</label>
           <br />
           <input 
-              className='h-8 w-full border-2 border-gray-200 rounded-md pl-2 pr-2'
+              className='h-8 w-full border border-neutral-200 rounded-md pl-2 pr-2'
               placeholder="Enter title" 
               type="text" 
+              maxLength={18}
               value={title} 
               onChange={(e) => setTitle(e.target.value)} 
           />
@@ -247,18 +247,8 @@ const NewTracker: any = ({ link, editMode }: any) => {
             <label className='text-base'>Add URLs</label>
             <br />
             <div className="urls__input mb-2 grid grid-cols-10">
-              <select 
-                className='col-span-3 border-gray-200 rounded-md pl-2 pr-2 mr-1 cursor-pointer' 
-                value={protocol} 
-                onChange={(e) => setProtocol(e.target.value)}
-                name="protocol" 
-                title="Protocol"
-              >
-                <option value="https://">https://</option>
-                <option value="http://">http://</option>
-              </select>
               <input 
-                  className='h-8 col-span-6 border-2 border-gray-200 rounded-md pl-2 pr-2 mr-1'
+                  className='h-8 col-span-9 border border-neutral-200 rounded-md pl-2 pr-2 mr-1'
                   placeholder="Add URL" 
                   type="text" 
                   value={url}
@@ -266,7 +256,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
               />
               <button onClick={(e) => {
                 e.preventDefault()
-                addUrl(protocol + formatUrl(url))
+                addUrl(formatUrl(url))
               }} className='col-span-1 bg-blue-400 hover:bg-blue-700 text-white text-base w-8 rounded-md border-none flex items-center justify-center'>+</button>
             </div>
             { displayUrls() }
@@ -288,7 +278,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
           <div className="time__input flex flex-row items-center">
             <div className="flex flex-col">
             <input 
-              className='w-20 p-1 border-2 border-gray-200 rounded-md pl-2 pr-2 mr-1' 
+              className='w-20 p-1 border border-neutral-200 rounded-md pl-2 pr-2 mr-1' 
               onChange={(e) => setHours(parseInt(e.target.value))} 
               value={hours} 
               type="number" 
@@ -300,7 +290,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
             </div>
             <div className="flex flex-col">
               <input 
-                className='w-20 p-1 border-2 border-gray-200 rounded-md pl-2 pr-2' 
+                className='w-20 p-1 border border-neutral-200 rounded-md pl-2 pr-2' 
                 onChange={(e) => setMins(parseInt(e.target.value))} 
                 value={mins} 
                 type="number" 
@@ -314,7 +304,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
           </div>   
         </div>
         
-        <button className='border-2 text-blue-400 border-blue-400 rounded-md mt-2 text-base py-1 px-2'>{ editMode ? 'Update' : 'Submit' }</button>
+        <button className='border text-blue-400 border-blue-400 rounded-md mt-2 text-sm py-1 px-2 w-28 hover:text-neutral-100 hover:bg-blue-400 transition ease-in-out duration-300'>{ editMode ? 'Update' : 'Submit' }</button>
     </form>
 
     { displayErrors() }
