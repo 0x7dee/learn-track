@@ -220,7 +220,6 @@ const NewTracker: any = ({ link, editMode }: any) => {
           />
         </div>
         
-
         { /* URLS */ }
         <div className="urls mb-3">
             <label className='text-base'>URLs</label>
@@ -241,8 +240,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
             { displayUrls() }
         </div>
 
-        { /* Days of the week */ }
-  
+        { /* Days of the week */ } 
         <div className='days mb-3'>
             <label className='text-base'>Days</label>
             <br />

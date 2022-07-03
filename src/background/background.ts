@@ -1,14 +1,5 @@
 let url: string = '';
 
-chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-    /*
-    console.log({msg})
-    console.log({sender})
-    url = sender.url || ''
-    sendResponse('From the background script')
-    */
-})
-
 chrome.alarms.create('urlTimer', {
     periodInMinutes: 1 / 60
 })
@@ -45,7 +36,7 @@ const resetAllTimeLapsed = async (links: any) => {
     if ( existingLinks.links ) {
         let updateTimeLinks = existingLinks.links
         updateTimeLinks.forEach((link: { timeLapsed: number; }) => {
-        link.timeLapsed = 0
+            link.timeLapsed = 0
         })
         await chrome.storage.local.set({ links: updateTimeLinks })
     }
