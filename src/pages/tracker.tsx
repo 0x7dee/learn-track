@@ -10,7 +10,17 @@ const Tracker = ({ link, setOpenTracker, setOpenNewTracker, setEditMode }: any) 
         let totalTrues = Object.values(link.days).reduce((a: number, day) => a + (day === true ? 1 : 0), 0)
         let numberOfTrues = 0
 
-        return Object.keys(link.days).map((day: string) => {
+        let orderedDays = {
+          Monday: link.days['Monday'],
+          Tuesday: link.days['Tuesday'],
+          Wednesday: link.days['Wednesday'],
+          Thursday: link.days['Thursday'],
+          Friday: link.days['Friday'],
+          Saturday: link.days['Saturday'],
+          Sunday: link.days['Sunday'],
+        }
+
+        return Object.keys(orderedDays).map((day: string) => {
           
           if ( link.days[day] ) {
             numberOfTrues += 1

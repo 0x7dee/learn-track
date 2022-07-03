@@ -14,8 +14,10 @@ function Home() {
   const [onlyShowToday, setOnlyShowToday] = useState(true)
   
   useEffect(() => {
+
     const secondInterval = setInterval(async () => {
       updateLinks();
+
       if (loading) {
         setLoading(false)
       }
@@ -86,7 +88,7 @@ function Home() {
       return (
         <div className="displayPage__toggle mb-6 flex flex-row">
           <p onClick={ () => setOnlyShowToday(true) } className={`mr-2 cursor-pointer ${ onlyShowToday ? 'underline' : '' }`}>Today</p>
-          <p onClick={ () => setOnlyShowToday(false) } className={`cursor-pointer ${ !onlyShowToday ? 'underline' : '' }`}>Show all</p>
+          <p onClick={ () => setOnlyShowToday(false) } className={`cursor-pointer ${ !onlyShowToday ? 'underline' : '' }`}>Show all {`(${ existingLinks ? existingLinks.length : '' })`}</p>
         </div>
       )
     }
@@ -115,7 +117,12 @@ function Home() {
 
     if (existingLinks && existingLinks.length > 0) {
       let todaysDate = new Date();
-      let todaysDay = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][todaysDate.getDay()]
+      let today = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][todaysDate.getDay()]
+      let anyLinksForToday = existingLinks.reduce((prev: number, link: any) => prev + (link.days[today] === true ? 1 : 0), 0)
+
+      if (onlyShowToday && anyLinksForToday === 0) {
+        return <p>No links for today...</p>
+      }
 
       return existingLinks.map(
         (link: {
@@ -128,7 +135,8 @@ function Home() {
           days: any
         }, index: number) => {
             
-            if ( onlyShowToday && !link.days[todaysDay] ) return
+            {/* Filter out days */}
+            if ( onlyShowToday && !link.days[today] ) return
 
             return (
             <div 
@@ -174,7 +182,9 @@ function Home() {
       </div>
       <div className="displayPage p-5 pr-8 pl-8">
         { displayLinkToggle() }
-        { displayPage() }
+        <div id="page">
+          { displayPage() }
+        </div> 
       </div>
     </div>
   );
