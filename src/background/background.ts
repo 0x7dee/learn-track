@@ -47,7 +47,7 @@ const updateLapsedTime = async (linkData: any, lastTab: any) => {
     if ( !linkData ) return
 
     let todaysDate = new Date();
-    let today = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][todaysDate.getDay()]
+    let today = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][todaysDate.getDay()]
     let getCurrentDay = await chrome.storage.local.get('currentDay')
     let currentDay = getCurrentDay.currentDay ? getCurrentDay.currentDay : ''
     
@@ -60,7 +60,7 @@ const updateLapsedTime = async (linkData: any, lastTab: any) => {
         link.urls.forEach((url: any) => {
             let timeLeft = linkData[index].timeLapsed <= linkData[index].time
             let urlsIsValid = compareUrls(url, lastTab.tab.url)
-            let isStudyDay = linkData[index].days.indexOf(today) > -1
+            let isStudyDay = linkData[index].days[today]
 
             /* Compare current url to urls specified in link, if there is no time left then ignore */
             if( timeLeft && urlsIsValid && isStudyDay ) {

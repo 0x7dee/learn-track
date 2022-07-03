@@ -2,12 +2,32 @@ import React, { useEffect, useState } from 'react'
 import '../index.css'
 
 const NewTracker: any = ({ link, editMode }: any) => {
+
+  let defaultDays = {
+    Monday: false,
+    Tuesday: false,
+    Wednesday: false,
+    Thursday: false,
+    Friday: false,
+    Saturday: false,
+    Sunday: false
+  }
+
+  let dayOptions = {
+    Mon: 'Monday',
+    Tues: 'Tuesday',
+    Wed: 'Wednesday',
+    Thurs: 'Thursday',
+    Fri: 'Friday',
+    Sat: 'Saturday',
+    Sun: 'Sunday'
+  }
   
   const [title, setTitle] = useState<string>('')
   const [editTitle, setEditTitle] = useState<string>('')
   const [url, setUrl] = useState<string>('')
   const [urls, setUrls] = useState<string[]>([])
-  const [days, setDays] = useState<string[]>([])
+  const [days, setDays] = useState<any>(defaultDays)
   const [time, setTime] = useState<number>(0)
   const [hours, setHours] = useState<any>(0)
   const [mins, setMins] = useState<any>(0)
@@ -25,16 +45,6 @@ const NewTracker: any = ({ link, editMode }: any) => {
     }
   }, [])
 
-  let dayOptions = {
-    Mon: 'monday',
-    Tues: 'tuesday',
-    Wed: 'wednesday',
-    Thurs: 'thursday',
-    Fri: 'friday',
-    Sat: 'saturday',
-    Sun: 'sunday'
-  }
-  
   const updateUrlInput = (input: string) => {
     if (/\s+$/.test(input)) {
         addUrl()
@@ -67,7 +77,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
     setEditTitle('')
     setUrl('')
     setUrls([])
-    setDays([])
+    setDays(defaultDays)
     setTime(0)
     setHours(0)
     setMins(0)
@@ -100,7 +110,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
     if ( urls.length < 1 ) errors.push("No urls are set")
     
     /* Check days are selected */
-    if ( days.length < 1 ) errors.push("No days are selected")
+    if ( JSON.stringify(days) === JSON.stringify(defaultDays) ) errors.push("No days are selected")
 
     /* Check time, timeElapsed exists */
     if ( !time ) errors.push("Time must not be empty")
@@ -178,11 +188,10 @@ const NewTracker: any = ({ link, editMode }: any) => {
   }
 
   const addDay = (e: React.ChangeEvent<HTMLInputElement>, day: string) => {
-    if ( e.target.checked && !days.includes(day) ) {
-      setDays([day, ...days]);
+    if ( e.target.checked && !days[day] ) {
+      setDays({ ...days, [day]: true })
     } else {
-      let removeDay = days.filter(d => d != day)
-      setDays(removeDay)
+      setDays({ ...days, [day]: false })
     }
   }
 
@@ -196,7 +205,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
           id={dayOptions[key as keyof typeof dayOptions]} 
           type="checkbox" 
           value={dayOptions[key as keyof typeof dayOptions]} 
-          checked={ days.includes(dayOptions[key as keyof typeof dayOptions]) ? true : false } 
+          checked={ days[dayOptions[key as keyof typeof dayOptions]] ? true : false } 
         />
         <label htmlFor={dayOptions[key as keyof typeof dayOptions]}>{key}</label>
       </ div>

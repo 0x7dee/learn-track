@@ -115,7 +115,7 @@ function Home() {
 
     if (existingLinks && existingLinks.length > 0) {
       let todaysDate = new Date();
-      let todaysDay = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][todaysDate.getDay()]
+      let todaysDay = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][todaysDate.getDay()]
 
       return existingLinks.map(
         (link: {
@@ -125,10 +125,10 @@ function Home() {
           time: number,
           mins: number,
           hours: number,
-          days: string[]
+          days: any
         }, index: number) => {
             
-            if ( onlyShowToday && !link.days.includes(todaysDay) ) return
+            if ( onlyShowToday && !link.days[todaysDay] ) return
 
             return (
             <div 

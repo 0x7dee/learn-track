@@ -7,18 +7,25 @@ const Tracker = ({ link, setOpenTracker, setOpenNewTracker, setEditMode }: any) 
 
   const displayDays = () => {
     if ( link.days ) {
-        return link.days.map((day: string, index: number, row: string | any[]) => {
-            if ( index + 1 === row.length ) {
-              return <p className='mx-1' key={`${day}-${index}`}>{day}</p>
+        let totalTrues = Object.values(link.days).reduce((a: number, day) => a + (day === true ? 1 : 0), 0)
+        let numberOfTrues = 0
+
+        return Object.keys(link.days).map((day: string) => {
+          
+          if ( link.days[day] ) {
+            numberOfTrues += 1
+
+            if ( numberOfTrues === totalTrues) {
+              return <p className='mx-1' key={`${day}-${numberOfTrues}`}>{day}</p>
             } else {
               return (
-                <div className='flex flex-row' key={`${day}-${index}-with-dot`}>
+                <div className='flex flex-row' key={`${day}-${numberOfTrues}-with-dot`}>
                   <p className='mx-1' >{day}</p>
                   <p>&#x2022;</p>
                 </div>
               )
             }
-            
+          } 
         })
     }
   }
