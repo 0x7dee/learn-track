@@ -5,6 +5,12 @@ const Tracker = ({ link, setOpenTracker, setOpenNewTracker, setEditMode }: any) 
   const [errors, setErrors] = useState<string[]>([])
   const [success, setSuccess] = useState<string>('')
 
+  const formatUrl = (url: string) => {
+    let removeHttps = url.replace(/^https?:\/\//, '')
+    let removeHttp = removeHttps.replace(/^http?:\/\//, '')
+    return removeHttp
+  }
+
   const displayDays = () => {
     if ( link.days ) {
         let totalTrues = Object.values(link.days).reduce((a: number, day) => a + (day === true ? 1 : 0), 0)
@@ -46,7 +52,7 @@ const Tracker = ({ link, setOpenTracker, setOpenNewTracker, setEditMode }: any) 
           return (
             <div key={`${url}-${index}`} className="url flex flex-row align-items-center mb-1">
               <img className="h-5 w-5 mr-2" src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${url}`} alt="favicon" />           
-              <a href={`${url}`} target='_blank' className='flex flex-row items-center'><p className='mr-2'>{url}</p></a>
+              <a href={`${url}`} target='_blank' className='flex flex-row items-center'><p className='mr-2'>{ formatUrl(url) }</p></a>
             </div>
           )   
     })

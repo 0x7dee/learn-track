@@ -33,6 +33,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
   const [mins, setMins] = useState<any>(0)
   const [errors, setErrors] = useState<string[]>([])
   const [success, setSuccess] = useState<string>('')
+  const [protocol, setProtocol] = useState<string>('https://')
 
   useEffect(() => {
     if (link && editMode) {
@@ -46,16 +47,22 @@ const NewTracker: any = ({ link, editMode }: any) => {
   }, [])
 
   const updateUrlInput = (input: string) => {
+    {/* spacebar will add url */}
     if (/\s+$/.test(input)) {
-        addUrl()
+        addUrl(protocol + formatUrl(url))
     } else {
         setUrl(input);
     }
   }
 
-  const addUrl  = () => {
-      setUrls([url, ...urls]);
-      setUrl('');
+  const addUrl  = (url: string) => {
+      if ( !urls.includes(url) ) {
+        setUrls([url, ...urls]);
+        setUrl('');
+        setErrors([])
+      } else {
+        setErrors(['URL already exists', ...errors])
+      }
   }
 
   const removeUrl = (url: string) => {
@@ -66,7 +73,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
     return urls.map(url => (
         <div key={url} className="flex flex-row align-items-center mb-1">
             <img className="h-5 w-5 mr-1" src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${url}`} alt="favicon" />
-            <p className='mr-3'>{url}</p>
+            <p className='mr-3'>{formatUrl(url)}</p>
             <div className="text-red-600 cursor-pointer" onClick={() => removeUrl(url)}>x</div>
         </div>
     ))
@@ -195,6 +202,12 @@ const NewTracker: any = ({ link, editMode }: any) => {
     }
   }
 
+  const formatUrl = (url: string) => {
+    let removeHttps = url.replace(/^https?:\/\//, '')
+    let removeHttp = removeHttps.replace(/^http?:\/\//, '')
+    return removeHttp
+  }
+
   const displayDays = () => {
     return Object.keys(dayOptions).map((key, index) => (
       <div className='flex flex-row flex-wrap align-items-center' key={key}>
@@ -231,11 +244,21 @@ const NewTracker: any = ({ link, editMode }: any) => {
         
         { /* URLS */ }
         <div className="urls mb-3">
-            <label className='text-base'>URLs</label>
+            <label className='text-base'>Add URLs</label>
             <br />
             <div className="urls__input mb-2 grid grid-cols-10">
+              <select 
+                className='col-span-3 border-gray-200 rounded-md pl-2 pr-2 mr-1 cursor-pointer' 
+                value={protocol} 
+                onChange={(e) => setProtocol(e.target.value)}
+                name="protocol" 
+                title="Protocol"
+              >
+                <option value="https://">https://</option>
+                <option value="http://">http://</option>
+              </select>
               <input 
-                  className='h-8 col-span-9 border-2 border-gray-200 rounded-md pl-2 pr-2 mr-1'
+                  className='h-8 col-span-6 border-2 border-gray-200 rounded-md pl-2 pr-2 mr-1'
                   placeholder="Add URL" 
                   type="text" 
                   value={url}
@@ -243,7 +266,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
               />
               <button onClick={(e) => {
                 e.preventDefault()
-                addUrl()
+                addUrl(protocol + formatUrl(url))
               }} className='col-span-1 bg-blue-400 hover:bg-blue-700 text-white text-base w-8 rounded-md border-none flex items-center justify-center'>+</button>
             </div>
             { displayUrls() }
