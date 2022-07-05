@@ -182,7 +182,7 @@ function Home() {
   };
 
   return (
-    <div className="w-96 h-[32rem] relative">
+    <div className="w-96 h-[34rem] relative">
       <div className="header bg-neutral-50 pt-6 pb-6 pr-8 pl-8 border-dashed border-slate-300 border-b-2">
         <h1 className="text-3xl font-serif mb-1">Trackly</h1>
         { displayNavigation() }
@@ -193,7 +193,7 @@ function Home() {
           { displayPage() }
         </div> 
       </div>
-      <div id="advertisement" className="w-full h-12 flex flex-row items-center absolute bottom-0 bg-neutral-50 pr-8 pl-8 border-dashed border-slate-300 border-t-2">
+      <div id="advertisement" className="w-full h-10 flex flex-row items-center absolute bottom-0 pr-8 pl-8 border-dashed border-slate-300 border-t-2">
         <p>Want to learn to code? Check <a className="text-blue-400" href="https://www.google.com" target='_blank'>this</a> out</p>
       </div>
     </div>

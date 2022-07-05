@@ -117,7 +117,7 @@ const Tracker = ({ link, setOpenTracker, setOpenNewTracker, setEditMode }: any) 
           </div>
         </div>
         
-        <div className="edit-delete fixed bottom-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-row items-center">
+        <div className="edit-delete fixed bottom-4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-row items-center">
         <button 
             className='w-28 border text-emerald-400 border-emerald-400 rounded-md mt-2 text-sm py-1 px-2 mb-5 mr-2 hover:text-neutral-100 hover:bg-emerald-400 transition ease-in-out duration-300' 
             onClick={ () => {

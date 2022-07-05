@@ -48,7 +48,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
   const updateUrlInput = (input: string) => {
     {/* spacebar will add url */}
     if (/\s+$/.test(input)) {
-        addUrl(formatUrl(url))
+        addUrl(url)
     } else {
         setUrl(input);
     }
@@ -256,7 +256,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
               />
               <button onClick={(e) => {
                 e.preventDefault()
-                addUrl(formatUrl(url))
+                addUrl(url)
               }} className='col-span-1 bg-sky-300 hover:bg-sky-400 text-white text-base w-8 rounded-md border-none flex items-center justify-center transition ease-in-out duration-300'>+</button>
             </div>
             { displayUrls() }
