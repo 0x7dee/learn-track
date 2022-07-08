@@ -194,7 +194,7 @@ function Home() {
         </div> 
       </div>
       <div id="advertisement" className="w-full h-10 flex flex-row items-center absolute bottom-0 pr-8 pl-8 border-dashed border-slate-300 border-t-2">
-        <p>Want to learn to code? Check <a className="text-blue-400" href="https://www.google.com" target='_blank'>this</a> out</p>
+        <p>Want to 10x your online productivity? Check <a rel="noopener" className="text-blue-400" href="https://www.google.com" target='_blank'>this</a> out</p>
       </div>
     </div>
   );
