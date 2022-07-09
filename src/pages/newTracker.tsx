@@ -70,10 +70,10 @@ const NewTracker: any = ({ link, editMode }: any) => {
 
   const displayUrls = () => {
     return urls.map(url => (
-        <div key={url} className="flex flex-row align-items-center mb-1">
-            <img className="h-5 w-5 mr-1" src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${url}`} alt="favicon" />
-            <p className='mr-3'>{formatUrl(url)}</p>
-            <div className="text-red-600 cursor-pointer" onClick={() => removeUrl(url)}>x</div>
+        <div key={url} className="grid grid-cols-10 align-items-center mb-1 w-full">
+            <img className="h-5 w-5 cols-span-1" src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${url}`} alt="favicon" />
+            <p className='mr-3 col-span-8'>{formatUrl(url)}</p>
+            <div className="text-red-600 cursor-pointer cols-span-1" onClick={() => removeUrl(url)}>x</div>
         </div>
     ))
   }
