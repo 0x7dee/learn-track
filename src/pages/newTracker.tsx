@@ -259,7 +259,9 @@ const NewTracker: any = ({ link, editMode }: any) => {
                 addUrl(url)
               }} className='col-span-1 bg-sky-300 hover:bg-sky-400 text-white text-base w-8 rounded-md border-none flex items-center justify-center transition ease-in-out duration-300'>+</button>
             </div>
-            { displayUrls() }
+            <div className='max-h-24 overscroll-contain overflow-y-auto'>
+              { displayUrls() }
+            </div>
         </div>
 
         { /* Days of the week */ } 
@@ -304,7 +306,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
           </div>   
         </div>
         
-        <button className='border text-sky-400 border-sky-400 rounded-md mt-2 text-sm py-1 px-2 w-28 hover:text-neutral-100 hover:bg-sky-400 transition ease-in-out duration-300'>{ editMode ? 'Update' : 'Submit' }</button>
+        <button className='rounded-md mt-2 text-sm py-1 px-2 w-28 border text-sky-400 border-sky-400 hover:text-neutral-100 hover:bg-sky-400 transition ease-in-out duration-300'>{ editMode ? 'Update' : 'Submit' }</button>
     </form>
 
     { displayErrors() }
