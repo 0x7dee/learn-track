@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import '../index.css';
 import NewTracker from "./newTracker";
 import Tracker from "./tracker";
+import { GrAddCircle } from 'react-icons/gr'
 
 
 function Home() {
@@ -71,14 +72,13 @@ function Home() {
             setEditMode(false)
             setLink(null)
           }}>Home</button>
-        <button 
-          className={`${openNewTracker && !openTracker ? 'text-black' : 'text-slate-400'} mr-2`}
-          onClick={() => { 
-            setOpenNewTracker(true) 
-            setOpenTracker(false)
-            setEditMode(false)
-            setLink(null)
-          }}>Add New</button>
+          <button 
+          className={`${'text-slate-400'} mr-2`}
+          onClick={() => {}}>About</button>
+          <button 
+          className={`${'text-slate-400'} mr-2`}
+          onClick={() => {}}>Learn More</button>
+        
       </nav>
     )
   }
@@ -86,9 +86,18 @@ function Home() {
   const displayLinkToggle = () => {
     if (!openTracker && !openNewTracker) {
       return (
-        <div className="displayPage__toggle mb-6 flex flex-row">
+        <div className="displayPage__toggle mb-6 flex flex-row items-center w-full">
           <p onClick={ () => setOnlyShowToday(true) } className={`mr-2 cursor-pointer ${ onlyShowToday ? 'text-black' : 'text-slate-400' }`}>Today</p>
           <p onClick={ () => setOnlyShowToday(false) } className={`cursor-pointer ${ !onlyShowToday ? 'text-black' : 'text-slate-400' }`}>Show all {`(${ existingLinks ? existingLinks.length : '0' })`}</p>
+           <button 
+            className='ml-auto rounded-md text-xs py-1 px-0 w-16 border text-sky-400 border-sky-400 hover:text-neutral-100 hover:bg-sky-400 transition ease-in-out duration-300'
+            onClick={() => { 
+              setOpenNewTracker(true) 
+              setOpenTracker(false)
+              setEditMode(false)
+              setLink(null)
+            }}
+            >New</button>
         </div>
       )
     }
