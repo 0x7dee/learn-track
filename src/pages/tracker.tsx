@@ -5,12 +5,6 @@ const Tracker = ({ link, setOpenTracker, setOpenNewTracker, setEditMode }: any) 
   const [errors, setErrors] = useState<string[]>([])
   const [success, setSuccess] = useState<string>('')
 
-  const formatUrl = (url: string) => {
-    let removeHttps = url.replace(/^https?:\/\//, '')
-    let removeHttp = removeHttps.replace(/^http?:\/\//, '')
-    return removeHttp
-  }
-
   const displayDays = () => {
     if ( link.days ) {
         let totalTrues = Object.values(link.days).reduce((a: number, day) => a + (day === true ? 1 : 0), 0)

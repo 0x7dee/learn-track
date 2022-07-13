@@ -55,10 +55,15 @@ const NewTracker: any = ({ link, editMode }: any) => {
   }
 
   const addUrl  = (url: string) => {
-      if ( !urls.includes(url) ) {
+      let alreadyExists = urls.includes(url)
+      let protocolSet = includesProtocol(url)
+
+      if ( !alreadyExists && protocolSet ) {
         setUrls([url, ...urls]);
         setUrl('');
         setErrors([])
+      } else if ( !protocolSet ) {
+        setErrors(['Add protocol to URL (i.e. https://)', ...errors])
       } else {
         setErrors(['URL already exists', ...errors])
       }
@@ -205,6 +210,12 @@ const NewTracker: any = ({ link, editMode }: any) => {
     let removeHttps = url.replace(/^https?:\/\//, '')
     let removeHttp = removeHttps.replace(/^http?:\/\//, '')
     return removeHttp
+  }
+
+  const includesProtocol = (url: string): boolean => {
+    if (/^https?:\/\//.test(url)) return true
+    if (/^http?:\/\//.test(url)) return true
+    return false
   }
 
   const displayDays = () => {
