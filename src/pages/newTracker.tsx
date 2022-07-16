@@ -153,7 +153,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
   const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    let time = (hours * 60 * 60) + (mins * 60)
+    let time = (( hours ? hours : 0 ) * 60 * 60) + (( mins ? mins : 0 ) * 60)
     let timeLapsed = 0;
 
     const newLink = {
