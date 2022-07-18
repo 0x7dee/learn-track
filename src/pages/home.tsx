@@ -193,7 +193,7 @@ function Home() {
   return (
     <div className="w-96 min-h-[34rem] max-h-[42rem] relative">
       <div className="header bg-neutral-50 pt-6 pb-6 pr-8 pl-8 border-dashed border-slate-300 border-b-2">
-        <h1 className="text-3xl font-serif mb-1">Trackly</h1>
+        <h1 className="text-3xl font-serif mb-1"><span className="">v</span>productive.co</h1>
         { displayNavigation() }
       </div>
       <div className="displayPage pt-5 pb-12 pr-8 pl-8 font-sans">
