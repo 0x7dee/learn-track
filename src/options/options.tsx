@@ -19,7 +19,7 @@ const Options = () => {
   const displayPopup = () => {
   if ( showDeletePopup ) {
     return (
-        <div className="w-2/5 h-40 absolute top-12 left-1/2 transform -translate-x-1/2 bg-slate-300">
+        <div className="w-2/5 h-40 absolute top-12 left-1/2 transform -translate-x-1/2 bg-slate-300 rounded">
           <p>Are you sure?</p>
           <button onClick={ () => {} }>Yes I'm sure</button>
           <button onClick={ () => setShowDeletePopup(false) }>Cancel</button>
@@ -31,7 +31,7 @@ const Options = () => {
   const displayBundles = () => {
     if ( options ) {
       return Object.keys(options).map(key => (
-        <div key={ key } className='w-full h-4 bg-slate-200 mb-2'>
+        <div key={ key } className='w-full h-40 px-5 py-5 bg-slate-200 mb-2 rounded'>
           <p>{ key }</p>
         </div>
       ))
@@ -48,12 +48,11 @@ const Options = () => {
           <h1 className='text-3xl'>Curated learning bundles</h1>
           <p>Curated learning resources to help you achieve you goals faster!!</p>
           <p className='absolute top-1 right-0'>$3.99 each</p>
-          <div className="bundle-list py-8">
+          <input placeholder='Search...' type="text" className='w-full h-10 my-10 py-6 px-4 border-2 border-slate-200 rounded outline-none focus:border-blue-400' />
+          <div className="bundle-list">
            { displayBundles() }
           </div>
         </div>
-        
-
         { displayPopup() }
     </div>
   )
