@@ -74,12 +74,6 @@ function Home() {
           <button 
           className={`${'text-slate-400'} mr-2`}
           onClick={() => chrome.runtime.openOptionsPage()}>Dashboard</button>
-          <button 
-          className={`${'text-slate-400'} mr-2`}
-          onClick={() => {}}>Learn</button>
-          <button 
-          className={`${'text-slate-400'} mr-2`}
-          onClick={() => {}}>About</button>
       </nav>
     )
   }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import '../index.css'
-
+import options from '../bundles/bundles'
 
 
 const Options = () => {
@@ -28,6 +28,16 @@ const Options = () => {
   }
   }
 
+  const displayBundles = () => {
+    if ( options ) {
+      return Object.keys(options).map(key => (
+        <div key={ key } className='w-full h-4 bg-slate-200 mb-2'>
+          <p>{ key }</p>
+        </div>
+      ))
+    }
+  }
+
   return (
     <div className='h-full m-auto max-w-2xl relative py-10'>
         <div className="w-full flex flex-row items-center justify-between mb-20">
@@ -38,7 +48,11 @@ const Options = () => {
           <h1 className='text-3xl'>Curated learning bundles</h1>
           <p>Curated learning resources to help you achieve you goals faster!!</p>
           <p className='absolute top-1 right-0'>$3.99 each</p>
+          <div className="bundle-list py-8">
+           { displayBundles() }
+          </div>
         </div>
+        
 
         { displayPopup() }
     </div>
