@@ -67,7 +67,7 @@ module.exports = {
 
 function getHtmlPlugins(chunks) {
     return chunks.map(chunk => new HtmlPlugin({
-        title: 'React Extension',
+        title: 'Dashboard',
         filename: `${chunk}.html`,
         chunks: [chunk]
     }))

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import '../index.css';
 import NewTracker from "./newTracker";
 import Tracker from "./tracker";
-import { GrAddCircle } from 'react-icons/gr'
 
 
 function Home() {
@@ -74,11 +73,13 @@ function Home() {
           }}>Home</button>
           <button 
           className={`${'text-slate-400'} mr-2`}
-          onClick={() => {}}>About</button>
+          onClick={() => chrome.runtime.openOptionsPage()}>Dashboard</button>
           <button 
           className={`${'text-slate-400'} mr-2`}
-          onClick={() => {}}>Learn More</button>
-        
+          onClick={() => {}}>Learn</button>
+          <button 
+          className={`${'text-slate-400'} mr-2`}
+          onClick={() => {}}>About</button>
       </nav>
     )
   }
@@ -126,8 +127,8 @@ function Home() {
 
     if ( openNewTracker ) {
       return <NewTracker 
-                link={link} 
-                editMode={editMode}
+                link={link || {}} 
+                editMode={editMode || false}
               />
     }
 
@@ -193,7 +194,9 @@ function Home() {
   return (
     <div className="w-96 min-h-[34rem] max-h-[42rem] relative">
       <div className="header bg-neutral-50 pt-6 pb-6 pr-8 pl-8 border-dashed border-slate-300 border-b-2">
-        <h1 className="text-3xl font-serif mb-1"><span className="text-blue-300">v</span>Productive.co</h1>
+        <a href="https://vproductive.co" rel='noopener' target='_blank' className="hover:text-blue-300">
+          <h1 className="text-3xl font-serif mb-1"><span className="text-blue-300">v</span>Productive.co</h1>
+        </a>
         { displayNavigation() }
       </div>
       <div className="displayPage pt-5 pb-12 pr-8 pl-8 font-sans">
