@@ -58,6 +58,10 @@ const updateLapsedTime = async (linkData: any, lastTab: any) => {
     /* Increment timeLapsed */
     linkData.forEach((link: { urls: any[], title: string }) => {
         link.urls.forEach((url: any) => {
+            url = url
+                    .replace(/^https?:\/\//, '')
+                    .replace(/^http?:\/\//, '')
+                    .replace(/^www?:\/\//, '')
             let timeLeft = linkData[index].timeLapsed <= linkData[index].time
             let urlsIsValid = compareUrls(url, lastTab.tab.url)
             let isStudyDay = linkData[index].days[today]

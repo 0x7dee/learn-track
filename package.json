@@ -1,7 +1,7 @@
 {
-  "name": "timetrackerextension",
+  "name": "vproductive",
   "version": "1.0.0",
-  "description": "Time Tracker Extension",
+  "description": "Productivity app",
   "main": "index.js",
   "scripts": {
     "start": "webpack --watch --progress --config webpack.dev.js",
