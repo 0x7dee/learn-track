@@ -168,7 +168,7 @@ function Home() {
                 <div className={`flex flex-row items-center self-center col-span-5 w-full h-3 border ${ link.time > link.timeLapsed ? ('border-neutral-200') : ('border-none') } rounded-full overflow-hidden`}>
                   <div 
                     id={`${link.title}-progress`} 
-                    className={`h-full transition linear delay-500 ${ link.time > link.timeLapsed ? ('bg-sky-200') : ('bg-lime-300') }`}
+                    className={`h-full transition linear delay-500 ${ link.time > link.timeLapsed ? ('bg-amber-300') : ('bg-green-300') }`}
                     style={{ width: updateProgressBar(link.time, link.timeLapsed) }}
                   />
                 </div>     
@@ -186,10 +186,10 @@ function Home() {
   };
 
   return (
-    <div className="w-96 min-h-[34rem] max-h-[42rem] relative">
+    <div className="w-96 min-h-[34rem] max-h-[42rem] relative rounded-md overflow-hidden">
       <div className="header bg-neutral-50 pt-6 pb-6 pr-8 pl-8 border-dashed border-slate-300 border-b-2">
         <a href="https://vproductive.co" rel='noopener' target='_blank' className="hover:text-blue-300">
-          <h1 className="text-3xl font-serif mb-1"><span className="text-blue-300">v</span>Productive.co</h1>
+          <h1 className="text-3xl font-serif mb-1"><span className="text-blue-300">v</span>Pro</h1>
         </a>
         { displayNavigation() }
       </div>
