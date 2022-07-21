@@ -32,6 +32,7 @@ const Options = () => {
   const displayPage = () => {
     if ( openedTab === 'dashboard' ) {
       return (
+        /*
         <div className="bundles relative w-full">
           <h1 className='text-3xl'>Curated learning bundles</h1>
           <p>Curated learning resources to help you achieve you goals faster!!</p>
@@ -41,6 +42,16 @@ const Options = () => {
            { displayBundles() }
           </div>
         </div>
+        */
+       <div className="dashboard">
+        <h1 className='text-3xl mb-8'>Welcome to HabitSystem!</h1>
+        <p className='text-lg mb-4'>Habit system was originally a personal project designed to help me systematize my time spent online and avoid distractions.</p>
+        <p className='text-lg mb-4'>The app has dramatically improved my productivity so I thought I would share it with others in the hopes that it will also help you in your journey. Habit system lives in your browser, 
+          no data is collected or shared outside your browser. 
+        </p>
+        <p className='text-lg mb-4'>The product is completely free to use.</p>
+        <p className='text-lg mb-4'>Check out the <span className='text-blue-400'>How It Works</span> tab to learn how to get started.</p>
+       </div>
       )
     } else if ( openedTab === 'settings' ) {
       return (
@@ -61,8 +72,8 @@ const Options = () => {
           ) }
         </div>
       )
-    } else if ( openedTab === 'about' ) {
-      return <p>About</p>
+    } else if ( openedTab === 'howitworks' ) {
+      return <p>howitworks</p>
     } else if ( openedTab === 'learn' ) {
       return <p>Learn</p>
     }
@@ -72,8 +83,8 @@ const Options = () => {
     <div className='h-full m-auto max-w-2xl relative py-10'>
         <div className="w-full flex flex-row items-center justify-between mb-20">
           <h1 onClick={ () => setOpenedTab('dashboard') } className={`text-2xl cursor-pointer ${ openedTab === 'dashboard' ? 'text-blue-400' : '' }`}>Dashboard</h1>
-          <h1 onClick={ () => setOpenedTab('settings') } className={`text-2xl cursor-pointer ${ openedTab === 'settings' ? 'text-blue-400' : '' }`}>Settings</h1>
-          <h1 onClick={ () => setOpenedTab('about') } className={`text-2xl cursor-pointer ${ openedTab === 'about' ? 'text-blue-400' : '' }`}>About</h1>
+          <h1 onClick={ () => setOpenedTab('howitworks') } className={`text-2xl cursor-pointer ${ openedTab === 'howitworks' ? 'text-blue-400' : '' }`}>How It Works</h1>
+          <h1 onClick={ () => setOpenedTab('settings') } className={`text-2xl cursor-pointer ${ openedTab === 'settings' ? 'text-blue-400' : '' }`}>Settings</h1>        
           <h1 onClick={ () => setOpenedTab('learn') } className={`text-2xl cursor-pointer ${ openedTab === 'learn' ? 'text-blue-400' : '' }`}>Learn</h1>
         </div>
         { displayPage() }
