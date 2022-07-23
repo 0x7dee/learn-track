@@ -50,7 +50,7 @@ const Options = () => {
           no data is collected or shared outside your browser. 
         </p>
         <p className='text-lg mb-4'>The product is completely free to use.</p>
-        <p className='text-lg mb-4'>Check out the <span className='text-blue-400'>How It Works</span> tab to learn how to get started.</p>
+        <p className='text-lg mb-4'>Check out the <span onClick={ () => setOpenedTab('howitworks') } className='text-blue-400 cursor-pointer'>How It Works</span> tab to learn how to get started.</p>
        </div>
       )
     } else if ( openedTab === 'settings' ) {
@@ -74,18 +74,15 @@ const Options = () => {
       )
     } else if ( openedTab === 'howitworks' ) {
       return <p>howitworks</p>
-    } else if ( openedTab === 'learn' ) {
-      return <p>Learn</p>
     }
   }
 
   return (
     <div className='h-full m-auto max-w-2xl relative py-10'>
-        <div className="w-full flex flex-row items-center justify-between mb-20">
+        <div className="w-full flex flex-row items-center justify-between mb-20 pb-7 border-b-2 border-slate-200">
           <h1 onClick={ () => setOpenedTab('dashboard') } className={`text-2xl cursor-pointer ${ openedTab === 'dashboard' ? 'text-blue-400' : '' }`}>Dashboard</h1>
           <h1 onClick={ () => setOpenedTab('howitworks') } className={`text-2xl cursor-pointer ${ openedTab === 'howitworks' ? 'text-blue-400' : '' }`}>How It Works</h1>
           <h1 onClick={ () => setOpenedTab('settings') } className={`text-2xl cursor-pointer ${ openedTab === 'settings' ? 'text-blue-400' : '' }`}>Settings</h1>        
-          <h1 onClick={ () => setOpenedTab('learn') } className={`text-2xl cursor-pointer ${ openedTab === 'learn' ? 'text-blue-400' : '' }`}>Learn</h1>
         </div>
         { displayPage() }
     </div>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import '../index.css';
 import NewTracker from "./newTracker";
 import Tracker from "./tracker";
+import { IoMdOpen } from 'react-icons/io'
 
 
 function Home() {
@@ -71,9 +72,13 @@ function Home() {
             setEditMode(false)
             setLink(null)
           }}>Home</button>
-          <button 
-          className={`${'text-slate-400'} mr-2`}
-          onClick={() => chrome.runtime.openOptionsPage()}>Dashboard</button>
+          <div onClick={() => chrome.runtime.openOptionsPage()} className="flex flex-row items-center cursor-pointer">
+            <button 
+            className={`${'text-slate-400'} mr-1`}
+            >Dashboard</button>
+            <IoMdOpen className={`${'text-slate-400'}`} />
+          </div>
+          
       </nav>
     )
   }
