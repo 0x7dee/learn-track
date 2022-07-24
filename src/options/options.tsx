@@ -44,7 +44,7 @@ const Options = () => {
         </div>
         */
        <div className="dashboard">
-        <h1 className='text-3xl mb-8'>Welcome to HabitSystem!</h1>
+        <h1 className='text-3xl mb-8'>Welcome to LearnTrack</h1>
         <p className='text-lg mb-4'>Habit system was originally a personal project designed to help me systematize my time spent online and avoid distractions.</p>
         <p className='text-lg mb-4'>The app has dramatically improved my productivity so I thought I would share it with others in the hopes that it will also help you in your journey. Habit system lives in your browser, 
           no data is collected or shared outside your browser. 

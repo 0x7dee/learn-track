@@ -194,7 +194,7 @@ function Home() {
     <div className="w-96 min-h-[34rem] max-h-[42rem] relative rounded-md overflow-hidden">
       <div className="header bg-neutral-50 pt-6 pb-6 pr-8 pl-8 border-dashed border-slate-300 border-b-2">
         <a href="https://vproductive.co" rel='noopener' target='_blank' className="hover:text-blue-300">
-          <h1 className="text-2xl font-serif mb-1">habitsystem.xyz</h1>
+          <h1 className="text-2xl font-serif mb-1">learntrack.co</h1>
         </a>
         { displayNavigation() }
       </div>
