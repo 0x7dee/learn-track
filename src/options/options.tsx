@@ -61,7 +61,12 @@ const Options = () => {
             <div className="rounded">
               <p className='text-lg mb-4'>Are you sure? Once deleted, your data cannot be recovered.</p>
               <div className="flex flex-row">
-                <button className='text-red-400 border-2 border-red-400 px-4 py-2 mr-2 rounded' onClick={ () => clearData() }>Yes, I'm sure</button>
+                <button 
+                  className='text-red-400 border-2 border-red-400 px-4 py-2 mr-2 rounded' 
+                    onClick={ () => {
+                      clearData() 
+                      setShowDeletePopup(false)
+                    }}>Yes, I'm sure</button>
                 <button className='text-blue-400 border-2 border-blue-400 px-4 py-2 rounded' onClick={ () => setShowDeletePopup(false) }>Cancel</button>
               </div>  
             </div>
@@ -73,7 +78,18 @@ const Options = () => {
         </div>
       )
     } else if ( openedTab === 'howitworks' ) {
-      return <p>howitworks</p>
+      return (
+        <div className='howitworks'>
+          <div className="purpose">
+            <h1 className='text-3xl mb-8'>Links</h1>
+            <p className='text-lg mb-4'>The main purpose of LearnTrack is to create what we call links, links are collections of urls under a common heading such as "Learning Programming".</p>
+            <p className='text-lg mb-4'>Whenever you go to one of the urls listed in the link, the app will keep track of how long you have visited that website. This will then allow you to know how long you are spending on each topic.</p>
+            <p className='text-lg mb-4'>To create a link click the "new" button on the homepage, this will take you to a form page where you are able to create a new link.</p>
+            <p className='text-lg mb-4'>Be sure to add each url to the link by entering the url string and clicking the blue plus button.</p>
+            <p className='text-lg mb-4'>You can select the days in which this link will be valid as well as the amount of time you are committing each day.</p>
+          </div>
+        </div>
+      )
     }
   }
 

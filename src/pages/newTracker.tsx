@@ -29,8 +29,8 @@ const NewTracker: any = ({ link, editMode }: any) => {
   const [urls, setUrls] = useState<string[]>([])
   const [days, setDays] = useState<any>(defaultDays)
   const [time, setTime] = useState<number>(0)
-  const [hours, setHours] = useState<any>(0)
-  const [mins, setMins] = useState<any>(0)
+  const [hours, setHours] = useState<any>('0')
+  const [mins, setMins] = useState<any>('0')
   const [errors, setErrors] = useState<string[]>([])
   const [success, setSuccess] = useState<string>('')
 
@@ -40,8 +40,8 @@ const NewTracker: any = ({ link, editMode }: any) => {
       setEditTitle(link.title)
       setUrls(link.urls)
       setDays(link.days)
-      setMins(link.mins)
-      setHours(link.hours)
+      setMins(link.mins.toString())
+      setHours(link.hours.toString())
     }
   }, [])
 
@@ -153,7 +153,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
   const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    let time = (( hours ? hours : 0 ) * 60 * 60) + (( mins ? mins : 0 ) * 60)
+    let time = (( hours ? parseInt(hours) : 0 ) * 60 * 60) + (( mins ? parseInt(mins) : 0 ) * 60)
     let timeLapsed = 0;
 
     const newLink = {
@@ -161,8 +161,8 @@ const NewTracker: any = ({ link, editMode }: any) => {
       urls,
       days,
       time,
-      mins,
-      hours,
+      mins: parseInt(mins),
+      hours: parseInt(hours),
       timeLapsed
     }
 
@@ -245,7 +245,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
           <br />
           <input 
               className='h-8 w-full border border-neutral-200 rounded-md pl-2 pr-2 focus:border-sky-300 focus:outline-none'
-              placeholder="Enter title" 
+              placeholder="Pick a name for your new link..." 
               type="text" 
               maxLength={18}
               value={title} 
@@ -260,7 +260,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
             <div className="urls__input mb-2 grid grid-cols-10">
               <input 
                   className='h-8 col-span-9 border border-neutral-200 rounded-md pl-2 pr-2 mr-1 focus:border-sky-300 focus:outline-none'
-                  placeholder="Add URL" 
+                  placeholder="Type a URL then click the plus button..." 
                   type="text" 
                   value={url}
                   onChange={(e) => updateUrlInput(e.target.value)} 
@@ -292,7 +292,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
             <div className="flex flex-col">
             <input 
               className='w-20 p-1 border border-neutral-200 rounded-md pl-2 pr-2 mr-1 focus:border-sky-300 focus:outline-none' 
-              onChange={(e) => setHours(parseInt(e.target.value))} 
+              onChange={(e) => setHours(e.target.value)} 
               value={hours} 
               type="number" 
               min={0} 
@@ -304,7 +304,9 @@ const NewTracker: any = ({ link, editMode }: any) => {
             <div className="flex flex-col">
               <input 
                 className='w-20 p-1 border border-neutral-200 rounded-md pl-2 pr-2 focus:border-sky-300 focus:outline-none' 
-                onChange={(e) => setMins(parseInt(e.target.value))} 
+                onChange={(e) => {
+                  setMins(e.target.value)    
+                }} 
                 value={mins} 
                 type="number" 
                 min={0} 

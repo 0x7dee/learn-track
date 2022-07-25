@@ -10,7 +10,7 @@ function Home() {
   const [loading, setLoading] = useState(true)
   const [openTracker, setOpenTracker] = useState(false)
   const [openNewTracker, setOpenNewTracker] = useState(false)
-  const [link, setLink]: any = useState(null)
+  const [link, setLink]: any = useState({})
   const [editMode, setEditMode] = useState(false)
   const [onlyShowToday, setOnlyShowToday] = useState(true)
   
@@ -70,7 +70,7 @@ function Home() {
             setOpenNewTracker(false) 
             setOpenTracker(false)
             setEditMode(false)
-            setLink(null)
+            setLink({})
           }}>Home</button>
           <div onClick={() => chrome.runtime.openOptionsPage()} className="flex flex-row items-center cursor-pointer">
             <button 
@@ -95,7 +95,7 @@ function Home() {
               setOpenNewTracker(true) 
               setOpenTracker(false)
               setEditMode(false)
-              setLink(null)
+              setLink({})
             }}
             >New</button>
         </div>
@@ -126,8 +126,8 @@ function Home() {
 
     if ( openNewTracker ) {
       return <NewTracker 
-                link={link || {}} 
-                editMode={editMode || false}
+                link={link} 
+                editMode={editMode}
               />
     }
 
@@ -186,15 +186,19 @@ function Home() {
       );
       
     } else {
-      return <p>No links available...</p>;
+      return (
+        <div>
+          <h1>No links available...</h1>
+        </div>
+      );
     }
   };
 
   return (
     <div className="w-96 min-h-[34rem] max-h-[42rem] relative rounded-md overflow-hidden">
-      <div className="header bg-neutral-50 pt-6 pb-6 pr-8 pl-8 border-dashed border-slate-300 border-b-2">
-        <a href="https://vproductive.co" rel='noopener' target='_blank' className="hover:text-blue-300">
-          <h1 className="text-2xl font-serif mb-1">learntrack.co</h1>
+      <div className="header pt-6 pb-6 pr-8 pl-8 border-dashed border-slate-300 border-b-2">
+        <a href="https://learntrack.co" rel='noopener' target='_blank' className="hover:text-blue-300">
+          <h1 className="text-2xl font-serif mb-1">LearnTrack.co</h1>
         </a>
         { displayNavigation() }
       </div>

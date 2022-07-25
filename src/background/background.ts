@@ -56,28 +56,31 @@ const updateLapsedTime = async (linkData: any, lastTab: any) => {
     await chrome.storage.local.set({ currentDay: today })
 
     /* Increment timeLapsed */
+    let urlFound = false // we only want one increment per second
     linkData.forEach((link: { urls: any[], title: string }) => {
         link.urls.forEach((url: any) => {
-            url = url
-                    .replace(/^https?:\/\//, '')
-                    .replace(/^http?:\/\//, '')
-                    .replace(/^www?:\/\//, '')
             let timeLeft = linkData[index].timeLapsed <= linkData[index].time
             let urlsIsValid = compareUrls(url, lastTab.tab.url)
             let isStudyDay = linkData[index].days[today]
 
             /* Compare current url to urls specified in link, if there is no time left then ignore */
-            if( timeLeft && urlsIsValid && isStudyDay ) {
+            if( timeLeft && urlsIsValid && isStudyDay && !urlFound ) {
                 let updatedLinkData = linkData;
                 updatedLinkData[index].timeLapsed += 1
-                chrome.storage.local.set({'links': updatedLinkData})   
+                chrome.storage.local.set({'links': updatedLinkData})  
+                urlFound = true
             }
         })
         index += 1
+        urlFound = false
     })
 }
 
 const compareUrls = (url: string, currentUrl: string): boolean => {
+    url = url
+        .replace(/^https?:\/\//, '')
+        .replace(/^http?:\/\//, '')
+        .replace(/^www?:\/\//, '')
     if ( currentUrl.includes(url) ) return true
     return false
 }
