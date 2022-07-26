@@ -12,8 +12,8 @@ const Options = () => {
   }
 
   return (
-    <div className='m-auto max-w-2xl relative py-40'>
-        <div className="w-2/5 h-20 flex flex-row items-center justify-between border-b-2 fixed top-0 left-1/2 -translate-x-1/2 z-10 bg-white">
+    <div className='m-auto max-w-2xl w-[26rem] sm:w-[32rem] md:w-[38rem] lg:w-[42rem] relative'>
+        <div className="w-[26rem] sm:w-[32rem] md:w-[38rem] lg:w-[42rem] h-20 flex flex-row items-center justify-between border-b-2 fixed top-0 left-1/2 -translate-x-1/2 z-10 bg-white">
           <a href='#welcome' className={`text-2xl`}>Welcome</a>     
           <a href='#howitworks' className={`text-2xl`}>How It Works</a>     
           <a href='#faq' className={`text-2xl`}>FAQ</a> 
