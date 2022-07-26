@@ -65,14 +65,14 @@ function Home() {
     return (
       <nav className="relative flex flex-row items-center mt-2">
         <button 
-          className={`${!openNewTracker && !openTracker ? 'text-black' : 'text-slate-400'} mr-2`}
+          className={`${!openNewTracker && !openTracker ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
           onClick={() => { 
             setOpenNewTracker(false) 
             setOpenTracker(false)
             setEditMode(false)
             setLink({})
           }}>Home</button>
-          <div onClick={() => chrome.runtime.openOptionsPage()} className="flex flex-row items-center cursor-pointer">
+          <div onClick={() => chrome.runtime.openOptionsPage()} className="flex flex-row items-center cursor-pointer hover:underline-offset-2 hover:underline hover:text-slate-400">
             <button 
             className={`${'text-slate-400'} mr-1`}
             >Dashboard</button>
@@ -197,7 +197,7 @@ function Home() {
   return (
     <div className="w-96 min-h-[34rem] max-h-[42rem] relative rounded-md overflow-hidden">
       <div className="header pt-6 pb-6 pr-8 pl-8 border-dashed border-slate-300 border-b-2">
-        <a href="https://learntrack.co" rel='noopener' target='_blank' className="hover:text-blue-300">
+        <a href="https://learntrack.co" rel='noopener' target='_blank'>
           <h1 className="text-2xl font-serif mb-1">LearnTrack.co</h1>
         </a>
         { displayNavigation() }
