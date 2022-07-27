@@ -10,9 +10,11 @@ function Home() {
   const [loading, setLoading] = useState(true)
   const [openTracker, setOpenTracker] = useState(false)
   const [openNewTracker, setOpenNewTracker] = useState(false)
-  const [link, setLink]: any = useState({})
+  const [openPro, setOpenPro] = useState(false)
+  const [link, setSelectedLink]: any = useState({})
   const [editMode, setEditMode] = useState(false)
   const [onlyShowToday, setOnlyShowToday] = useState(true)
+  const [credential, setCredential] = useState('')
   
   useEffect(() => {
 
@@ -61,42 +63,60 @@ function Home() {
     }
   }
 
+  const openPage = (page: string) => {
+    switch (page) {
+      case "home": 
+        setOpenNewTracker(false) 
+        setOpenTracker(false)
+        setEditMode(false)
+        setOpenPro(false)
+        setSelectedLink({})
+        break
+      case "newTracker":
+        setOpenNewTracker(true) 
+        setOpenTracker(false)
+        setEditMode(false)
+        setOpenPro(false)
+        setSelectedLink({})
+        break
+      case "pro":
+        setOpenNewTracker(false) 
+        setOpenTracker(false)
+        setOpenPro(true)
+        break
+    }
+  }
+
   const displayNavigation = () => {
     return (
       <nav className="relative flex flex-row items-center mt-2">
         <button 
           className={`${!openNewTracker && !openTracker ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
-          onClick={() => { 
-            setOpenNewTracker(false) 
-            setOpenTracker(false)
-            setEditMode(false)
-            setLink({})
-          }}>Home</button>
+          onClick={() => openPage("home")}>Home</button>
+          <button className="pro mr-2"
+          onClick={() => openPage('pro')}
+          >
+            Pro
+          </button>
           <div onClick={() => chrome.runtime.openOptionsPage()} className="flex flex-row items-center cursor-pointer hover:underline-offset-2 hover:underline hover:text-slate-400">
             <button 
             className={`${'text-slate-400'} mr-1`}
             >Dashboard</button>
-            <IoMdOpen className={`${'text-slate-400'}`} />
+            <IoMdOpen className={`${'text-slate-400'} mr-2`} />
           </div>
-          
       </nav>
     )
   }
 
   const displayLinkToggle = () => {
-    if (!openTracker && !openNewTracker) {
+    if (!openTracker && !openNewTracker && !openPro) {
       return (
         <div className="displayPage__toggle mb-6 flex flex-row items-center w-full">
           <p onClick={ () => setOnlyShowToday(true) } className={`mr-2 cursor-pointer ${ onlyShowToday ? 'text-black' : 'text-slate-400' }`}>Today</p>
           <p onClick={ () => setOnlyShowToday(false) } className={`cursor-pointer ${ !onlyShowToday ? 'text-black' : 'text-slate-400' }`}>Show all {`(${ existingLinks ? existingLinks.length : '0' })`}</p>
            <button 
             className='ml-auto rounded-md text-xs py-1 px-0 w-16 border text-sky-400 border-sky-400 hover:text-neutral-100 hover:bg-sky-400 transition ease-in-out duration-300'
-            onClick={() => { 
-              setOpenNewTracker(true) 
-              setOpenTracker(false)
-              setEditMode(false)
-              setLink({})
-            }}
+            onClick={() => openPage("newTracker")}
             >New</button>
         </div>
       )
@@ -110,9 +130,30 @@ function Home() {
     return title
   }
 
+  const submitCredential = (e: any) => {
+    e.preventDefault()
+    console.log({credential})
+  }
+
   const displayPage = () => {
     if ( loading ) {
       return <p>Loading...</p>
+    }
+
+    if ( openPro ) {
+      return (
+        <div className="pro w-full">
+          <form className="w-full" onSubmit={e => submitCredential(e)}>
+            <input 
+              placeholder="Enter your pro credential..." 
+              type="text" 
+              className="py-2 px-2 w-full" 
+              onChange={ e => setCredential(e.target.value) }
+            />
+            <button className="mt-4 rounded-md text-xs py-1 px-2 w-20 border text-sky-400 border-sky-400 hover:text-neutral-100 hover:bg-sky-400 transition ease-in-out duration-300">Submit</button>
+          </form>
+        </div>
+      )
     }
 
     if ( openTracker ) {
@@ -158,7 +199,7 @@ function Home() {
             <div 
               key={`${link.title}-${index}-homepage`}
               onClick={() => {
-                setLink(link)
+                setSelectedLink(link)
                 setOpenNewTracker(false)
                 setOpenTracker(true)
               }} className="grid grid-cols-12 content-center mb-5 cursor-pointer" >
