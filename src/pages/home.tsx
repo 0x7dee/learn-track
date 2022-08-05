@@ -3,6 +3,7 @@ import '../index.css';
 import NewTracker from "./newTracker";
 import Tracker from "./tracker";
 import { IoMdOpen } from 'react-icons/io'
+import ExtPay from "extpay";
 
 
 function Home() {
@@ -10,13 +11,11 @@ function Home() {
   const [loading, setLoading] = useState(true)
   const [openTracker, setOpenTracker] = useState(false)
   const [openNewTracker, setOpenNewTracker] = useState(false)
-  const [openPro, setOpenPro] = useState(false)
   const [link, setSelectedLink]: any = useState({})
   const [editMode, setEditMode] = useState(false)
   const [onlyShowToday, setOnlyShowToday] = useState(true)
-  const [credential, setCredential] = useState('')
   
-  useEffect(() => {
+  useEffect( () => {
 
     const secondInterval = setInterval(async () => {
       updateLinks();
@@ -69,20 +68,13 @@ function Home() {
         setOpenNewTracker(false) 
         setOpenTracker(false)
         setEditMode(false)
-        setOpenPro(false)
         setSelectedLink({})
         break
       case "newTracker":
         setOpenNewTracker(true) 
         setOpenTracker(false)
         setEditMode(false)
-        setOpenPro(false)
         setSelectedLink({})
-        break
-      case "pro":
-        setOpenNewTracker(false) 
-        setOpenTracker(false)
-        setOpenPro(true)
         break
     }
   }
@@ -93,11 +85,11 @@ function Home() {
         <button 
           className={`${!openNewTracker && !openTracker ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
           onClick={() => openPage("home")}>Home</button>
-          <button className="pro mr-2"
-          onClick={() => openPage('pro')}
-          >
-            Pro
-          </button>
+  
+          <button 
+            className="text-sky-400 font-bold mr-2 hover:underline-offset-2 hover:underline" 
+            onClick={() => joinPro()}>Join Pro</button>
+
           <div onClick={() => chrome.runtime.openOptionsPage()} className="flex flex-row items-center cursor-pointer hover:underline-offset-2 hover:underline hover:text-slate-400">
             <button 
             className={`${'text-slate-400'} mr-1`}
@@ -109,7 +101,7 @@ function Home() {
   }
 
   const displayLinkToggle = () => {
-    if (!openTracker && !openNewTracker && !openPro) {
+    if (!openTracker && !openNewTracker) {
       return (
         <div className="displayPage__toggle mb-6 flex flex-row items-center w-full">
           <p onClick={ () => setOnlyShowToday(true) } className={`mr-2 cursor-pointer ${ onlyShowToday ? 'text-black' : 'text-slate-400' }`}>Today</p>
@@ -130,30 +122,30 @@ function Home() {
     return title
   }
 
-  const submitCredential = (e: any) => {
-    e.preventDefault()
-    console.log({credential})
+  const joinPro = () => {
+    var extpay = ExtPay('learntrack')
+    extpay.getUser().then((user: { paid: any }) => {
+      if (user.paid) {
+          console.log('paid')
+          extpay.openPaymentPage()
+      } else {
+          extpay.openPaymentPage()
+          console.log('not paid')
+      }
+    })
+  }
+
+  const checkIfProMember = async () => {
+    var extpay = ExtPay('learntrack')
+    await extpay.getUser().then((user: { paid: any }) => {
+      if (user.paid) return true
+      return false
+    })
   }
 
   const displayPage = () => {
     if ( loading ) {
       return <p>Loading...</p>
-    }
-
-    if ( openPro ) {
-      return (
-        <div className="pro w-full">
-          <form className="w-full" onSubmit={e => submitCredential(e)}>
-            <input 
-              placeholder="Enter your pro credential..." 
-              type="text" 
-              className="py-2 px-2 w-full" 
-              onChange={ e => setCredential(e.target.value) }
-            />
-            <button className="mt-4 rounded-md text-xs py-1 px-2 w-20 border text-sky-400 border-sky-400 hover:text-neutral-100 hover:bg-sky-400 transition ease-in-out duration-300">Submit</button>
-          </form>
-        </div>
-      )
     }
 
     if ( openTracker ) {
@@ -238,9 +230,9 @@ function Home() {
   return (
     <div className="w-96 min-h-[34rem] max-h-[42rem] relative rounded-md overflow-hidden">
       <div className="header pt-6 pb-6 pr-8 pl-8 border-dashed border-slate-300 border-b-2">
-        <a href="https://learntrack.co" rel='noopener' target='_blank'>
-          <h1 className="text-2xl font-serif mb-1">LearnTrack.co</h1>
-        </a>
+        <a className="text-2xl font-serif" href="https://learntrack.co" rel='noopener' target='_blank'>
+          LearnTrack.co
+        </a> 
         { displayNavigation() }
       </div>
       <div className="displayPage pt-5 pb-12 pr-8 pl-8 font-sans">

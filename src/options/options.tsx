@@ -6,9 +6,14 @@ import options from '../bundles/bundles'
 
 const Options = () => {
   let [showDeletePopup, setShowDeletePopup] = useState(false)
+  let [credential, setCredential] = useState('')
 
   const clearData = async () => {
     await chrome.storage.local.set({"links": null});
+  }
+
+  const upgradeToPro = (e: any) => {
+    e.preventDefault()
   }
 
   return (
@@ -20,13 +25,14 @@ const Options = () => {
           <a href='#settings' className={`text-2xl`}>Settings</a>     
         </div>
 
-        <div className="" id="welcome">
+        <div className='text-lg' id="welcome">
           <h2 className='text-3xl mb-8 pt-40'>Welcome to LearnTrack</h2>
           <p className='text-lg mb-4'>Habit system was originally a personal project designed to help me systematize my time spent online and avoid distractions.</p>
           <p className='text-lg mb-4'>The app has dramatically improved my productivity so I thought I would share it with others in the hopes that it will also help you in your journey. Habit system lives in your browser, 
             no data is collected or shared outside your browser. 
           </p>
           <p className='text-lg'>The product is completely free to use.</p>
+          <p>Upgrade to <a href="#settings" className='text-sky-400'>Pro</a> today!!!</p>
         </div>
 
         <div className='' id='howitworks'>
@@ -51,24 +57,43 @@ const Options = () => {
 
         <div className='mb-[50rem]' id='settings'>
           <h2 className='text-3xl mb-8 pt-40'>Settings</h2>
-          { showDeletePopup ? (
-            <div className="rounded">
-              <p className='text-lg mb-4'>Are you sure? Once deleted, your data cannot be recovered.</p>
-              <div className="flex flex-row">
-                <button 
-                  className='text-red-400 border-2 border-red-400 px-4 py-2 mr-2 rounded' 
-                    onClick={ () => {
-                      clearData() 
-                      setShowDeletePopup(false)
-                    }}>Yes, I'm sure</button>
-                <button className='text-blue-400 border-2 border-blue-400 px-4 py-2 rounded' onClick={ () => setShowDeletePopup(false) }>Cancel</button>
-              </div>  
-            </div>
+
+          <div className='w-full mb-8'>
+            <h2 className='text-xl mb-8'>Upgrade to the Pro Plan</h2>
+            <form onSubmit={e => upgradeToPro(e)}>
+              <input 
+                className='w-full py-4 px-8 mb-4 border-slate-200 border-2 rounded-md' 
+                type="text" 
+                placeholder='Enter your credential...' 
+                onChange={ e => setCredential(e.target.value) }
+              />
+              <button className='text-lg rounded-md py-2 px-8 border text-sky-400 border-sky-400 hover:text-neutral-100 hover:bg-sky-400 transition ease-in-out duration-300'>Submit</button>
+            </form>
+          </div>
+
+          <div>
+            <h2 className='text-xl mb-8'>Data</h2>
+            { showDeletePopup ? (
+              <div className="rounded">
+                <p className='text-lg mb-4'>Are you sure? Once deleted, your data cannot be recovered.</p>
+                <div className="flex flex-row">
+                  <button 
+                    className='text-lg rounded-md py-2 px-8 mr-4 border text-red-400 border-red-400 hover:text-neutral-100 hover:bg-red-400 transition ease-in-out duration-300' 
+                      onClick={ () => {
+                        clearData() 
+                        setShowDeletePopup(false)
+                      }}>Yes, I'm sure</button>
+                  <button className='text-lg rounded-md py-2 px-8 border text-sky-400 border-sky-400 hover:text-neutral-100 hover:bg-sky-400 transition ease-in-out duration-300' onClick={ () => setShowDeletePopup(false) }>Cancel</button>
+                </div>  
+              </div>
           ) : (
             <>
-            <button className='border-2 border-red-400 text-red-400 px-4 py-2 rounded' onClick={() => setShowDeletePopup(true)}>Clear all data</button>
+              <button className='text-lg rounded-md py-2 px-8 border text-red-400 border-red-400 hover:text-neutral-100 hover:bg-red-400 transition ease-in-out duration-300' onClick={() => setShowDeletePopup(true)}>Clear all data</button>
             </>
           ) }
+          </div>
+            
+          
         </div>
     </div>
   )

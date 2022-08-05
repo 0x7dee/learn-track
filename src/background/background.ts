@@ -1,3 +1,10 @@
+import ExtPay from "extpay"
+
+var extpay = ExtPay('learntrack')
+extpay.startBackground()
+
+
+/* LearnTrack time track functionality */
 let url: string = '';
 
 chrome.alarms.create('urlTimer', {
