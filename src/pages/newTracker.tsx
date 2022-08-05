@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import ExtPay from "extpay"
 import '../index.css'
 
 const NewTracker: any = ({ link, editMode }: any) => {
@@ -33,8 +34,21 @@ const NewTracker: any = ({ link, editMode }: any) => {
   const [mins, setMins] = useState<any>('0')
   const [errors, setErrors] = useState<string[]>([])
   const [success, setSuccess] = useState<string>('')
+  const [proMember, setProMember] = useState<boolean>(false) 
 
   useEffect(() => {
+    async function checkLogin() {
+        var extpay = ExtPay('learntrack')
+        await extpay.getUser().then((user: { paid: any }) => {
+            if (user.paid) {
+                setProMember(true)
+            } else {
+                setProMember(false)
+            }
+        })
+    }
+    checkLogin()
+
     if (link && editMode) {
       setTitle(link.title)
       setEditTitle(link.title)
@@ -167,6 +181,12 @@ const NewTracker: any = ({ link, editMode }: any) => {
     }
 
     const existingLinks: any = await chrome.storage.local.get("links");
+
+    /* Only allow max 3 links unless on pro plan */
+    if ( existingLinks.links.length > 2 && !proMember ) {
+      setErrors([...errors, 'Free tier limit reached. Upgrade to pro plan today for unlimited links!'])
+      return
+    }
 
     /* If array already exists then add the new link */
     if ( existingLinks && Array.isArray(existingLinks.links) ) {

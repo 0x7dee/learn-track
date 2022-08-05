@@ -3,7 +3,7 @@ import '../index.css';
 import NewTracker from "./newTracker";
 import Tracker from "./tracker";
 import { IoMdOpen } from 'react-icons/io'
-import ExtPay from "extpay";
+import ProPlan from "./proPlan";
 
 
 function Home() {
@@ -11,6 +11,7 @@ function Home() {
   const [loading, setLoading] = useState(true)
   const [openTracker, setOpenTracker] = useState(false)
   const [openNewTracker, setOpenNewTracker] = useState(false)
+  const [openProPlan, setOpenProPlan] = useState(false)
   const [link, setSelectedLink]: any = useState({})
   const [editMode, setEditMode] = useState(false)
   const [onlyShowToday, setOnlyShowToday] = useState(true)
@@ -65,13 +66,22 @@ function Home() {
   const openPage = (page: string) => {
     switch (page) {
       case "home": 
+        setOpenProPlan(false)
         setOpenNewTracker(false) 
         setOpenTracker(false)
         setEditMode(false)
         setSelectedLink({})
         break
       case "newTracker":
+        setOpenProPlan(false)
         setOpenNewTracker(true) 
+        setOpenTracker(false)
+        setEditMode(false)
+        setSelectedLink({})
+        break
+      case 'proPlan':
+        setOpenProPlan(true)
+        setOpenNewTracker(false) 
         setOpenTracker(false)
         setEditMode(false)
         setSelectedLink({})
@@ -88,7 +98,7 @@ function Home() {
   
           <button 
             className="text-sky-400 font-bold mr-2 hover:underline-offset-2 hover:underline" 
-            onClick={() => joinPro()}>Join Pro</button>
+            onClick={() => openPage('proPlan')}>Pro Plan</button>
 
           <div onClick={() => chrome.runtime.openOptionsPage()} className="flex flex-row items-center cursor-pointer hover:underline-offset-2 hover:underline hover:text-slate-400">
             <button 
@@ -101,7 +111,7 @@ function Home() {
   }
 
   const displayLinkToggle = () => {
-    if (!openTracker && !openNewTracker) {
+    if (!openTracker && !openNewTracker && !openProPlan) {
       return (
         <div className="displayPage__toggle mb-6 flex flex-row items-center w-full">
           <p onClick={ () => setOnlyShowToday(true) } className={`mr-2 cursor-pointer ${ onlyShowToday ? 'text-black' : 'text-slate-400' }`}>Today</p>
@@ -122,30 +132,13 @@ function Home() {
     return title
   }
 
-  const joinPro = () => {
-    var extpay = ExtPay('learntrack')
-    extpay.getUser().then((user: { paid: any }) => {
-      if (user.paid) {
-          console.log('paid')
-          extpay.openPaymentPage()
-      } else {
-          extpay.openPaymentPage()
-          console.log('not paid')
-      }
-    })
-  }
-
-  const checkIfProMember = async () => {
-    var extpay = ExtPay('learntrack')
-    await extpay.getUser().then((user: { paid: any }) => {
-      if (user.paid) return true
-      return false
-    })
-  }
-
   const displayPage = () => {
     if ( loading ) {
       return <p>Loading...</p>
+    }
+
+    if ( openProPlan ) {
+      return <ProPlan />
     }
 
     if ( openTracker ) {
