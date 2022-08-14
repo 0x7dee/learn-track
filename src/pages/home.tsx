@@ -4,6 +4,7 @@ import NewTracker from "./newTracker";
 import Tracker from "./tracker";
 import { IoMdOpen } from 'react-icons/io'
 import ProPlan from "./proPlan";
+import Settings from "./settings";
 
 
 function Home() {
@@ -12,6 +13,7 @@ function Home() {
   const [openTracker, setOpenTracker] = useState(false)
   const [openNewTracker, setOpenNewTracker] = useState(false)
   const [openProPlan, setOpenProPlan] = useState(false)
+  const [openSettings, setOpenSettings] = useState(false)
   const [link, setSelectedLink]: any = useState({})
   const [editMode, setEditMode] = useState(false)
   const [onlyShowToday, setOnlyShowToday] = useState(true)
@@ -70,17 +72,28 @@ function Home() {
         setOpenNewTracker(false) 
         setOpenTracker(false)
         setEditMode(false)
+        setOpenSettings(false)
         setSelectedLink({})
         break
       case "newTracker":
-        setOpenProPlan(false)
         setOpenNewTracker(true) 
+        setOpenProPlan(false)
         setOpenTracker(false)
         setEditMode(false)
+        setOpenSettings(false)
         setSelectedLink({})
         break
       case 'proPlan':
         setOpenProPlan(true)
+        setOpenNewTracker(false) 
+        setOpenTracker(false)
+        setEditMode(false)
+        setOpenSettings(false)
+        setSelectedLink({})
+        break
+      case 'settings':
+        setOpenSettings(true)
+        setOpenProPlan(false)
         setOpenNewTracker(false) 
         setOpenTracker(false)
         setEditMode(false)
@@ -100,18 +113,17 @@ function Home() {
             className="text-sky-400 font-bold mr-2 hover:underline-offset-2 hover:underline" 
             onClick={() => openPage('proPlan')}>Pro Plan</button>
 
-          <div onClick={() => chrome.runtime.openOptionsPage()} className="flex flex-row items-center cursor-pointer hover:underline-offset-2 hover:underline hover:text-slate-400">
+          <div onClick={() => openPage('settings')} className="flex flex-row items-center cursor-pointer hover:underline-offset-2 hover:underline hover:text-slate-400">
             <button 
             className={`${'text-slate-400'} mr-1`}
-            >Dashboard</button>
-            <IoMdOpen className={`${'text-slate-400'} mr-2`} />
+            >Settings</button>
           </div>
       </nav>
     )
   }
 
   const displayLinkToggle = () => {
-    if (!openTracker && !openNewTracker && !openProPlan) {
+    if (!openTracker && !openNewTracker && !openProPlan && !openSettings) {
       return (
         <div className="displayPage__toggle mb-6 flex flex-row items-center w-full">
           <p onClick={ () => setOnlyShowToday(true) } className={`mr-2 cursor-pointer ${ onlyShowToday ? 'text-black' : 'text-slate-400' }`}>Today</p>
@@ -137,10 +149,10 @@ function Home() {
       return <p>Loading...</p>
     }
 
-    if ( openProPlan ) {
-      return <ProPlan />
-    }
+    if ( openSettings ) return <Settings />
 
+    if ( openProPlan ) return <ProPlan />
+    
     if ( openTracker ) {
       return <Tracker 
                 link={link} 

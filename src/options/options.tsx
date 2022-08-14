@@ -84,7 +84,7 @@ const Options = () => {
                         setShowDeletePopup(false)
                       }}>Yes, I'm sure</button>
                   <button className='text-lg rounded-md py-2 px-8 border text-sky-400 border-sky-400 hover:text-neutral-100 hover:bg-sky-400 transition ease-in-out duration-300' onClick={ () => setShowDeletePopup(false) }>Cancel</button>
-                </div>  
+                </div> 
               </div>
           ) : (
             <>
