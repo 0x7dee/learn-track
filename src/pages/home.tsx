@@ -12,12 +12,6 @@ function Home() {
   const [existingLinks, setExistingLinks]: any = useState([])
   const [loading, setLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState('home')
-  const [openHome, setOpenHome] = useState(true)
-  const [openTracker, setOpenTracker] = useState(false)
-  const [openNewTracker, setOpenNewTracker] = useState(false)
-  const [openProPlan, setOpenProPlan] = useState(false)
-  const [openSettings, setOpenSettings] = useState(false)
-  const [openHowTo, setOpenHowTo] = useState(false)
   const [link, setSelectedLink]: any = useState({})
   const [editMode, setEditMode] = useState(false)
   const [onlyShowToday, setOnlyShowToday] = useState(true)
@@ -73,7 +67,7 @@ function Home() {
     return (
       <nav className="relative flex flex-row items-center mt-2">
         <button 
-          className={`${!openNewTracker && !openTracker && !openHowTo && !openProPlan ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
+          className={`${ currentPage === 'home' ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
           onClick={() => setCurrentPage("home")}>Home</button>
   
           <button 
@@ -81,11 +75,11 @@ function Home() {
             onClick={() => setCurrentPage('proPlan')}>Pro Plan</button>
 
           <button 
-            className={`${ openHowTo ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
-            onClick={() => setCurrentPage('howto')}>How To</button>
+            className={`${ currentPage === 'howto' ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
+            onClick={() => setCurrentPage('howto')}>How it works</button>
 
           <button 
-            className={`${ openSettings ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
+            className={`${ currentPage === 'settings' ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
             onClick={() => setCurrentPage('settings')}
             >Settings</button>
       </nav>
