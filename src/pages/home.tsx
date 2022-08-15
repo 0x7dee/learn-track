@@ -5,15 +5,19 @@ import Tracker from "./tracker";
 import { IoMdOpen } from 'react-icons/io'
 import ProPlan from "./proPlan";
 import Settings from "./settings";
+import HowTo from "./howTo";
 
 
 function Home() {
   const [existingLinks, setExistingLinks]: any = useState([])
   const [loading, setLoading] = useState(true)
+  const [currentPage, setCurrentPage] = useState('home')
+  const [openHome, setOpenHome] = useState(true)
   const [openTracker, setOpenTracker] = useState(false)
   const [openNewTracker, setOpenNewTracker] = useState(false)
   const [openProPlan, setOpenProPlan] = useState(false)
   const [openSettings, setOpenSettings] = useState(false)
+  const [openHowTo, setOpenHowTo] = useState(false)
   const [link, setSelectedLink]: any = useState({})
   const [editMode, setEditMode] = useState(false)
   const [onlyShowToday, setOnlyShowToday] = useState(true)
@@ -65,72 +69,38 @@ function Home() {
     }
   }
 
-  const openPage = (page: string) => {
-    switch (page) {
-      case "home": 
-        setOpenProPlan(false)
-        setOpenNewTracker(false) 
-        setOpenTracker(false)
-        setEditMode(false)
-        setOpenSettings(false)
-        setSelectedLink({})
-        break
-      case "newTracker":
-        setOpenNewTracker(true) 
-        setOpenProPlan(false)
-        setOpenTracker(false)
-        setEditMode(false)
-        setOpenSettings(false)
-        setSelectedLink({})
-        break
-      case 'proPlan':
-        setOpenProPlan(true)
-        setOpenNewTracker(false) 
-        setOpenTracker(false)
-        setEditMode(false)
-        setOpenSettings(false)
-        setSelectedLink({})
-        break
-      case 'settings':
-        setOpenSettings(true)
-        setOpenProPlan(false)
-        setOpenNewTracker(false) 
-        setOpenTracker(false)
-        setEditMode(false)
-        setSelectedLink({})
-        break
-    }
-  }
-
   const displayNavigation = () => {
     return (
       <nav className="relative flex flex-row items-center mt-2">
         <button 
-          className={`${!openNewTracker && !openTracker ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
-          onClick={() => openPage("home")}>Home</button>
+          className={`${!openNewTracker && !openTracker && !openHowTo && !openProPlan ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
+          onClick={() => setCurrentPage("home")}>Home</button>
   
           <button 
             className="text-sky-400 font-bold mr-2 hover:underline-offset-2 hover:underline" 
-            onClick={() => openPage('proPlan')}>Pro Plan</button>
+            onClick={() => setCurrentPage('proPlan')}>Pro Plan</button>
 
-          <div onClick={() => openPage('settings')} className="flex flex-row items-center cursor-pointer hover:underline-offset-2 hover:underline hover:text-slate-400">
-            <button 
-            className={`${'text-slate-400'} mr-1`}
+          <button 
+            className={`${ openHowTo ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
+            onClick={() => setCurrentPage('howto')}>How To</button>
+
+          <button 
+            className={`${ openSettings ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
+            onClick={() => setCurrentPage('settings')}
             >Settings</button>
-          </div>
       </nav>
     )
   }
 
   const displayLinkToggle = () => {
-    if (!openTracker && !openNewTracker && !openProPlan && !openSettings) {
+    if ( currentPage === 'home' ) {
       return (
         <div className="displayPage__toggle mb-6 flex flex-row items-center w-full">
           <p onClick={ () => setOnlyShowToday(true) } className={`mr-2 cursor-pointer ${ onlyShowToday ? 'text-black' : 'text-slate-400' }`}>Today</p>
           <p onClick={ () => setOnlyShowToday(false) } className={`cursor-pointer ${ !onlyShowToday ? 'text-black' : 'text-slate-400' }`}>Show all {`(${ existingLinks ? existingLinks.length : '0' })`}</p>
            <button 
             className='ml-auto rounded-md text-xs py-1 px-0 w-16 border text-sky-400 border-sky-400 hover:text-neutral-100 hover:bg-sky-400 transition ease-in-out duration-300'
-            onClick={() => openPage("newTracker")}
+            onClick={() => setCurrentPage("newTracker")}
             >New</button>
         </div>
       )
@@ -149,20 +119,21 @@ function Home() {
       return <p>Loading...</p>
     }
 
-    if ( openSettings ) return <Settings />
+    if ( currentPage === 'howto' ) return <HowTo />
 
-    if ( openProPlan ) return <ProPlan />
+    if ( currentPage === 'settings' ) return <Settings />
+
+    if ( currentPage === 'proPlan' ) return <ProPlan />
     
-    if ( openTracker ) {
+    if ( currentPage === 'tracker' ) {
       return <Tracker 
                 link={link} 
-                setOpenTracker={setOpenTracker} 
-                setOpenNewTracker={setOpenNewTracker} 
+                setCurrentPage={setCurrentPage} 
                 setEditMode={setEditMode}
               />
     }
 
-    if ( openNewTracker ) {
+    if ( currentPage === 'newTracker' ) {
       return <NewTracker 
                 link={link} 
                 editMode={editMode}
@@ -197,8 +168,7 @@ function Home() {
               key={`${link.title}-${index}-homepage`}
               onClick={() => {
                 setSelectedLink(link)
-                setOpenNewTracker(false)
-                setOpenTracker(true)
+                setCurrentPage('tracker')
               }} className="grid grid-cols-12 content-center mb-5 cursor-pointer" >
                 <div className="col-span-4 grid grid-cols-4 self-center content-center">
                   <img
@@ -247,7 +217,7 @@ function Home() {
         </div> 
       </div>
       <div id="advertisement" className="w-full h-10 flex flex-row items-center absolute bottom-0 pr-8 pl-8 border-dashed border-slate-300 border-t-2">
-        <p>Want to 10x your online productivity? Check <a rel="noopener" className="text-blue-400" href="https://www.google.com" target='_blank'>this</a> out</p>
+        <p>Join our <a rel="noopener" className="text-blue-400" href="https://www.learntrack.co" target='_blank'>mailing list</a> to keep up to date with new features</p>
       </div>
     </div>
   );

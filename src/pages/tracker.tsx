@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 
-const Tracker = ({ link, setOpenTracker, setOpenNewTracker, setEditMode }: any) => {
+const Tracker = ({ link, setCurrentPage, setEditMode }: any) => {
   const [errors, setErrors] = useState<string[]>([])
   const [success, setSuccess] = useState<string>('')
 
@@ -115,8 +115,7 @@ const Tracker = ({ link, setOpenTracker, setOpenNewTracker, setEditMode }: any) 
         <button 
             className='w-28 rounded-md mt-2 text-sm py-1 px-2 mb-5 mr-2 border text-emerald-400 border-emerald-400 hover:text-neutral-100 hover:bg-emerald-400 transition ease-in-out duration-300' 
             onClick={ () => {
-              setOpenNewTracker(true)
-              setOpenTracker(false)
+              setCurrentPage('newTracker')
               setEditMode(true)
             } }
           >Edit</button>

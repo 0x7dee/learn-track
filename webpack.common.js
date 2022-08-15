@@ -14,6 +14,7 @@ module.exports = {
         newTracker: path.resolve('src/pages/newTracker.tsx'),
         tracker: path.resolve('src/pages/tracker.tsx'),
         proPlan: path.resolve('src/pages/proPlan.tsx'),
+        howTo: path.resolve('src/pages/howTo.tsx')
     },
     module: {
         rules: [
@@ -50,7 +51,8 @@ module.exports = {
             'home',
             'newTracker',
             'tracker',
-            'proPlan'
+            'proPlan',
+            'howTo'
         ])
     ],
     resolve: {
