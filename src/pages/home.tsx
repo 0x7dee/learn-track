@@ -5,7 +5,6 @@ import Tracker from "./tracker";
 import { IoMdOpen } from 'react-icons/io'
 import ProPlan from "./proPlan";
 import Settings from "./settings";
-import HowTo from "./howTo";
 
 
 function Home() {
@@ -75,10 +74,6 @@ function Home() {
             onClick={() => setCurrentPage('proPlan')}>Pro Plan</button>
 
           <button 
-            className={`${ currentPage === 'howto' ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
-            onClick={() => setCurrentPage('howto')}>How it works</button>
-
-          <button 
             className={`${ currentPage === 'settings' ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
             onClick={() => setCurrentPage('settings')}
             >Settings</button>
@@ -112,8 +107,6 @@ function Home() {
     if ( loading ) {
       return <p>Loading...</p>
     }
-
-    if ( currentPage === 'howto' ) return <HowTo />
 
     if ( currentPage === 'settings' ) return <Settings />
 
