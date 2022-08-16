@@ -67,7 +67,11 @@ function Home() {
       <nav className="relative flex flex-row items-center mt-2">
         <button 
           className={`${ currentPage === 'home' ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
-          onClick={() => setCurrentPage("home")}>Home</button>
+          onClick={() => {
+            setCurrentPage("home")
+            setEditMode(false)
+            setSelectedLink({})
+          }}>Home</button>
   
           <button 
             className="text-sky-400 font-bold mr-2 hover:underline-offset-2 hover:underline" 

@@ -118,8 +118,11 @@ const NewTracker: any = ({ link, editMode }: any) => {
         if (link.title == title) errors.push("title already exists")
       })
     }
+
+    /* Check title exists */
+    if ( title.length < 1 ) errors.push("No title is set")
     
-    /* Make sure urls exist */
+    /* Check urls exist */
     if ( urls.length < 1 ) errors.push("No urls are set")
     
     /* Check days are selected */
@@ -295,7 +298,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
         </div>
 
         { /* Amount of time */ }
-        <div className="time mb-3">
+        <div className="time mb-2">
           <label className='text-base'>Time</label>
           <br />
           <div className="time__input flex flex-row items-center">
@@ -329,7 +332,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
           </div>   
         </div>
         
-        <button className='rounded-md mt-2 text-sm py-1 px-2 w-28 border text-sky-400 border-sky-400 hover:text-neutral-100 hover:bg-sky-400 transition ease-in-out duration-300'>{ editMode ? 'Update' : 'Submit' }</button>
+        <button className='rounded-md mt-2 text-sm py-1 px-2 w-full border text-sky-400 border-sky-400 hover:text-neutral-100 hover:bg-sky-400 transition ease-in-out duration-300'>{ editMode ? 'Update' : 'Submit' }</button>
     </form>
 
     { displayErrors() }
