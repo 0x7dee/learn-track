@@ -5,6 +5,8 @@ import Tracker from "./tracker";
 import { IoMdOpen } from 'react-icons/io'
 import ProPlan from "./proPlan";
 import Settings from "./settings";
+import Goals from "./goals";
+import Analytics from "./analytics";
 
 
 function Home() {
@@ -72,11 +74,25 @@ function Home() {
             setEditMode(false)
             setSelectedLink({})
           }}>Home</button>
-  
+          <button 
+          className={`${ currentPage === 'goals' ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
+          onClick={() => {
+            setCurrentPage("goals")
+            setEditMode(false)
+            setSelectedLink({})
+          }}>Goals</button>
+          <button 
+          className={`${ currentPage === 'analytics' ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
+          onClick={() => {
+            setCurrentPage("analytics")
+            setEditMode(false)
+            setSelectedLink({})
+          }}>Analytics</button>
+          {/*
           <button 
             className="text-sky-400 font-bold mr-2 hover:underline-offset-2 hover:underline" 
             onClick={() => setCurrentPage('proPlan')}>Pro Plan</button>
-
+          */}
           <button 
             className={`${ currentPage === 'settings' ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
             onClick={() => setCurrentPage('settings')}
@@ -111,6 +127,10 @@ function Home() {
     if ( loading ) {
       return <p>Loading...</p>
     }
+
+    if ( currentPage === 'goals' ) return <Goals />
+
+    if ( currentPage === 'analytics' ) return <Analytics />
 
     if ( currentPage === 'settings' ) return <Settings />
 
