@@ -42,8 +42,8 @@ const NewTracker: any = ({ link, editMode }: any) => {
       setEditTitle(link.title)
       setUrls(link.urls)
       setDays(link.days)
-      setMins(link.mins.toString())
-      setHours(link.hours.toString())
+      setMins(link.mins ? link.mins.toString() : '0')
+      setHours(link.hours ? link.hours.toString() : '0')
     }
   }, [])
 
