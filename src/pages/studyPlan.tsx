@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 const StudyPlan = () => {
   const [links, setLinks] = useState<any[]>([])
-  const [topics, setTopics] = useState<any[]>([])
+  const [topics, setTopics] = useState<any>({})
   const [studyOnDay, setStudyOnDay] = useState<any>({})
 
   useEffect(() => {
@@ -32,10 +32,31 @@ const StudyPlan = () => {
       sunday: []
     }
 
+    let colors = [
+      'bg-red-400', 
+      'bg-orange-400', 
+      'bg-blue-400', 
+      'bg-yellow-400', 
+      'bg-pink-400', 
+      'bg-lime-400', 
+      'bg-teal-400', 
+      'bg-sky-400', 
+      'bg-indigo-400', 
+      'bg-purple-400', 
+      'bg-rose-400'
+    ]
+
+    let newTopics: any = {}
+
     links.forEach(link => {
       let { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday } = link.days
       let { hours, mins, title } = link
       let topic = { title, hours, mins }
+
+      if ( !topics[title] ) {
+        newTopics[title] = colors[0]
+        colors.shift()
+      }
 
       if ( Monday ) days.monday.push(topic)
       if ( Tuesday ) days.tuesday.push(topic)
@@ -47,6 +68,19 @@ const StudyPlan = () => {
     })
 
     setStudyOnDay(days)
+    setTopics(newTopics)
+  }
+
+  const displayHistogram = () => {
+    if (!topics) return
+    return Object.keys(topics).map(topic => {
+      return (
+        <div className='flex flex-row items-center mr-3'>
+          <div className={`${topics[topic]} h-2 w-2 mr-1`}></div>
+          <p>{ topic }</p>
+        </div>
+      )
+    })
   }
 
   const displayDayData = (day: any[]) => {
@@ -75,7 +109,13 @@ const StudyPlan = () => {
 
   return (
     <div className='studyPlan'>
-        <button onClick={() => console.log(studyOnDay)}>Study Days</button>
+        <button onClick={() => {
+          console.log(studyOnDay)
+          console.log({topics})
+        }}>Study Days</button>
+        <div className="histogram flex flex-row">
+          { displayHistogram() }
+        </div>
         { displayStudyPlan() }
     </div>
   )
