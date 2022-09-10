@@ -114,30 +114,13 @@ const StudyPlan = () => {
       let time = (hours*60*60)+(mins*60)
       let width = (time / (longestTime*60)) * 100
 
-      console.log({day, index})
-
       return (
-        <div key={`${title}${topics[title]}`} className={`${topics[title]} ${index+1 === day.length ? 'rounded-r-full' : ''}`} style={{ width: `${width}%` }}></div>
+        <div 
+          key={`${title}${topics[title]}`} 
+          className={`${topics[title]} ${index+1 === day.length ? 'rounded-r-full' : ''} ${index === 0 ? 'rounded-l-full' : ''} h-3`} 
+          style={{ width: `${width}%` }}></div>
       )
     })
-  }
-
-  const totalTimeForOneDay = (days: any) => {
-    if (!days) return 
-
-    let totalHours = 0
-    let totalMins = 0
-
-    days.forEach((data: { hours: number; mins: number }) => {
-      totalHours += data.hours
-      totalMins += data.mins
-    })
-
-    let hours: string = totalHours > 0 ? `${totalHours}hr` : ''
-    let mins: string = totalMins > 0 ? `${totalMins}min` : ''
-
-    return `${hours} ${mins}`
-
   }
 
   const displayStudyPlan = () => {
@@ -145,11 +128,11 @@ const StudyPlan = () => {
 
     return Object.keys(studyOnDay).map(day => {
       return (
-        <div key={day} className='grid grid-cols-12 mt-3'>
+        <div key={day} className='grid grid-cols-12'>
           <div className="col-span-3">
             <h1>{ day }</h1>
           </div>
-          <div className="flex flex-row col-span-9 rounded-full overflow-hidden">
+          <div className="flex flex-row col-span-9 rounded-full overflow-hidden items-center">
             { displayDayData(studyOnDay[day]) }
           </div> 
           {/*
@@ -170,14 +153,27 @@ const StudyPlan = () => {
 
   return (
     <div className='studyPlan grid grid-cols-12'>
-        <div className="histogram flex flex-row col-span-12">
+        <div className="grid grid-cols-12 grid-rows-8 progress col-span-12 h-[8rem] bg-slate-400 mb-4">
+          <div className="col-start-0 col-span-1 row-start-0 row-span-8 bg-slate-200 grid grid-cols-1 grid-rows-8">
+            <p className='row-start-3 row-span-1'>Mon</p>
+            <p className='row-start-5 row-span-1'>Wed</p>
+            <p className='row-start-7 row-span-1'>Fri</p>
+          </div>
+          <div className="col-start-2 col-span-11 row-start-0 row-span-1 bg-slate-100">
+
+          </div>
+          <div className="col-start-2 col-span-11 row-start-2 row-span-7 bg-slate-300">
+
+          </div>
+        </div>
+        <div className="histogram flex flex-row col-span-12 mb-2">
           { displayHistogram() }
         </div>
         <div className="col-span-12">
           { displayStudyPlan() }
         </div>
         <div className="col-span-3"></div>
-        <div className="col-span-9 w-full h-5 flex flex-row justify-between">
+        <div className="col-span-9 w-full h-5 flex flex-row justify-between mt-1">
           <p>0</p>
           <p>{`${ convertTimeToHoursAndMins(longestTime) }hr`}</p>
         </div>
