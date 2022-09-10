@@ -151,19 +151,32 @@ const StudyPlan = () => {
     return mins % 60 > 0 ? hours + 1 : hours
   }
 
+  const displayProgress = () => {
+    return Array.from(Array(140).keys()).map((key) => {
+      return <div key={key} className='col-span-1 row-span-1 bg-slate-50 rounded-sm'></div>
+    })
+  }
+
+  const displayMonths = () => {
+    let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May']
+    return months.map((month) => {
+      return <div className="col-start-0 col-span-2">{ month }</div>
+    })
+  }
+
   return (
     <div className='studyPlan grid grid-cols-12'>
-        <div className="grid grid-cols-12 grid-rows-8 progress col-span-12 h-[8rem] bg-slate-400 mb-4">
-          <div className="col-start-0 col-span-1 row-start-0 row-span-8 bg-slate-200 grid grid-cols-1 grid-rows-8">
+        <div className="grid grid-cols-12 grid-rows-8 progress col-span-12 h-[8rem] mb-4">
+          <div className="days col-start-0 col-span-1 row-start-0 row-span-8 grid grid-cols-1 grid-rows-8 justify-center content-start text-xs">
             <p className='row-start-3 row-span-1'>Mon</p>
             <p className='row-start-5 row-span-1'>Wed</p>
             <p className='row-start-7 row-span-1'>Fri</p>
           </div>
-          <div className="col-start-2 col-span-11 row-start-0 row-span-1 bg-slate-100">
-
+          <div className="months col-start-2 col-span-11 row-start-0 row-span-1 px-2 grid grid-cols-11 grid-rows-1">
+            { displayMonths() }
           </div>
-          <div className="col-start-2 col-span-11 row-start-2 row-span-7 bg-slate-300">
-
+          <div className="progress col-start-2 col-span-11 row-start-2 row-span-7 grid grid-rows-7 grid-cols-18 gap-[2px] pl-2 pt-2 justify-center content-center">
+            { displayProgress() }
           </div>
         </div>
         <div className="histogram flex flex-row col-span-12 mb-2">
