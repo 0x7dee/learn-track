@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react";
 import '../index.css';
 import NewTracker from "./newTracker";
 import Tracker from "./tracker";
-import { IoMdOpen } from 'react-icons/io'
 import ProPlan from "./proPlan";
 import Settings from "./settings";
-import Goals from "./goals";
-import Analytics from "./analytics";
+import StudyPlan from "./studyPlan";
 
 
 function Home() {
@@ -75,24 +73,9 @@ function Home() {
             setSelectedLink({})
           }}>Home</button>
           <button 
-          className={`${ currentPage === 'goals' ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
-          onClick={() => {
-            setCurrentPage("goals")
-            setEditMode(false)
-            setSelectedLink({})
-          }}>Goals</button>
-          <button 
-          className={`${ currentPage === 'analytics' ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
-          onClick={() => {
-            setCurrentPage("analytics")
-            setEditMode(false)
-            setSelectedLink({})
-          }}>Analytics</button>
-          {/*
-          <button 
-            className="text-sky-400 font-bold mr-2 hover:underline-offset-2 hover:underline" 
-            onClick={() => setCurrentPage('proPlan')}>Pro Plan</button>
-          */}
+            className={`${ currentPage === 'studyPlan' ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
+            onClick={() => setCurrentPage('studyPlan')}
+            >Study Plan</button>
           <button 
             className={`${ currentPage === 'settings' ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
             onClick={() => setCurrentPage('settings')}
@@ -128,9 +111,7 @@ function Home() {
       return <p>Loading...</p>
     }
 
-    if ( currentPage === 'goals' ) return <Goals />
-
-    if ( currentPage === 'analytics' ) return <Analytics />
+    if ( currentPage === 'studyPlan' ) return <StudyPlan />
 
     if ( currentPage === 'settings' ) return <Settings />
 
@@ -226,9 +207,6 @@ function Home() {
         <div id="page">
           { displayPage() }
         </div> 
-      </div>
-      <div id="advertisement" className="w-full h-10 flex flex-row items-center absolute bottom-0 pr-8 pl-8 border-dashed border-slate-300 border-t-2">
-        <p>Join our <a rel="noopener" className="text-blue-400" href="https://www.learntrack.co" target='_blank'>mailing list</a> to keep up to date with new features</p>
       </div>
     </div>
   );

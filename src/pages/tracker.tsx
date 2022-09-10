@@ -44,7 +44,7 @@ const Tracker = ({ link, setCurrentPage, setEditMode }: any) => {
     if ( link.urls ) {
         return link.urls.map((url: string, index: number) => {
           return (
-            <div key={`${url}-${index}`} className="url flex flex-row align-items-center mb-1">
+            <div key={`${url}-${index}`} className="url flex flex-row align-items-center mb-3">
               <img className="h-5 w-5 mr-2" src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${url}`} alt="favicon" />           
               <a href={`${url}`} target='_blank' className='flex flex-row items-center'><p className='mr-2'>{ url }</p></a>
             </div>
