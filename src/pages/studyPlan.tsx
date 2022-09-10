@@ -11,12 +11,15 @@ const StudyPlan = () => {
   }, [])
 
   useEffect(() => {
+    setLongestDay()
+  }, [studyOnDay])
+
+  useEffect(() => {
     formatStudyDays()
   }, [links])
 
   const getLinks = async () => {
     const existingLinks = await chrome.storage.local.get("links");
-    console.log(existingLinks.links)
     setLinks(existingLinks.links)
   }
 
@@ -49,7 +52,6 @@ const StudyPlan = () => {
 
     let newTopics: any = {}
 
-    let foundLongestTime = 0
 
     links.forEach(link => {
       let { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday } = link.days
@@ -60,8 +62,6 @@ const StudyPlan = () => {
         newTopics[title] = colors[0]
         colors.shift()
       }
-
-      if ( time > foundLongestTime ) foundLongestTime = time
 
       if ( Monday ) days.Monday.push(topic)
       if ( Tuesday ) days.Tuesday.push(topic)
@@ -74,7 +74,6 @@ const StudyPlan = () => {
 
     setStudyOnDay(days)
     setTopics(newTopics)
-    setLongestTime(foundLongestTime)
   }
 
   const displayHistogram = () => {
@@ -82,25 +81,43 @@ const StudyPlan = () => {
     return Object.keys(topics).map(topic => {
       return (
         <div key={`${topics[topic]}${topic}`} className='flex flex-row items-center mr-3'>
-          <div className={`${topics[topic]} h-2 w-2 mr-1`}></div>
+          <div className={`${topics[topic]} h-2 w-2 mr-1 rounded-full`}></div>
           <p>{ topic }</p>
         </div>
       )
     })
   }
 
+  const setLongestDay = () => {
+    if (!studyOnDay) return
+
+    let highestMins = 0
+    let totalMins = 0
+
+    Object.keys(studyOnDay).forEach(day => {
+      totalMins = 0
+      studyOnDay[day].forEach((data: { hours: number; mins: number }) => totalMins += (data.hours * 60 + data.mins))
+      if (totalMins > highestMins) highestMins = totalMins
+    })
+    
+    setLongestTime(highestMins)
+  }
+
   const displayDayData = (day: any[]) => {
+    if (!longestTime || longestTime < 1) return
 
     let totalMins = 0
     day.forEach(data => totalMins += (data.hours * 60 + data.mins))
 
-    return day.map(data => {
+    return day.map((data, index) => {
       let { hours, mins, title } = data
       let time = (hours*60*60)+(mins*60)
-      let width = (time / longestTime) * 100
+      let width = (time / (longestTime*60)) * 100
+
+      console.log({day, index})
 
       return (
-        <div key={`${title}${topics[title]}`} className={`${topics[title]}`} style={{ width: `${width}%` }}></div>
+        <div key={`${title}${topics[title]}`} className={`${topics[title]} ${index+1 === day.length ? 'rounded-r-full' : ''}`} style={{ width: `${width}%` }}></div>
       )
     })
   }
@@ -128,32 +145,42 @@ const StudyPlan = () => {
 
     return Object.keys(studyOnDay).map(day => {
       return (
-        <div key={day} className='grid grid-cols-10 mt-3'>
+        <div key={day} className='grid grid-cols-12 mt-3'>
           <div className="col-span-3">
             <h1>{ day }</h1>
           </div>
-          <div className="flex flex-row col-span-4">
+          <div className="flex flex-row col-span-9 rounded-full overflow-hidden">
             { displayDayData(studyOnDay[day]) }
           </div> 
+          {/*
           <div className="flex flex-row col-span-3">
             { totalTimeForOneDay(studyOnDay[day]) }
           </div>
+          */}
         </div>
       )
     })
 
   }
 
+  const convertTimeToHoursAndMins = (mins: number) => {
+    let hours = Math.floor(mins / 60)
+    return mins % 60 > 0 ? hours + 1 : hours
+  }
+
   return (
-    <div className='studyPlan'>
-        <button onClick={() => {
-          console.log(studyOnDay)
-          console.log({topics})
-        }}>Study Days</button>
-        <div className="histogram flex flex-row">
+    <div className='studyPlan grid grid-cols-12'>
+        <div className="histogram flex flex-row col-span-12">
           { displayHistogram() }
         </div>
-        { displayStudyPlan() }
+        <div className="col-span-12">
+          { displayStudyPlan() }
+        </div>
+        <div className="col-span-3"></div>
+        <div className="col-span-9 w-full h-5 flex flex-row justify-between">
+          <p>0</p>
+          <p>{`${ convertTimeToHoursAndMins(longestTime) }hr`}</p>
+        </div>
     </div>
   )
 }
