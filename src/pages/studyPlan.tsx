@@ -111,8 +111,13 @@ const StudyPlan = () => {
 
     return day.map((data, index) => {
       let { hours, mins, title } = data
+      console.log({ hours, mins, title, longestTime })
+
+      // time in seconds
       let time = (hours*60*60)+(mins*60)
-      let width = (time / (longestTime*60)) * 100
+
+      // round longestTime up to nearest hour and convert to seconds then convert fraction to percentage value
+      let width = (time / ((longestTime % 60 > 0 ? (Math.floor(longestTime / 60) + 1) * 60 : longestTime * 60)*60)) * 100
 
       return (
         <div 
@@ -135,11 +140,6 @@ const StudyPlan = () => {
           <div className="flex flex-row col-span-9 rounded-full overflow-hidden items-center">
             { displayDayData(studyOnDay[day]) }
           </div> 
-          {/*
-          <div className="flex flex-row col-span-3">
-            { totalTimeForOneDay(studyOnDay[day]) }
-          </div>
-          */}
         </div>
       )
     })
@@ -152,6 +152,11 @@ const StudyPlan = () => {
   }
 
   const displayProgress = () => {
+
+    let today = new Date()
+    let currMonth = today.getMonth()
+    let startMonth = currMonth - 5 < 0 ? currMonth + 7 : currMonth - 5
+
     return Array.from(Array(140).keys()).map((key) => {
       return <div key={key} className='col-span-1 row-span-1 bg-slate-50 rounded-sm'></div>
     })
@@ -160,26 +165,26 @@ const StudyPlan = () => {
   const displayMonths = () => {
     let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May']
     return months.map((month) => {
-      return <div className="col-start-0 col-span-2">{ month }</div>
+      return <div key={month} className="">{ month }</div>
     })
   }
 
   return (
     <div className='studyPlan grid grid-cols-12'>
-        <div className="grid grid-cols-12 grid-rows-8 progress col-span-12 h-[8rem] mb-4">
-          <div className="days col-start-0 col-span-1 row-start-0 row-span-8 grid grid-cols-1 grid-rows-8 justify-center content-start text-xs">
+        <div className="grid grid-cols-12 grid-rows-8 progress col-span-12 h-[8.5rem] mb-4">
+          <div className="days col-start-0 col-span-1 row-start-0 row-span-8 grid grid-cols-1 grid-rows-8 justify-center content-start text-xs pt-2">
             <p className='row-start-3 row-span-1'>Mon</p>
             <p className='row-start-5 row-span-1'>Wed</p>
             <p className='row-start-7 row-span-1'>Fri</p>
           </div>
-          <div className="months col-start-2 col-span-11 row-start-0 row-span-1 px-2 grid grid-cols-11 grid-rows-1">
+          <div className="months col-start-2 col-span-11 row-start-0 row-span-1 px-2 flex flex-row items-start justify-around">
             { displayMonths() }
           </div>
           <div className="progress col-start-2 col-span-11 row-start-2 row-span-7 grid grid-rows-7 grid-cols-18 gap-[2px] pl-2 pt-2 justify-center content-center">
             { displayProgress() }
           </div>
         </div>
-        <div className="histogram flex flex-row col-span-12 mb-2">
+        <div className="histogram flex flex-row flex-wrap col-span-12 mb-2">
           { displayHistogram() }
         </div>
         <div className="col-span-12">
