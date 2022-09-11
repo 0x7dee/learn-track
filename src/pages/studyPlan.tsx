@@ -163,8 +163,27 @@ const StudyPlan = () => {
   }
 
   const displayMonths = () => {
-    let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May']
-    return months.map((month) => {
+    let months: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+    let recentMonths: string[] = []
+
+    let today = new Date()
+    let currMonth = today.getMonth()
+    let currDay = today.getDate()
+
+    let startMonth = currMonth - 5 < 0 ? currMonth + 7 : currMonth - 5
+
+    // If we're 1 week into the new month then use that month in the UI
+    if ( currDay > 7 ) startMonth = startMonth + 1
+
+    for(let i=0; i < 5; i++) {
+      if ( startMonth + i > 12 ) {
+        recentMonths.push(months[startMonth+i-12])
+      } else {
+        recentMonths.push(months[startMonth+i])
+      }
+    }
+
+    return recentMonths.map((month) => {
       return <div key={month} className="">{ month }</div>
     })
   }
