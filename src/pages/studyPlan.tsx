@@ -111,13 +111,14 @@ const StudyPlan = () => {
 
     return day.map((data, index) => {
       let { hours, mins, title } = data
-      console.log({ hours, mins, title, longestTime })
 
       // time in seconds
       let time = (hours*60*60)+(mins*60)
 
-      // round longestTime up to nearest hour and convert to seconds then convert fraction to percentage value
-      let width = (time / ((longestTime % 60 > 0 ? (Math.floor(longestTime / 60) + 1) * 60 : longestTime * 60)*60)) * 100
+      // round longestTime up to nearest hour (in mins) then converts to seconds then to percentage value
+      let roundsToAnHour = longestTime % 60 === 0
+      let roundedUpTime = !roundsToAnHour ? ( Math.floor( longestTime / 60 ) + 1 ) * 60 : longestTime
+      let width = (time / ( roundedUpTime * 60 )) * 100
 
       return (
         <div 
@@ -146,9 +147,15 @@ const StudyPlan = () => {
 
   }
 
-  const convertTimeToHoursAndMins = (mins: number) => {
+  /* change this to display whole time on x axis */
+  const displayTimeAxis = (mins: number) => {
     let hours = Math.floor(mins / 60)
-    return mins % 60 > 0 ? hours + 1 : hours
+    let totalTime = mins % 60 > 0 ? hours + 1 : hours
+    return Array.from(Array(totalTime).keys()).map((key) => {
+      if ( key === 0 ) return <span>{ key }</span>
+      return <span key={key} className=''>{ `${key}hr` }</span>
+    })
+    
   }
 
   const displayProgress = () => {
@@ -211,8 +218,9 @@ const StudyPlan = () => {
         </div>
         <div className="col-span-3"></div>
         <div className="col-span-9 w-full h-5 flex flex-row justify-between mt-1">
-          <p>0</p>
-          <p>{`${ convertTimeToHoursAndMins(longestTime) }hr`}</p>
+          <div className="flex flex-row justify-between w-full items-end">
+            { displayTimeAxis(longestTime) }
+          </div>
         </div>
     </div>
   )
