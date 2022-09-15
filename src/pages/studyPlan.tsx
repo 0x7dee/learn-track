@@ -80,7 +80,7 @@ const StudyPlan = () => {
     if (!topics) return
     return Object.keys(topics).map(topic => {
       return (
-        <div key={`${topics[topic]}${topic}`} className='flex flex-row items-center mr-3'>
+        <div key={`${topics[topic]} ${topic}`} className='flex flex-row items-center mr-3'>
           <div className={`${topics[topic]} h-2 w-2 mr-1 rounded-full`}></div>
           <p>{ topic }</p>
         </div>
@@ -91,23 +91,25 @@ const StudyPlan = () => {
   const setLongestDay = () => {
     if (!studyOnDay) return
 
-    let highestMins = 0
-    let totalMins = 0
+    let highestTime = 0
+    let totalTime = 0
 
     Object.keys(studyOnDay).forEach(day => {
-      totalMins = 0
-      studyOnDay[day].forEach((data: { hours: number; mins: number }) => totalMins += (data.hours * 60 + data.mins))
-      if (totalMins > highestMins) highestMins = totalMins
+      studyOnDay[day].forEach((data: { hours: number; mins: number }) => {
+        totalTime += ((data.hours * 60 * 60) + (data.mins * 60))
+      })
+      if (totalTime > highestTime) highestTime = totalTime
+      totalTime = 0
     })
-    
-    setLongestTime(highestMins)
+
+    setLongestTime(highestTime)
   }
 
   const displayDayData = (day: any[]) => {
     if (!longestTime || longestTime < 1) return
 
-    let totalMins = 0
-    day.forEach(data => totalMins += (data.hours * 60 + data.mins))
+    let totalTime = 0
+    day.forEach(data => totalTime += ((data.hours * 60 * 60) + (data.mins * 60)))
 
     return day.map((data, index) => {
       let { hours, mins, title } = data
@@ -116,9 +118,13 @@ const StudyPlan = () => {
       let time = (hours*60*60)+(mins*60)
 
       // round longestTime up to nearest hour (in mins) then converts to seconds then to percentage value
-      let roundsToAnHour = longestTime % 60 === 0
-      let roundedUpTime = !roundsToAnHour ? ( Math.floor( longestTime / 60 ) + 1 ) * 60 : longestTime
-      let width = (time / ( roundedUpTime * 60 )) * 100
+      // THIS PART IS STILL BUGGY, NEEDS TO BE VALIDATED/TESTED
+      let longestTimeMins = Math.floor(longestTime / 60)
+      let longestTimeHrs = Math.floor(longestTimeMins / 60)
+
+      let roundsToAnHour = longestTimeMins % 60 === 0
+      let roundedUpTime = !roundsToAnHour ? longestTimeHrs + 1 : longestTimeHrs
+      let width = (time / ( roundedUpTime * 60 * 60 )) * 100
 
       return (
         <div 
@@ -132,9 +138,9 @@ const StudyPlan = () => {
   const displayStudyPlan = () => {
     if (!links || !studyOnDay) return
 
-    return Object.keys(studyOnDay).map(day => {
+    return Object.keys(studyOnDay).map((day, index) => {
       return (
-        <div key={day} className='grid grid-cols-12'>
+        <div key={`${index}${day}`} className='grid grid-cols-12'>
           <div className="col-span-3">
             <h1>{ day }</h1>
           </div>
@@ -148,12 +154,15 @@ const StudyPlan = () => {
   }
 
   /* change this to display whole time on x axis */
-  const displayTimeAxis = (mins: number) => {
-    let hours = Math.floor(mins / 60)
-    let totalTime = mins % 60 > 0 ? hours + 1 : hours
-    return Array.from(Array(totalTime).keys()).map((key) => {
+  const displayTimeAxis = () => {
+    if (!longestTime) return
+
+    let hours = Math.ceil(Math.floor(longestTime / 60) / 60)
+    console.log({ hours })
+
+    return Array.from(Array(hours+1).keys()).map((key, index) => {
       if ( key === 0 ) return <span>{ key }</span>
-      return <span key={key} className=''>{ `${key}hr` }</span>
+      return <span key={`${index}${key}`} className=''>{ `${key}hr` }</span>
     })
     
   }
@@ -164,8 +173,8 @@ const StudyPlan = () => {
     let currMonth = today.getMonth()
     let startMonth = currMonth - 5 < 0 ? currMonth + 7 : currMonth - 5
 
-    return Array.from(Array(140).keys()).map((key) => {
-      return <div key={key} className='col-span-1 row-span-1 bg-slate-50 rounded-sm'></div>
+    return Array.from(Array(140).keys()).map((key, index) => {
+      return <div key={`${index}${key}`} className='col-span-1 row-span-1 bg-slate-50 rounded-sm'></div>
     })
   }
 
@@ -190,8 +199,8 @@ const StudyPlan = () => {
       }
     }
 
-    return recentMonths.map((month) => {
-      return <div key={month} className="">{ month }</div>
+    return recentMonths.map((month, index) => {
+      return <div key={index+month} className="">{ month }</div>
     })
   }
 
@@ -219,7 +228,7 @@ const StudyPlan = () => {
         <div className="col-span-3"></div>
         <div className="col-span-9 w-full h-5 flex flex-row justify-between mt-1">
           <div className="flex flex-row justify-between w-full items-end">
-            { displayTimeAxis(longestTime) }
+            { displayTimeAxis() }
           </div>
         </div>
     </div>
