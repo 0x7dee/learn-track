@@ -153,28 +153,58 @@ const StudyPlan = () => {
 
   }
 
-  /* change this to display whole time on x axis */
   const displayTimeAxis = () => {
     if (!longestTime) return
 
     let hours = Math.ceil(Math.floor(longestTime / 60) / 60)
-    console.log({ hours })
 
     return Array.from(Array(hours+1).keys()).map((key, index) => {
-      if ( key === 0 ) return <span>{ key }</span>
-      return <span key={`${index}${key}`} className=''>{ `${key}hr` }</span>
+      if ( key === 0 ) return <span key={`timeAxis${key}${index}`}>{ key }</span>
+      return <span key={`timeAxis${index}${key}`} className=''>{ `${key}hr` }</span>
     })
     
   }
 
+  function getDateXDaysAgo(numOfDays: number, date = new Date()) {
+    const daysAgo = new Date(date.getTime());
+
+    daysAgo.setDate(date.getDate() - numOfDays);
+
+    return daysAgo;
+  }
+
+  function getDateXDaysAway(numOfDays: number, date = new Date()) {
+    const daysAgo = new Date(date.getTime());
+
+    daysAgo.setDate(date.getDate() + numOfDays);
+
+    return daysAgo;
+  }
+
   const displayProgress = () => {
-
+    let weeks = 18
     let today = new Date()
-    let currMonth = today.getMonth()
-    let startMonth = currMonth - 5 < 0 ? currMonth + 7 : currMonth - 5
+    let dayOfWeek = today.getDay()
+    let UIStartDaysAgo = (weeks-1) * 7 + dayOfWeek
 
-    return Array.from(Array(140).keys()).map((key, index) => {
-      return <div key={`${index}${key}`} className='col-span-1 row-span-1 bg-slate-50 rounded-sm'></div>
+    let xIndex = 0
+    let yIndex = 0
+
+    return Array.from(Array(weeks*7).keys()).map((key) => {
+      if ( xIndex > weeks-1 ) {
+        xIndex = 0
+        yIndex++
+      }
+
+      let weeklyIncrement = xIndex*7
+
+      let currDate = getDateXDaysAgo(UIStartDaysAgo - weeklyIncrement - yIndex)
+      xIndex++
+
+      return (
+        <div key={`progress${key}`} className='col-span-1 row-span-1 bg-slate-50 rounded-sm relative group cursor-default'>
+          <div className={`absolute top-0 ${ xIndex > 12 ? '-left-12' : '' } bg-slate-50 rounded-md px-1 py-1 z-10 hidden group-hover:block cursor-default`}>{ currDate.toLocaleDateString() }</div>
+        </div>)
     })
   }
 
@@ -200,7 +230,7 @@ const StudyPlan = () => {
     }
 
     return recentMonths.map((month, index) => {
-      return <div key={index+month} className="">{ month }</div>
+      return <div key={`months${month}${index}`} className="">{ month }</div>
     })
   }
 
