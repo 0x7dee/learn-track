@@ -194,6 +194,15 @@ function Home() {
     }
   };
 
+  const getData = async () => {
+    let links = await chrome.storage.local.get('dates')
+    console.log(links)
+  }
+
+  const deleteData = async () => {
+    await chrome.storage.local.set({dates: {}})
+  }
+
   return (
     <div className="w-96 min-h-[34rem] max-h-[42rem] relative rounded-md overflow-hidden">
       <div className="header pt-6 pb-6 pr-8 pl-8 border-dashed border-slate-300 border-b-2">
@@ -208,6 +217,10 @@ function Home() {
           { displayPage() }
         </div> 
       </div>
+      {/* 
+      <button onClick={() => getData()}>Get Data</button>
+      <button onClick={() => deleteData()}>Delete Data</button>
+      */}
     </div>
   );
 }

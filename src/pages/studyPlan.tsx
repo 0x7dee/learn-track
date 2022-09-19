@@ -198,12 +198,13 @@ const StudyPlan = () => {
 
       let weeklyIncrement = xIndex*7
 
-      let currDate = getDateXDaysAgo(UIStartDaysAgo - weeklyIncrement - yIndex)
+      let daysAgo = UIStartDaysAgo - weeklyIncrement - yIndex
+      let currDate = getDateXDaysAgo(daysAgo)
       xIndex++
 
       return (
-        <div key={`progress${key}`} className='col-span-1 row-span-1 bg-slate-50 rounded-sm relative group cursor-default'>
-          <div className={`absolute top-0 ${ xIndex > 12 ? '-left-12' : '' } bg-slate-50 rounded-md px-1 py-1 z-10 hidden group-hover:block cursor-default`}>{ currDate.toLocaleDateString() }</div>
+        <div key={`progress${key}`} className={`col-span-1 row-span-1 ${ daysAgo < 0 ? 'bg-white' : 'bg-slate-100' } rounded-sm relative group cursor-default`}>
+          <div className={`absolute -top-6 ${ xIndex > 12 ? '-left-12' : '' } bg-slate-50 rounded-md px-1 py-1 z-10 hidden ${ daysAgo < 0 ? '' : 'group-hover:block' } cursor-default`}>{ currDate.toLocaleDateString() }</div>
         </div>)
     })
   }

@@ -51,18 +51,41 @@ const updateLapsedTime = async (linkData: any, lastTab: any) => {
     let today = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][todaysDate.getDay()]
     let getCurrentDay = await chrome.storage.local.get('currentDay')
     let currentDay = getCurrentDay.currentDay ? getCurrentDay.currentDay : ''
+    let dates = await chrome.storage.local.get('dates')
+    let todayString = todaysDate.toLocaleDateString()
     
     /* If it's a new day then reset time lapsed for all links */
-    if ( today !== currentDay ) resetAllTimeLapsed(linkData)
+    if ( today !== currentDay ) {
+        
+        /* add current day to dates */
+        if ( !dates[todayString] ) {
+            let addedDates = { ...dates, [todayString]: [] }
+            await chrome.storage.local.set({ dates: addedDates})
+        }
+        
+        resetAllTimeLapsed(linkData)
+    }
     await chrome.storage.local.set({ currentDay: today })
 
     /* Increment timeLapsed */
     let urlFound = false // we only want one increment per second
     linkData.forEach((link: { urls: any[], title: string }) => {
-        link.urls.forEach((url: any) => {
+        link.urls.forEach( async (url: any) => {
             let timeLeft = linkData[index].timeLapsed <= linkData[index].time
             let urlsIsValid = compareUrls(url, lastTab.tab.url)
             let isStudyDay = linkData[index].days[today]
+            
+            let updatedDates = dates
+
+            /* NEEDS TO BE WORKED ON - ADD DATE WITH COMPLETED TOPIC */
+            if (!timeLeft && isStudyDay) {
+                /* Add completed value to dates */
+                updatedDates = { ...updatedDates, [todayString]: { ...updatedDates[todayString], [link.title]: 'complete' } }
+                await chrome.storage.local.set({ dates: updatedDates })
+            } else if ( timeLeft && isStudyDay && !updatedDates[todayString] ) {
+                updatedDates = { ...updatedDates, [todayString]: { ...updatedDates[todayString], [link.title]: 'incomplete' } }
+                await chrome.storage.local.set({ dates: updatedDates })
+            }
 
             /* Compare current url to urls specified in link, if there is no time left then ignore */
             if( timeLeft && urlsIsValid && isStudyDay && !urlFound ) {
