@@ -199,6 +199,16 @@ function Home() {
     console.log(links)
   }
 
+  const setDummyData = async () => {
+    
+    let getDates = await chrome.storage.local.get('dates')
+    getDates.dates['08/09/2022'] = { "a": true } 
+    getDates.dates['09/09/2022'] = { "a": false, "b": true }
+    getDates.dates['11/09/2022'] = { "a": false, "b": false, "c": true }
+
+    await chrome.storage.local.set({ dates: getDates.dates })
+  } 
+
   const deleteData = async () => {
     await chrome.storage.local.set({dates: {}})
   }
@@ -217,10 +227,11 @@ function Home() {
           { displayPage() }
         </div> 
       </div>
-      {/* 
+      
       <button onClick={() => getData()}>Get Data</button>
+      <button onClick={() => setDummyData()}>Set Dummy Data</button>
       <button onClick={() => deleteData()}>Delete Data</button>
-      */}
+      
     </div>
   );
 }

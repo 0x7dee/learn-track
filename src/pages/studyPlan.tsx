@@ -5,9 +5,11 @@ const StudyPlan = () => {
   const [topics, setTopics] = useState<any>({})
   const [studyOnDay, setStudyOnDay] = useState<any>({})
   const [longestTime, setLongestTime] = useState<number>(0)
+  const [dates, setDates] = useState<any>({})
 
   useEffect(() => {
     getLinks()
+    getDates()
   }, [])
 
   useEffect(() => {
@@ -17,6 +19,11 @@ const StudyPlan = () => {
   useEffect(() => {
     formatStudyDays()
   }, [links])
+
+  const getDates = async () => {
+    let getDates = await chrome.storage.local.get('dates')
+    setDates(getDates.dates)
+  }
 
   const getLinks = async () => {
     const existingLinks = await chrome.storage.local.get("links");
@@ -182,6 +189,7 @@ const StudyPlan = () => {
   }
 
   const displayProgress = () => {
+
     let weeks = 18
     let today = new Date()
     let dayOfWeek = today.getDay()
@@ -202,8 +210,32 @@ const StudyPlan = () => {
       let currDate = getDateXDaysAgo(daysAgo)
       xIndex++
 
+      let completenessScore = 0
+
+      let numerator = 0
+      let denominator = 0
+
+
+      if (dates[currDate.toLocaleDateString()]) {
+        Object.keys(dates[currDate.toLocaleDateString()]).forEach(topic => {
+          denominator++
+          if ( dates[currDate.toLocaleDateString()][topic] ) numerator++
+        })
+        completenessScore = numerator / denominator
+      }
+
       return (
-        <div key={`progress${key}`} className={`col-span-1 row-span-1 ${ daysAgo < 0 ? 'bg-white' : 'bg-slate-100' } rounded-sm relative group cursor-default`}>
+        <div 
+          key={`progress${key}`} 
+          className={`col-span-1 row-span-1 
+          ${ 
+            daysAgo < 0 ? 'bg-white' : 
+            completenessScore === 1 ? 'bg-green-600' : 
+            completenessScore >= 0.5 ? 'bg-green-400' : 
+            completenessScore > 0 ? 'bg-green-200' : 
+            'bg-slate-100' 
+          } 
+          rounded-sm relative group cursor-default`}>
           <div className={`absolute -top-6 ${ xIndex > 12 ? '-left-12' : '' } bg-slate-50 rounded-md px-1 py-1 z-10 hidden ${ daysAgo < 0 ? '' : 'group-hover:block' } cursor-default`}>{ currDate.toLocaleDateString() }</div>
         </div>)
     })

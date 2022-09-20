@@ -13,7 +13,6 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
        chrome.storage.local.set({tab})   
 
        let lastTab = await chrome.storage.local.get('tab');
-       //console.log(lastTab.tab.url)
 
        /* Get link data and match to current url */
        let getLinkData = await chrome.storage.local.get('links');
@@ -44,7 +43,6 @@ const resetAllTimeLapsed = async (links: any) => {
 }
 
 const updateLapsedTime = async (linkData: any, lastTab: any) => {
-    let index = 0
     if ( !linkData ) return
 
     let todaysDate = new Date();
@@ -53,37 +51,38 @@ const updateLapsedTime = async (linkData: any, lastTab: any) => {
     let currentDay = getCurrentDay.currentDay ? getCurrentDay.currentDay : ''
     let dates = await chrome.storage.local.get('dates')
     let todayString = todaysDate.toLocaleDateString()
+
+    let updatedDates = dates.dates
+
+    /* Add date if doesn't exist */
+    if ( !updatedDates[todayString] ) {
+        updatedDates = { ...updatedDates, [todayString]: {} }
+        await chrome.storage.local.set({ dates: updatedDates })
+    }
     
     /* If it's a new day then reset time lapsed for all links */
-    if ( today !== currentDay ) {
-        
-        /* add current day to dates */
-        if ( !dates[todayString] ) {
-            let addedDates = { ...dates, [todayString]: [] }
-            await chrome.storage.local.set({ dates: addedDates})
-        }
-        
+    if ( today !== currentDay ) {        
         resetAllTimeLapsed(linkData)
     }
     await chrome.storage.local.set({ currentDay: today })
 
     /* Increment timeLapsed */
     let urlFound = false // we only want one increment per second
-    linkData.forEach((link: { urls: any[], title: string }) => {
+    linkData.forEach((link: { urls: any[], title: string }, index: number) => {
         link.urls.forEach( async (url: any) => {
             let timeLeft = linkData[index].timeLapsed <= linkData[index].time
             let urlsIsValid = compareUrls(url, lastTab.tab.url)
             let isStudyDay = linkData[index].days[today]
-            
-            let updatedDates = dates
 
-            /* NEEDS TO BE WORKED ON - ADD DATE WITH COMPLETED TOPIC */
-            if (!timeLeft && isStudyDay) {
-                /* Add completed value to dates */
-                updatedDates = { ...updatedDates, [todayString]: { ...updatedDates[todayString], [link.title]: 'complete' } }
+            /* Add topic if doesn't already exist in todays date */
+            if (isStudyDay && updatedDates[todayString] && !updatedDates[todayString][link.title]) {
+                updatedDates[todayString] = { ...updatedDates[todayString], [link.title]: false }
                 await chrome.storage.local.set({ dates: updatedDates })
-            } else if ( timeLeft && isStudyDay && !updatedDates[todayString] ) {
-                updatedDates = { ...updatedDates, [todayString]: { ...updatedDates[todayString], [link.title]: 'incomplete' } }
+            }
+
+            /* Add completed topic to todays date */
+            if (!timeLeft && isStudyDay) {
+                updatedDates[todayString] = { ...updatedDates[todayString], [link.title]: true }
                 await chrome.storage.local.set({ dates: updatedDates })
             }
 
@@ -95,7 +94,6 @@ const updateLapsedTime = async (linkData: any, lastTab: any) => {
                 urlFound = true
             }
         })
-        index += 1
         urlFound = false
     })
 }
