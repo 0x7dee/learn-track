@@ -4,7 +4,8 @@ const Settings = () => {
   let [showDeletePopup, setShowDeletePopup] = useState(false)
 
   const clearData = async () => {
-    await chrome.storage.local.set({"links": null});
+    await chrome.storage.local.set({ links: null });
+    await chrome.storage.local.set({ dates: {} })
   }
 
   return (

@@ -82,11 +82,19 @@ const Tracker = ({ link, setCurrentPage, setEditMode }: any) => {
     const existingLinks = await chrome.storage.local.get("links");
     if ( existingLinks.links ) {
       if ( existingLinks.links.length === 1 ) {
-        chrome.storage.local.set({"links": null})
+        await chrome.storage.local.set({"links": null})
       } else {
         existingLinks.links = existingLinks.links.filter((l: { title: string }) => l.title !== link.title)
-        chrome.storage.local.set({"links": [...existingLinks.links]})
+        await chrome.storage.local.set({"links": [...existingLinks.links]})
       }
+
+      // Remove topic from todays date
+      let today = new Date()
+      let todayString = today.toLocaleDateString()
+      let getDates = await chrome.storage.local.get('dates')
+      delete getDates.dates[todayString][link.title]
+      await chrome.storage.local.set({ dates: getDates.dates })
+
       setSuccess('Deleted link successfully!')
     } else {
       setErrors(['Unable to delete link...'])

@@ -14,7 +14,8 @@ module.exports = {
         newTracker: path.resolve('src/pages/newTracker.tsx'),
         tracker: path.resolve('src/pages/tracker.tsx'),
         proPlan: path.resolve('src/pages/proPlan.tsx'),
-        studyPlan: path.resolve('src/pages/studyPlan.tsx')
+        studyPlan: path.resolve('src/pages/studyPlan.tsx'),
+        history: path.resolve('src/pages/history.tsx')
     },
     module: {
         rules: [
@@ -52,7 +53,8 @@ module.exports = {
             'newTracker',
             'tracker',
             'proPlan',
-            'studyPlan'
+            'studyPlan',
+            'history'
         ])
     ],
     resolve: {

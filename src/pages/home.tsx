@@ -5,6 +5,7 @@ import Tracker from "./tracker";
 import ProPlan from "./proPlan";
 import Settings from "./settings";
 import StudyPlan from "./studyPlan";
+import History from "./history";
 
 
 function Home() {
@@ -14,6 +15,7 @@ function Home() {
   const [link, setSelectedLink]: any = useState({})
   const [editMode, setEditMode] = useState(false)
   const [onlyShowToday, setOnlyShowToday] = useState(true)
+  const [isMember, setIsMember] = useState(true)
   
   useEffect( () => {
 
@@ -77,6 +79,10 @@ function Home() {
             onClick={() => setCurrentPage('studyPlan')}
             >Study Plan</button>
           <button 
+            className={`${ currentPage === 'history' ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
+            onClick={() => setCurrentPage('history')}
+            >History</button>
+          <button 
             className={`${ currentPage === 'settings' ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
             onClick={() => setCurrentPage('settings')}
             >Settings</button>
@@ -85,7 +91,7 @@ function Home() {
   }
 
   const displayLinkToggle = () => {
-    if ( currentPage === 'home' ) {
+    if ( currentPage === 'home' && isMember ) {
       return (
         <div className="displayPage__toggle mb-6 flex flex-row items-center w-full">
           <p onClick={ () => setOnlyShowToday(true) } className={`mr-2 cursor-pointer ${ onlyShowToday ? 'text-black' : 'text-slate-400' }`}>Today</p>
@@ -107,11 +113,16 @@ function Home() {
   }
 
   const displayPage = () => {
+    
+    if (!isMember) return <ProPlan />
+    
     if ( loading ) {
       return <p>Loading...</p>
     }
 
     if ( currentPage === 'studyPlan' ) return <StudyPlan />
+
+    if (currentPage === 'history' ) return <History />
 
     if ( currentPage === 'settings' ) return <Settings />
 
@@ -227,11 +238,11 @@ function Home() {
           { displayPage() }
         </div> 
       </div>
-      
+      {/*
       <button onClick={() => getData()}>Get Data</button>
       <button onClick={() => setDummyData()}>Set Dummy Data</button>
       <button onClick={() => deleteData()}>Delete Data</button>
-      
+      */}
     </div>
   );
 }

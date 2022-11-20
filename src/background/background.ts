@@ -1,3 +1,11 @@
+/**
+ * links -> array of all links created by the user
+ * timer -> counter
+ * tab -> current tab the user is on
+ * currentDay -> current day
+ * dates -> records all dates that the application has been in use, used for showing completion rate
+ */
+
 /* LearnTrack time track functionality */
 let url: string = '';
 
@@ -17,6 +25,13 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
        /* Get link data and match to current url */
        let getLinkData = await chrome.storage.local.get('links');
        updateLapsedTime(getLinkData.links, lastTab)
+
+       /* Store the current URL in history */
+       // get base domain of last tab
+       //let { hostname: string } = new URL(lastTab); -> this works
+       // check if it exists in history
+       // if it exists then increment the counter value
+       // if it does not exist then add it with an incremented value of 1
     }
 })
 
@@ -54,17 +69,17 @@ const updateLapsedTime = async (linkData: any, lastTab: any) => {
 
     let updatedDates = dates.dates
 
+    /* If it's a new day then reset time lapsed for all links */
+    if ( today !== currentDay ) {        
+        await resetAllTimeLapsed(linkData)
+    }
+    await chrome.storage.local.set({ currentDay: today })
+
     /* Add date if doesn't exist */
     if ( !updatedDates[todayString] ) {
         updatedDates = { ...updatedDates, [todayString]: {} }
         await chrome.storage.local.set({ dates: updatedDates })
     }
-    
-    /* If it's a new day then reset time lapsed for all links */
-    if ( today !== currentDay ) {        
-        resetAllTimeLapsed(linkData)
-    }
-    await chrome.storage.local.set({ currentDay: today })
 
     /* Increment timeLapsed */
     let urlFound = false // we only want one increment per second
@@ -80,9 +95,9 @@ const updateLapsedTime = async (linkData: any, lastTab: any) => {
                 await chrome.storage.local.set({ dates: updatedDates })
             }
 
-            /* Add completed topic to todays date */
-            if (!timeLeft && isStudyDay) {
-                updatedDates[todayString] = { ...updatedDates[todayString], [link.title]: true }
+            /* Update topic completion for today */
+            if (isStudyDay) {
+                updatedDates[todayString] = { ...updatedDates[todayString], [link.title]: !timeLeft }
                 await chrome.storage.local.set({ dates: updatedDates })
             }
 

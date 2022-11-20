@@ -180,14 +180,6 @@ const StudyPlan = () => {
     return daysAgo;
   }
 
-  function getDateXDaysAway(numOfDays: number, date = new Date()) {
-    const daysAgo = new Date(date.getTime());
-
-    daysAgo.setDate(date.getDate() + numOfDays);
-
-    return daysAgo;
-  }
-
   const displayProgress = () => {
 
     let weeks = 18
@@ -230,7 +222,8 @@ const StudyPlan = () => {
           className={`col-span-1 row-span-1 
           ${ 
             daysAgo < 0 ? 'bg-white' : 
-            completenessScore === 1 ? 'bg-green-600' : 
+            completenessScore >= 1 ? 'bg-green-600' : 
+            completenessScore >= 0.75 ? 'bg-green-500' : 
             completenessScore >= 0.5 ? 'bg-green-400' : 
             completenessScore > 0 ? 'bg-green-200' : 
             'bg-slate-100' 
