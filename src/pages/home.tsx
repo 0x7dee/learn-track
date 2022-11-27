@@ -205,9 +205,19 @@ function Home() {
     }
   };
 
-  const getData = async () => {
-    let links = await chrome.storage.local.get('dates')
+  const getLinks = async () => {
+    let links = await chrome.storage.local.get('links')
     console.log(links)
+  }
+
+  const getDates = async () => {
+    let dates = await chrome.storage.local.get('dates')
+    console.log(dates)
+  }
+  
+  const getViewHistory = async () => {
+    let viewHistory = await chrome.storage.local.get('viewHistory')
+    console.log(viewHistory)
   }
 
   const setDummyData = async () => {
@@ -238,8 +248,11 @@ function Home() {
           { displayPage() }
         </div> 
       </div>
-      {/*
-      <button onClick={() => getData()}>Get Data</button>
+      
+      <button onClick={() => getViewHistory()}>Get History</button><br />
+      <button onClick={() => getLinks()}>Get Links</button><br />
+      <button onClick={() => getDates()}>Get Dates</button>
+      {/* 
       <button onClick={() => setDummyData()}>Set Dummy Data</button>
       <button onClick={() => deleteData()}>Delete Data</button>
       */}
