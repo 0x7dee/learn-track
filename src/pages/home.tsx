@@ -19,7 +19,7 @@ function Home() {
   
   useEffect( () => {
 
-    const secondInterval = setInterval(async () => {
+    let secondInterval = setInterval(async () => {
       updateLinks();
 
       if (loading) {
@@ -220,6 +220,10 @@ function Home() {
     console.log(viewHistory)
   }
 
+  const clearViewHistory = async () => {
+    await chrome.storage.local.set({'viewHistory': {}})
+  }
+
   const setDummyData = async () => {
     
     let getDates = await chrome.storage.local.get('dates')
@@ -249,7 +253,9 @@ function Home() {
         </div> 
       </div>
       
+      
       <button onClick={() => getViewHistory()}>Get History</button><br />
+      <button onClick={() => clearViewHistory()}>Clear History</button><br />
       <button onClick={() => getLinks()}>Get Links</button><br />
       <button onClick={() => getDates()}>Get Dates</button>
       {/* 

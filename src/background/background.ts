@@ -14,6 +14,9 @@ chrome.alarms.create('urlTimer', {
 })
 
 chrome.alarms.onAlarm.addListener(async (alarm) => {
+    let todaysDate = new Date();
+    let todayString = todaysDate.toLocaleDateString()
+
     if ( alarm.name === 'urlTimer' ) {
         
        /* Update current tab */
@@ -26,18 +29,35 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
        let getLinkData = await chrome.storage.local.get('links');
        updateLapsedTime(getLinkData.links, lastTab)
 
-       /* Store the current URL in history */
-       // get base domain of last tab
-       //let { hostname: string } = new URL(lastTab); -> this works
-       // check if it exists in history
-       // if it exists then increment the counter value
-       // if it does not exist then add it with an incremented value of 1
+       /* Update history */
+       updateHistory(lastTab, todayString)
+     
     }
 })
 
 chrome.storage.local.get('timer', (res) => {
     chrome.storage.local.set({ timer: 'timer' in res ? res.timer : 0 })
 })
+
+const updateHistory = async (lastTab: any, todayString: string) => {
+    // ViewHistory
+    
+    let getViewHistory = await chrome.storage.local.get('viewHistory')
+    let viewHistory = getViewHistory.viewHistory
+
+    console.log({lastTab})
+    console.log({viewHistory})
+    
+    // If hostname doesn't exist in history add it
+    if (!viewHistory[lastTab.tab.url]) {
+        viewHistory = {...viewHistory, [lastTab.tab.url]: {totalTime: 1, dates: { [todayString]: 1 }}}
+    } else {
+        viewHistory[lastTab.tab.url].totalTime += 1
+        viewHistory[lastTab.tab.url].dates[todayString] += 1  
+    }
+
+    await chrome.storage.local.set({'viewHistory': viewHistory})
+}
 
 async function getCurrentTab() {
     let queryOptions = { active: true, lastFocusedWindow: true };
