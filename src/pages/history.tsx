@@ -50,11 +50,20 @@ function History() {
         )
         
       }
+    
+    const getDateXDaysAgo = (numOfDays: number, date = new Date()) => {
+        const daysAgo = new Date(date.getTime());
+
+        daysAgo.setDate(date.getDate() - numOfDays);
+
+        return daysAgo;
+    }
 
     const displayHistory = () => {
         if (!viewHistory || Object.keys(viewHistory).length === 0) return <div>Loading history...</div>
 
         let viewHistorySorted = Object.keys(viewHistory).sort((a,b) => (viewHistory[b].totalTime - viewHistory[a].totalTime))
+        
 
         if (timeline === 'today') {
             return Object.keys(viewHistory).filter(a => viewHistory[a].dates[todayString]).sort((a,b) => (viewHistory[b].dates[todayString] - viewHistory[a].dates[todayString]))
@@ -62,17 +71,33 @@ function History() {
                 if (viewHistory[item].dates[todayString] < 60 || !viewHistory[item].dates[todayString]) return
                 return (
                     <div key={item}>
-                        <span><a href={`https://${item}`} target={"_blank"}>{item}</a>: {totalTime(viewHistory[item].dates[todayString])}</span>
+                        <span className='flex flex-row justify-between'>
+                            <a href={`https://${item}`} target={"_blank"}>{item}</a>
+                            <p>{totalTime(viewHistory[item].dates[todayString])}</p>
+                        </span>
                     </div>
                 )
             })
         } else if (timeline === 'week') {
+            
             return viewHistorySorted
                 .map(item => {
                     if (viewHistory[item].totalTime < 60) return
+
+                    let timeForLast7Days = 0
+                    
+                    let last7days = [0,1,2,3,4,5,6].forEach(daysAgo => {
+                        let day = getDateXDaysAgo(daysAgo)
+                        let timeOnPastDay = viewHistory[item].dates[day.toLocaleDateString()]
+                        if (timeOnPastDay) timeForLast7Days += timeOnPastDay
+                    })
+
                     return (
                         <div key={item}>
-                            <span><a href={`https://${item}`} target={"_blank"}>{item}</a>: {totalTime(viewHistory[item].totalTime)}</span>
+                            <span className='flex flex-row justify-between'>
+                                <a href={`https://${item}`} target={"_blank"}>{item}</a>
+                                <p>{totalTime(timeForLast7Days)}</p>
+                            </span>
                         </div>
                     )
                 })
@@ -81,7 +106,10 @@ function History() {
                 .map(item => {
                     return (
                         <div key={item}>
-                            <span><a href={`https://${item}`} target={"_blank"}>{item}</a>: {totalTime(viewHistory[item].totalTime)}</span>
+                            <span className='flex flex-row justify-between'>
+                                <a href={`https://${item}`} target={"_blank"}>{item}</a>
+                                <p>{totalTime(viewHistory[item].totalTime)}</p>
+                            </span>
                         </div>
                     )
                 })
@@ -93,7 +121,7 @@ function History() {
  return (
     <div>
         { displayLinkToggle() }
-        <div className="h-60 overflow-scroll">
+        <div className="h-60 overflow-scroll pr-5">
             { displayHistory() }
         </div>    
     </div>   
