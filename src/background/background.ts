@@ -41,18 +41,23 @@ chrome.storage.local.get('timer', (res) => {
 
 const updateHistory = async (lastTab: any, todayString: string) => {
     // ViewHistory
-    if (!lastTab) return
+    if (!lastTab || !lastTab.tab.url) return
     
     let getViewHistory = await chrome.storage.local.get('viewHistory')
     let viewHistory = getViewHistory.viewHistory
     let url: any = new URL(lastTab.tab.url)
+
+    if (["newtab", "extensions"].includes(url.hostname)) return 
     
     // If hostname doesn't exist in history add it
     if (!viewHistory[url.hostname]) {
         viewHistory = {...viewHistory, [url.hostname]: {totalTime: 1, dates: { [todayString]: 1 }}}
+    } else if (!viewHistory[url.hostname].dates[todayString]) {
+        viewHistory[url.hostname].totalTime += 1
+        viewHistory[url.hostname].dates = { ...viewHistory[url.hostname].dates, [todayString]: 1 }
     } else {
         viewHistory[url.hostname].totalTime += 1
-        viewHistory[url.hostname].dates[todayString] += 1  
+        viewHistory[url.hostname].dates[todayString] += 1          
     }
 
     await chrome.storage.local.set({'viewHistory': viewHistory})
