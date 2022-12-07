@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react'
 
 function History() {
     let [viewHistory, setViewHistory]: any = useState({})
+    let [onlyShowToday, setOnlyShowToday] = useState(true)
+    let [timeline, setTimeline] = useState("today")
     
     let todaysDate = new Date();
     let todayString = todaysDate.toLocaleDateString()
@@ -35,16 +37,67 @@ function History() {
         
     }, [viewHistory])
 
+    const displayLinkToggle = () => {
+        
+        return (
+        <div className="displayPage__toggle mb-6 py-1 flex flex-row items-center w-full">
+            <p onClick={ () => setTimeline("today") } className={`mr-2 cursor-pointer ${ timeline === "today" ? 'text-black' : 'text-slate-400' }`}>Today</p>
+            <p onClick={ () => setTimeline("week") } className={`mr-2 cursor-pointer ${ timeline === "week" ? 'text-black' : 'text-slate-400' }`}>This Week</p>
+            <p onClick={ () => setTimeline("all") } className={`cursor-pointer ${ timeline === "all" ? 'text-black' : 'text-slate-400' }`}>
+                Show all {`(${ viewHistory ? Object.keys(viewHistory).length : '0' })`}
+            </p>
+        </div>
+        )
+        
+      }
+
     const displayHistory = () => {
-        if (!viewHistory) return
-        return Object.keys(viewHistory)
-                .sort((a,b) => (viewHistory[b].totalTime - viewHistory[a].totalTime))
+        if (!viewHistory || Object.keys(viewHistory).length === 0) return <div>Loading history...</div>
+
+        let viewHistorySorted = Object.keys(viewHistory).sort((a,b) => (viewHistory[b].totalTime - viewHistory[a].totalTime))
+
+        if (timeline === 'today') {
+            return Object.keys(viewHistory).filter(a => viewHistory[a].dates[todayString]).sort((a,b) => (viewHistory[b].dates[todayString] - viewHistory[a].dates[todayString]))
+            .map(item => {
+                if (viewHistory[item].dates[todayString] < 60 || !viewHistory[item].dates[todayString]) return
+                return (
+                    <div key={item}>
+                        <span><a href={`https://${item}`} target={"_blank"}>{item}</a>: {totalTime(viewHistory[item].dates[todayString])}</span>
+                    </div>
+                )
+            })
+        } else if (timeline === 'week') {
+            return viewHistorySorted
                 .map(item => {
-                    return <div key={item}>{item}: {totalTime(viewHistory[item].totalTime)}</div>
+                    if (viewHistory[item].totalTime < 60) return
+                    return (
+                        <div key={item}>
+                            <span><a href={`https://${item}`} target={"_blank"}>{item}</a>: {totalTime(viewHistory[item].totalTime)}</span>
+                        </div>
+                    )
                 })
+        } else {
+            return viewHistorySorted
+                .map(item => {
+                    return (
+                        <div key={item}>
+                            <span><a href={`https://${item}`} target={"_blank"}>{item}</a>: {totalTime(viewHistory[item].totalTime)}</span>
+                        </div>
+                    )
+                })
+        }
+
+        
     }
 
- return <div className="history">{ displayHistory() }</div>   
+ return (
+    <div>
+        { displayLinkToggle() }
+        <div className="h-60 overflow-scroll">
+            { displayHistory() }
+        </div>    
+    </div>   
+ )
 }
 
 export default History;
