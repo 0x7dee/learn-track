@@ -5,6 +5,7 @@ function History() {
     let [viewHistory, setViewHistory]: any = useState({})
     let [onlyShowToday, setOnlyShowToday] = useState(true)
     let [timeline, setTimeline] = useState("today")
+    let [filterMinutes, setFilterMinutes] = useState(0)
     
     let todaysDate = new Date();
     let todayString = todaysDate.toLocaleDateString()
@@ -40,7 +41,7 @@ function History() {
     const displayLinkToggle = () => {
         
         return (
-        <div className="displayPage__toggle mb-6 py-1 flex flex-row items-center w-full">
+        <div className="displayPage__toggle mb-3 py-1 flex flex-row items-center w-full">
             <p onClick={ () => setTimeline("today") } className={`mr-2 cursor-pointer ${ timeline === "today" ? 'text-black' : 'text-slate-400' }`}>Today</p>
             <p onClick={ () => setTimeline("week") } className={`mr-2 cursor-pointer ${ timeline === "week" ? 'text-black' : 'text-slate-400' }`}>This Week</p>
             <p onClick={ () => setTimeline("all") } className={`cursor-pointer ${ timeline === "all" ? 'text-black' : 'text-slate-400' }`}>
@@ -59,6 +60,12 @@ function History() {
         return daysAgo;
     }
 
+    const removeItemFromHistory = async (item: any) => {
+        let removeItem = structuredClone(viewHistory)
+        delete removeItem[item]
+        await chrome.storage.local.set({ 'viewHistory': removeItem })
+    }
+
     const displayHistory = () => {
         if (!viewHistory || Object.keys(viewHistory).length === 0) return <div>Loading history...</div>
 
@@ -71,8 +78,11 @@ function History() {
                 if (viewHistory[item].dates[todayString] < 60 || !viewHistory[item].dates[todayString]) return
                 return (
                     <div key={item}>
-                        <span className='flex flex-row justify-between'>
-                            <a href={`https://${item}`} target={"_blank"}>{item}</a>
+                        <span className='group flex flex-row justify-between items-center'>
+                            <span className='flex flex-row items-center'>
+                                <a href={`https://${item}`} target={"_blank"}>{item}</a>
+                                <p onClick={() => removeItemFromHistory(item)} className='text-red-400 ml-2 hidden group-hover:block cursor-pointer'>x</p>
+                            </span>
                             <p>{totalTime(viewHistory[item].dates[todayString])}</p>
                         </span>
                     </div>
@@ -94,8 +104,11 @@ function History() {
 
                     return (
                         <div key={item}>
-                            <span className='flex flex-row justify-between'>
-                                <a href={`https://${item}`} target={"_blank"}>{item}</a>
+                            <span className='group flex flex-row justify-between'>
+                                <span className=' flex flex-row items-center'>
+                                    <a href={`https://${item}`} target={"_blank"}>{item}</a>
+                                <p onClick={() => removeItemFromHistory(item)} className='text-red-400 ml-2 hidden group-hover:block cursor-pointer'>x</p>
+                            </span>
                                 <p>{totalTime(timeForLast7Days)}</p>
                             </span>
                         </div>
@@ -106,8 +119,11 @@ function History() {
                 .map(item => {
                     return (
                         <div key={item}>
-                            <span className='flex flex-row justify-between'>
-                                <a href={`https://${item}`} target={"_blank"}>{item}</a>
+                            <span className='group flex flex-row justify-between'>
+                                <span className='flex flex-row items-center'>
+                                    <a href={`https://${item}`} target={"_blank"}>{item}</a>
+                                <p onClick={() => removeItemFromHistory(item)} className='text-red-400 ml-2 hidden group-hover:block cursor-pointer'>x</p>
+                            </span>
                                 <p>{totalTime(viewHistory[item].totalTime)}</p>
                             </span>
                         </div>
@@ -118,9 +134,28 @@ function History() {
         
     }
 
+    const filterHistory = async () => {
+        let filterHistory = structuredClone(viewHistory)
+        console.log(filterHistory)
+
+        Object.keys(filterHistory).forEach(item => {
+            if (filterHistory[item].totalTime < (filterMinutes*60)) {
+                console.log(`deleting: ${filterHistory[item]}`)
+                delete filterHistory[item]
+            }
+        })
+        await chrome.storage.local.set({ 'viewHistory': filterHistory })
+    }
+
  return (
     <div>
         { displayLinkToggle() }
+        <div className="filterHistory mb-3 flex flex-row justify-between">
+            <p>Clear items less than: </p>
+            <input className='w-20' type="number" name="minutes" onChange={ (e) => setFilterMinutes(parseInt(e.target.value)) } />
+            <p>minutes</p>
+            <button onClick={() => filterHistory()} className='ml-2 text-black border-2'>Go</button>
+        </div>
         <div className="h-60 overflow-scroll pr-5">
             { displayHistory() }
         </div>    

@@ -104,34 +104,30 @@ const Tracker = ({ link, setCurrentPage, setEditMode }: any) => {
 
   const toggleAutotrack = async () => {
 
-    let toggleAutotrack = !link.autotrack
-
     let linkData: any = await chrome.storage.local.get('links')
 
     if ( linkData.links ) {
-      console.log(linkData.links)
       let updateAutotrack = await linkData.links.map((currLink: any) => {
-        if ( link.title === currLink.title ) { 
-          currLink['autotrack'] = toggleAutotrack
-        }
+        if ( link.title === currLink.title ) currLink['autotrack'] = !autotrack
         return currLink
       })
-      //console.log(updateAutotrack)
       await chrome.storage.local.set({ links: updateAutotrack })
     }
-    setAutotrack(toggleAutotrack)
+    setAutotrack(!autotrack)
   }
 
   return (
     <div className="tracker w-full h-full relative">
         
-        <div className="tracker__title relative grid grid-cols-2 items-center mb-6">
+        <div className="tracker__title relative grid grid-cols-2 items-center mb-2">
           { displayTitle() }
           { displayTime() }
         </div>
 
-        <div className="div">
-          { autotrack ? <p onClick={() => toggleAutotrack()}>Autotrack Off</p> : <p onClick={() => toggleAutotrack()}>Autotrack</p> }
+        <div className="mb-6">
+          { autotrack ? 
+            <p className='text-red-400 cursor-pointer' onClick={() => toggleAutotrack()}>turn off autotrack</p> : 
+            <p className='text-emerald-400 cursor-pointer' onClick={() => toggleAutotrack()}>turn on autotrack</p> }
         </div>
 
         <div className="tracker__main-details">
