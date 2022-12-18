@@ -174,12 +174,12 @@ const NewTracker: any = ({ link, editMode }: any) => {
     const existingLinks: any = await chrome.storage.local.get("links");
 
     /* If array already exists then add the new link */
-    if ( existingLinks && Array.isArray(existingLinks.links) ) {
+    if ( existingLinks && Array.isArray(existingLinks.links) && existingLinks.links.length > 0 ) {
       let linkIsValid = await validateLink(newLink, existingLinks.links)
       if ( !linkIsValid ) return
 
       if ( existingLinks.links.length > 0 ) {
-
+        console.log("I AM HERE")
         if ( editMode ) {
           // find link and get lapsed time
           await existingLinks.links.forEach((link: { title: string, timeLapsed: number }) => {
@@ -197,6 +197,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
         resetState()
       }
     } else {
+      console.log("Creating new link")
       chrome.storage.local.set({"links": [newLink]})
       createdLinkSuccessful()
       resetState()
