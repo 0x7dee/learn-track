@@ -126,8 +126,8 @@ const Tracker = ({ link, setCurrentPage, setEditMode }: any) => {
 
         <div className="mb-6">
           { autotrack ? 
-            <p className='text-red-400 cursor-pointer' onClick={() => toggleAutotrack()}>turn off autotrack</p> : 
-            <p className='text-emerald-400 cursor-pointer' onClick={() => toggleAutotrack()}>turn on autotrack</p> }
+            <p className='text-red-400 cursor-pointer hover:underline-offset-2 hover:underline' onClick={() => toggleAutotrack()}>turn off autotrack</p> : 
+            <p className='text-emerald-400 cursor-pointer hover:underline-offset-2 hover:underline' onClick={() => toggleAutotrack()}>turn on autotrack</p> }
         </div>
 
         <div className="tracker__main-details">

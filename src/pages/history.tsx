@@ -90,7 +90,27 @@ function History() {
             })
         } else if (timeline === 'week') {
             
-            return viewHistorySorted
+            return Object.keys(viewHistory)
+                .sort((a, b) => {
+
+                    let timeForLast7DaysA = 0
+                    
+                    let last7daysA = [0,1,2,3,4,5,6].forEach(daysAgo => {
+                        let day = getDateXDaysAgo(daysAgo)
+                        let timeOnPastDay = viewHistory[a].dates[day.toLocaleDateString()]
+                        if (timeOnPastDay) timeForLast7DaysA += timeOnPastDay
+                    })
+
+                    let timeForLast7DaysB = 0
+                    
+                    let last7daysB = [0,1,2,3,4,5,6].forEach(daysAgo => {
+                        let day = getDateXDaysAgo(daysAgo)
+                        let timeOnPastDay = viewHistory[b].dates[day.toLocaleDateString()]
+                        if (timeOnPastDay) timeForLast7DaysB += timeOnPastDay
+                    })
+                    
+                    return timeForLast7DaysB - timeForLast7DaysA
+                })
                 .map(item => {
                     if (viewHistory[item].totalTime < 60) return
 
