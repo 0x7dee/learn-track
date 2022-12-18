@@ -141,8 +141,12 @@ function Home() {
     await chrome.storage.local.set({ dates: getDates.dates })
   } 
 
-  const deleteData = async () => {
+  const clearDates = async () => {
     await chrome.storage.local.set({dates: {}})
+  }
+
+  const clearLinks = async () => {
+    await chrome.storage.local.set({links: []})
   }
 
   const displayPage = () => {
@@ -253,10 +257,12 @@ function Home() {
         </div> 
       </div>
       
+      <button onClick={() => getLinks()}>Get Links</button><br />
+      <button onClick={() => clearLinks()}>Clear Links</button><br />
       {/* 
       <button onClick={() => getViewHistory()}>Get History</button><br />
       <button onClick={() => clearViewHistory()}>Clear History</button><br />
-      <button onClick={() => getLinks()}>Get Links</button><br />
+      
       <button onClick={() => getDates()}>Get Dates</button>
        
       <button onClick={() => setDummyData()}>Set Dummy Data</button>

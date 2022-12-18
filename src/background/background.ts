@@ -126,7 +126,7 @@ const updateLapsedTime = async (linkData: any, lastTab: any) => {
             }
 
             /* Compare current url to urls specified in link, if there is no time left then ignore */
-            if( timeLeft && urlsIsValid && isStudyDay && !urlFound ) {
+            if( timeLeft && !urlFound && ( linkData[index].autotrack || (urlsIsValid && isStudyDay) ) ) {
                 let updatedLinkData = linkData;
                 updatedLinkData[index].timeLapsed += 1
                 chrome.storage.local.set({'links': updatedLinkData})  
