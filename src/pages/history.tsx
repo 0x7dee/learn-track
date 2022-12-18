@@ -147,15 +147,24 @@ function History() {
         await chrome.storage.local.set({ 'viewHistory': filterHistory })
     }
 
+    const displayFilter = () => {
+        if ( timeline === 'week' || timeline === 'today' ) return
+        return (
+            <div className="filterHistory mb-3 flex flex-row items-center justify-between">
+                <div className="flex flex-row items-center">
+                    <p>Clear items less than: </p>
+                    <input className='w-10 mx-2' type="number" name="minutes" value={ filterMinutes.toString() } onChange={ (e) => setFilterMinutes(parseInt(e.target.value)) } />
+                    <p>minutes</p>
+                </div>
+                <button onClick={() => filterHistory()} className='ml-2 text-red-400 border-red-400 border-2 px-4 rounded-md hover:text-neutral-100 hover:bg-red-400 transition ease-in-out duration-300'>Clear</button>
+            </div>
+        )
+    }
+
  return (
     <div>
         { displayLinkToggle() }
-        <div className="filterHistory mb-3 flex flex-row justify-between">
-            <p>Clear items less than: </p>
-            <input className='w-20' type="number" name="minutes" onChange={ (e) => setFilterMinutes(parseInt(e.target.value)) } />
-            <p>minutes</p>
-            <button onClick={() => filterHistory()} className='ml-2 text-black border-2'>Go</button>
-        </div>
+        { displayFilter() }
         <div className="h-60 overflow-scroll pr-5">
             { displayHistory() }
         </div>    

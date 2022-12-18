@@ -257,8 +257,9 @@ function Home() {
         </div> 
       </div>
       
-      <button onClick={() => getViewHistory()}>Get History</button><br />
+      
       {/* 
+      <button onClick={() => getViewHistory()}>Get History</button><br />
       <button onClick={() => getLinks()}>Get Links</button><br />
       <button onClick={() => clearLinks()}>Clear Links</button><br />
       
