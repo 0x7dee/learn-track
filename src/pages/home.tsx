@@ -66,7 +66,7 @@ function Home() {
         return `${hoursLeft}hr`
       }
 
-      return `${hoursLeft}hr ${minsLeft}mins`
+      return `${hoursLeft}hr ${minsLeft}min`
     } else {
       return "Complete"
     }
@@ -115,7 +115,7 @@ function Home() {
 
   const shortenTitle = (title: string) => {
     if ( title.length > 10 ) {
-      return title.slice(0, 8) + '...'
+      return title.slice(0, 10) + '...'
     }
     return title
   }
@@ -230,25 +230,25 @@ function Home() {
                 setSelectedLink(link)
                 setCurrentPage('tracker')
               }} className="grid grid-cols-12 content-center mb-5 cursor-pointer" >
-                <div className="col-span-4 grid grid-cols-5 self-center content-center">
+                <div className="col-span-5 grid grid-cols-6 self-center content-center">
                   <img
                     className="h-5 w-5 justify-self-start self-center col-span-1"
                     src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${link.urls[0]}`}
                     alt="favicon"
                   />
-                  <div className="col-span-4 flex items-center justify-center w-full h-full">
-                    <h1 className="self-center">{shortenTitle(link.title)}</h1>
-                    <span className={`${ urlsContainCurrUrl || autotrack ? 'bg-green-400' : '' } w-1 h-1 mx-1 rounded-full`}></span>
+                  <div className="col-span-5 flex items-center w-full h-full">
+                    <h1 className="self-center ml-2">{shortenTitle(link.title)}</h1>
+                    <span className={`${ (urlsContainCurrUrl || autotrack) && (link.time > link.timeLapsed) ? 'bg-green-400' : 'hidden' } w-1 h-1 ml-2 rounded-full`}></span>
                   </div>
                 </div>
-                <div className={`flex flex-row items-center self-center col-span-5 w-full h-3 border ${ link.time > link.timeLapsed ? ('border-neutral-200') : ('border-none') } rounded-full overflow-hidden`}>
+                <div className={`col-span-4 flex flex-row items-center self-center w-full h-3 border ${ link.time > link.timeLapsed ? ('border-neutral-200') : ('border-none') } rounded-full overflow-hidden`}>
                   <div 
                     id={`${link.title}-progress`} 
                     className={`h-full transition linear delay-500 ${ link.time > link.timeLapsed ? ('bg-amber-300') : ('bg-green-300') }`}
                     style={{ width: updateProgressBar(link.time, link.timeLapsed) }}
                   />
                 </div>     
-                <div className="time col-span-3 justify-self-end items-center self-center">
+                <div className="col-span-3 justify-self-end items-center self-center">
                   <p>{ timeLeft(link.time, link.timeLapsed) }</p>
                 </div>
             </div>
