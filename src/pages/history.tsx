@@ -176,7 +176,7 @@ function History() {
                     <input className='w-10 mx-2' type="number" name="minutes" value={ filterMinutes.toString() } onChange={ (e) => setFilterMinutes(parseInt(e.target.value)) } />
                     <p>minutes</p>
                 </div>
-                <button onClick={() => filterHistory()} className='ml-2 text-red-400 border-red-400 border-2 px-4 rounded-md hover:text-neutral-100 hover:bg-red-400 transition ease-in-out duration-300'>Clear</button>
+                <button onClick={() => filterHistory()} className='ml-2 text-red-400 border-red-400 border px-4 rounded-md hover:text-neutral-100 hover:bg-red-400 transition ease-in-out duration-300'>Clear</button>
             </div>
         )
     }

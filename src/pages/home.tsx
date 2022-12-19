@@ -6,6 +6,7 @@ import ProPlan from "./proPlan";
 import Settings from "./settings";
 import StudyPlan from "./studyPlan";
 import History from "./history";
+import { compareUrls, getCurrentTab } from "../utils/functions";
 
 
 function Home() {
@@ -16,8 +17,10 @@ function Home() {
   const [editMode, setEditMode] = useState(false)
   const [onlyShowToday, setOnlyShowToday] = useState(true)
   const [isMember, setIsMember] = useState(true)
+  const [currTab, setCurrTab] = useState('')
   
   useEffect( () => {
+    setCurrentTab()
 
     let secondInterval = setInterval(async () => {
       updateLinks();
@@ -29,6 +32,11 @@ function Home() {
     return () => clearInterval(secondInterval)
     
   }, [])
+
+  const setCurrentTab = async () => {
+    let tab: any = await getCurrentTab()
+    setCurrTab(tab.url)
+  }
 
   const updateLinks = async () => {
     const existingLinks = await chrome.storage.local.get("links");
@@ -197,11 +205,23 @@ function Home() {
           time: number,
           mins: number,
           hours: number,
-          days: any
+          days: any,
+          autotrack: any
         }, index: number) => {
             
             {/* Filter out days */}
             if ( onlyShowToday && !link.days[today] ) return
+
+            //console.log(link)
+            let { urls, days, autotrack } = link
+            let isToday = days[today]
+            let urlsContainCurrUrl = false
+
+            
+            urls.forEach((url: string) => {
+              if ( compareUrls(url, currTab) ) urlsContainCurrUrl = true
+            });
+            
 
             return (
             <div 
@@ -210,13 +230,16 @@ function Home() {
                 setSelectedLink(link)
                 setCurrentPage('tracker')
               }} className="grid grid-cols-12 content-center mb-5 cursor-pointer" >
-                <div className="col-span-4 grid grid-cols-4 self-center content-center">
+                <div className="col-span-4 grid grid-cols-5 self-center content-center">
                   <img
                     className="h-5 w-5 justify-self-start self-center col-span-1"
                     src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${link.urls[0]}`}
                     alt="favicon"
                   />
-                  <h1 className="self-center col-span-3">{shortenTitle(link.title)}</h1>
+                  <div className="col-span-4 flex items-center justify-center w-full h-full">
+                    <h1 className="self-center">{shortenTitle(link.title)}</h1>
+                    <span className={`${ urlsContainCurrUrl || autotrack ? 'bg-green-400' : '' } w-1 h-1 mx-1 rounded-full`}></span>
+                  </div>
                 </div>
                 <div className={`flex flex-row items-center self-center col-span-5 w-full h-3 border ${ link.time > link.timeLapsed ? ('border-neutral-200') : ('border-none') } rounded-full overflow-hidden`}>
                   <div 

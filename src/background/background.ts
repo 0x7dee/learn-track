@@ -6,6 +6,8 @@
  * dates -> records all dates that the application has been in use, used for showing completion rate
  */
 
+import { getCurrentTab, compareUrls } from "../utils/functions";
+
 /* LearnTrack time track functionality */
 let url: string = '';
 
@@ -61,13 +63,6 @@ const updateHistory = async (lastTab: any, todayString: string) => {
     }
 
     await chrome.storage.local.set({'viewHistory': viewHistory})
-}
-
-async function getCurrentTab() {
-    let queryOptions = { active: true, lastFocusedWindow: true };
-    // `tab` will either be a `tabs.Tab` instance or `undefined`.
-    let [tab] = await chrome.tabs.query(queryOptions);
-    return tab;
 }
 
 const resetAllTimeLapsed = async (links: any) => {
@@ -137,11 +132,3 @@ const updateLapsedTime = async (linkData: any, lastTab: any) => {
     })
 }
 
-const compareUrls = (url: string, currentUrl: string): boolean => {
-    url = url
-        .replace(/^https?:\/\//, '')
-        .replace(/^http?:\/\//, '')
-        .replace(/^www?:\/\//, '')
-    if ( currentUrl.includes(url) ) return true
-    return false
-}
