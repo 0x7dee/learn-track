@@ -70,6 +70,7 @@ function History() {
         if (!viewHistory || Object.keys(viewHistory).length === 0) return <div>Loading history...</div>
 
         let viewHistorySorted = Object.keys(viewHistory).sort((a,b) => (viewHistory[b].totalTime - viewHistory[a].totalTime))
+        let totalTimeForLastWeek: any = {}
         
 
         if (timeline === 'today') {
@@ -78,7 +79,7 @@ function History() {
                 if (viewHistory[item].dates[todayString] < 60 || !viewHistory[item].dates[todayString]) return
                 return (
                     <div key={item}>
-                        <span className='group flex flex-row justify-between items-center'>
+                        <span className='group flex flex-row justify-between items-center mb-1'>
                             <span className='flex flex-row items-center'>
                                 <a href={`https://${item}`} target={"_blank"}>{item}</a>
                                 <p onClick={() => removeItemFromHistory(item)} className='text-red-400 ml-2 hidden group-hover:block cursor-pointer'>x</p>
@@ -108,11 +109,13 @@ function History() {
                         let timeOnPastDay = viewHistory[b].dates[day.toLocaleDateString()]
                         if (timeOnPastDay) timeForLast7DaysB += timeOnPastDay
                     })
+
+                    totalTimeForLastWeek = { ...totalTimeForLastWeek, [a]: timeForLast7DaysA }
                     
                     return timeForLast7DaysB - timeForLast7DaysA
                 })
                 .map(item => {
-                    if (viewHistory[item].totalTime < 60) return
+                    if (viewHistory[item].totalTime < 60 || totalTimeForLastWeek[item] < 60 ) return
 
                     let timeForLast7Days = 0
                     
@@ -124,7 +127,7 @@ function History() {
 
                     return (
                         <div key={item}>
-                            <span className='group flex flex-row justify-between'>
+                            <span className='group flex flex-row justify-between mb-1'>
                                 <span className=' flex flex-row items-center'>
                                     <a href={`https://${item}`} target={"_blank"}>{item}</a>
                                 <p onClick={() => removeItemFromHistory(item)} className='text-red-400 ml-2 hidden group-hover:block cursor-pointer'>x</p>
@@ -139,7 +142,7 @@ function History() {
                 .map(item => {
                     return (
                         <div key={item}>
-                            <span className='group flex flex-row justify-between'>
+                            <span className='group flex flex-row justify-between mb-1'>
                                 <span className='flex flex-row items-center'>
                                     <a href={`https://${item}`} target={"_blank"}>{item}</a>
                                 <p onClick={() => removeItemFromHistory(item)} className='text-red-400 ml-2 hidden group-hover:block cursor-pointer'>x</p>
@@ -183,11 +186,14 @@ function History() {
 
  return (
     <div>
-        { displayLinkToggle() }
-        { displayFilter() }
-        <div className="h-60 overflow-scroll pr-5">
+        { displayLinkToggle() }    
+        <div className="h-72 overflow-scroll pr-5">
             { displayHistory() }
-        </div>    
+        </div>   
+        <div className="absolute bottom-1 z-10">
+            { displayFilter() }
+        </div> 
+        
     </div>   
  )
 }

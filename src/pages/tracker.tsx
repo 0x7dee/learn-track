@@ -5,6 +5,7 @@ const Tracker = ({ link, setCurrentPage, setEditMode }: any) => {
   const [errors, setErrors] = useState<string[]>([])
   const [success, setSuccess] = useState<string>('')
   const [autotrack, setAutotrack] = useState(link.autotrack)
+  const [focusMode, setFocusMode] = useState(false)
 
   const displayDays = () => {
     if ( link.days ) {
@@ -116,6 +117,10 @@ const Tracker = ({ link, setCurrentPage, setEditMode }: any) => {
     setAutotrack(!autotrack)
   }
 
+  const toggleFocusMode = async () => {
+    setFocusMode(!focusMode)
+  }
+
   return (
     <div className="tracker w-full h-full relative">
         
@@ -124,11 +129,21 @@ const Tracker = ({ link, setCurrentPage, setEditMode }: any) => {
           { displayTime() }
         </div>
 
-        <div className="mb-6">
-          { autotrack ? 
-            <p className='text-red-400 cursor-pointer hover:underline-offset-2 hover:underline' onClick={() => toggleAutotrack()}>turn off autotrack</p> : 
-            <p className='text-emerald-400 cursor-pointer hover:underline-offset-2 hover:underline' onClick={() => toggleAutotrack()}>turn on autotrack</p> }
+        <div className="flex flex-row mb-6">
+          <div className='mr-3'>
+            { autotrack ? 
+              <p className='text-red-400 cursor-pointer hover:underline-offset-2 hover:underline' onClick={() => toggleAutotrack()}>turn off autotrack</p> : 
+              <p className='text-emerald-400 cursor-pointer hover:underline-offset-2 hover:underline' onClick={() => toggleAutotrack()}>turn on autotrack</p> }
+          </div>
+          {/* 
+          <div>
+            { focusMode ? 
+              <p className='text-red-400 cursor-pointer hover:underline-offset-2 hover:underline' onClick={() => toggleFocusMode()}>turn off focus mode</p> : 
+              <p className='text-emerald-400 cursor-pointer hover:underline-offset-2 hover:underline' onClick={() => toggleFocusMode()}>turn on focus mode</p> }
+          </div>
+          */}
         </div>
+        
 
         <div className="tracker__main-details">
           <div className="tracker__urls relative mb-6 max-h-48 overscroll-contain overflow-y-auto">

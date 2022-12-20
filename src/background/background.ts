@@ -4,6 +4,7 @@
  * tab -> current tab the user is on
  * currentDay -> current day
  * dates -> records all dates that the application has been in use, used for showing completion rate
+ * viewHistory -> store of hostnames user has visited
  */
 
 import { getCurrentTab, compareUrls } from "../utils/functions";
