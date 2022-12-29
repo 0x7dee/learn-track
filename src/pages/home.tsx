@@ -18,10 +18,18 @@ function Home() {
   const [onlyShowToday, setOnlyShowToday] = useState(true)
   const [isMember, setIsMember] = useState(true)
   const [currTab, setCurrTab] = useState('')
+
+  useEffect(() => {
+    setCurrentTab()
+    updateLinks();
+
+    if (loading) {
+      setLoading(false)
+    }
+  }, [])
   
   useEffect( () => {
-    setCurrentTab()
-
+    
     let secondInterval = setInterval(async () => {
       updateLinks();
 
@@ -31,7 +39,7 @@ function Home() {
     }, 1000)
     return () => clearInterval(secondInterval)
     
-  }, [])
+  }, [existingLinks])
 
   const setCurrentTab = async () => {
     let tab: any = await getCurrentTab()
@@ -238,7 +246,7 @@ function Home() {
                   />
                   <div className="col-span-5 flex items-center w-full h-full">
                     <h1 className="self-center ml-2">{shortenTitle(link.title)}</h1>
-                    <span className={`${ (urlsContainCurrUrl || autotrack) && (link.time > link.timeLapsed) ? 'bg-green-400' : 'hidden' } w-1 h-1 ml-2 rounded-full`}></span>
+                    <span className={`${ (urlsContainCurrUrl || autotrack) && isToday && (link.time > link.timeLapsed) ? 'bg-green-400' : 'hidden' } w-1 h-1 ml-2 rounded-full`}></span>
                   </div>
                 </div>
                 <div className={`col-span-4 flex flex-row items-center self-center w-full h-3 border ${ link.time > link.timeLapsed ? ('border-neutral-200') : ('border-none') } rounded-full overflow-hidden`}>
@@ -269,7 +277,7 @@ function Home() {
     <div className="w-96 min-h-[34rem] max-h-[42rem] relative rounded-md overflow-hidden">
       <div className="header pt-6 pb-6 pr-8 pl-8 border-dashed border-slate-300 border-b-2">
         <a className="text-2xl font-serif" href="https://learntrack.co" rel='noopener' target='_blank'>
-          timeturtle.co
+          LearnTrack
         </a> 
         { displayNavigation() }
       </div>

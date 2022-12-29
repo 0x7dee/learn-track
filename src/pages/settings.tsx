@@ -3,6 +3,9 @@ import React, { useEffect, useState } from 'react'
 const Settings = () => {
   let [showDeletePopup, setShowDeletePopup] = useState(false)
   let [data, setData] = useState('')
+  let [importedData, setImportedData] = useState('')
+  let [importFile, setImportFile]: any = useState('')
+  let [memberNumber, setMemberNumber]: any = useState(null)
 
   useEffect(() => {
     exportData()
@@ -21,21 +24,46 @@ const Settings = () => {
     setData(JSON.stringify({ links, dates, viewHistory }))
   }
 
+  const importData = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return
+    console.log(e.target.files[0])
+    setImportFile(e.target.files[0])
+  }
+
   return (
     <div>
-        <h1 className='text-base mb-6'>Settings</h1>
-        <input className='rounded-md text-xs py-2 px-2 mb-6 w-full border border-gray-400 transition ease-in-out duration-300' placeholder='Enter your member number' />
-        <button 
-          className='rounded-md text-xs py-1 px-0 mb-3 w-full border text-blue-400 border-blue-400 hover:text-neutral-100 hover:bg-blue-400 transition ease-in-out duration-300' 
-          onClick={() => {}}
-        >Import Data</button>
+        
+        <h1 className='mb-3 text-sm'>My Account</h1>
+        <form className='mb-3' onSubmit={() => {}}>
+          <input 
+            className='rounded-md text-xs py-2 px-2 mb-3 w-full border border-gray-400 transition ease-in-out duration-300' 
+            placeholder='Enter your member number' 
+            onChange={ (e) => setMemberNumber(e.target.value) }
+          />
+          <button 
+            className='rounded-md text-xs py-2 px-0 w-full border text-blue-400 border-blue-400 hover:text-neutral-100 hover:bg-blue-400 transition ease-in-out duration-300'>
+            Verify Account 
+          </button>  
+        </form>
+        
+
+        <h1 className='mb-3 text-sm'>My Data</h1>
+        <button className='rounded-md text-xs py-2 px-0 mb-3 w-full border text-blue-400 border-blue-400 hover:text-neutral-100 hover:bg-blue-400 transition ease-in-out duration-300'>
+          <label 
+            htmlFor="file-upload" 
+            className='block w-full h-full cursor-pointer'
+          >
+            Import Data  
+          </label>
+        </button>    
+        <input className='hidden' id="file-upload" type="file" onChange={(e) => importData(e)}/>
         
         <a 
           className='w-full h-full'
           href={`data:text/json;charset=utf-8,${ encodeURIComponent( data ) }`}
-          download='timeturtledata.json'>
+          download='learntrackdata.json'>
             <button
-              className='rounded-md text-xs py-1 px-0 mb-3 w-full border text-blue-400 border-blue-400 hover:text-neutral-100 hover:bg-blue-400 transition ease-in-out duration-300' 
+              className='rounded-md text-xs py-2 px-0 mb-3 w-full border text-blue-400 border-blue-400 hover:text-neutral-100 hover:bg-blue-400 transition ease-in-out duration-300' 
             >Export Data</button>
         </a>
 
@@ -44,17 +72,17 @@ const Settings = () => {
                 <p className='text-sm mb-4'>Are you sure? Once deleted, your data cannot be recovered.</p>
                 <div className="flex flex-row">
                   <button 
-                    className='mr-1 rounded-md text-xs py-1 px-0 w-full border text-red-400 border-red-400 hover:text-neutral-100 hover:bg-red-400 transition ease-in-out duration-300' 
+                    className='mr-1 rounded-md text-xs py-2 px-0 w-full border text-red-400 border-red-400 hover:text-neutral-100 hover:bg-red-400 transition ease-in-out duration-300' 
                       onClick={ () => {
                         clearData() 
                         setShowDeletePopup(false)
                       }}>Yes, I'm sure</button>
-                  <button className='rounded-md text-xs py-1 px-0 w-full border text-sky-400 border-sky-400 hover:text-neutral-100 hover:bg-sky-400 transition ease-in-out duration-300' onClick={ () => setShowDeletePopup(false) }>Cancel</button>
+                  <button className='rounded-md text-xs py-2 px-0 w-full border text-sky-400 border-sky-400 hover:text-neutral-100 hover:bg-sky-400 transition ease-in-out duration-300' onClick={ () => setShowDeletePopup(false) }>Cancel</button>
                 </div> 
               </div>
           ) : (
             <>
-              <button className='rounded-md text-xs py-1 px-0 w-full border text-red-400 border-red-400 hover:text-neutral-100 hover:bg-red-400 transition ease-in-out duration-300' onClick={() => setShowDeletePopup(true)}>Clear all data</button>
+              <button className='rounded-md text-xs py-2 px-0 w-full border text-red-400 border-red-400 hover:text-neutral-100 hover:bg-red-400 transition ease-in-out duration-300' onClick={() => setShowDeletePopup(true)}>Clear All Data</button>
             </>
           ) }
           

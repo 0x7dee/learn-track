@@ -10,46 +10,48 @@ function History() {
     let todaysDate = new Date();
     let todayString = todaysDate.toLocaleDateString()
 
-    const totalTime = (secondsLeft: number) => {
-        /* 7500 sec, 125 mins, 2hr 5mins */
-        let hoursLeft = Math.floor(secondsLeft / 60 / 60)
-        let minsLeft = Math.floor(secondsLeft / 60) - (hoursLeft * 60)
-        
-        if (secondsLeft < 60) return `${secondsLeft}sec`
-        
-        if ( hoursLeft === 0 && minsLeft > 0 ) {
-        return `${minsLeft}min`
-        } else if ( hoursLeft > 0 && minsLeft === 0 ) {
-        return `${hoursLeft}hr`
-        }
-
-        return `${hoursLeft}hr ${minsLeft}min`
-        
-      }
+    useEffect(() => {
+        updateHistory()
+    }, [])
     
-
     useEffect( () => {
-
         let secondInterval = setInterval(async () => {
-            let getViewHistory = await chrome.storage.local.get('viewHistory')
-            setViewHistory(getViewHistory.viewHistory)
+            updateHistory()
         }, 1000)
         return () => clearInterval(secondInterval)
         
     }, [viewHistory])
 
-    const displayLinkToggle = () => {
+    const updateHistory = async () => {
+        let getViewHistory = await chrome.storage.local.get('viewHistory')
+        setViewHistory(getViewHistory.viewHistory)
+    }
+
+    const totalTime = (secondsLeft: number) => {
+        /* 7500 sec, 125 mins, 2hr 5mins */
+        let daysLeft = Math.floor(secondsLeft / 60 / 60 / 24)
+        let hoursLeft = Math.floor(secondsLeft / 60 / 60) - ( daysLeft * 24 )
+        let minsLeft = Math.floor(secondsLeft / 60) - (hoursLeft * 60 ) - ( daysLeft * 24 * 60 )
         
+        if (secondsLeft < 60) return `${secondsLeft}sec`
+
+        return `
+            ${ daysLeft ? daysLeft + 'd' : '' } 
+            ${ hoursLeft ? hoursLeft + 'hr' : daysLeft ? '0hr' : '' } 
+            ${ minsLeft ? minsLeft + 'min' : hoursLeft ? '0min' : '' }
+            ` 
+    }
+
+    const displayLinkToggle = () => {   
         return (
-        <div className="displayPage__toggle mb-3 py-1 flex flex-row items-center w-full">
-            <p onClick={ () => setTimeline("today") } className={`mr-2 cursor-pointer ${ timeline === "today" ? 'text-black' : 'text-slate-400' }`}>Today</p>
-            <p onClick={ () => setTimeline("week") } className={`mr-2 cursor-pointer ${ timeline === "week" ? 'text-black' : 'text-slate-400' }`}>This Week</p>
-            <p onClick={ () => setTimeline("all") } className={`cursor-pointer ${ timeline === "all" ? 'text-black' : 'text-slate-400' }`}>
-                Show all {`(${ viewHistory ? Object.keys(viewHistory).length : '0' })`}
-            </p>
-        </div>
+            <div className="displayPage__toggle mb-3 py-1 flex flex-row items-center w-full">
+                <p onClick={ () => setTimeline("today") } className={`mr-2 cursor-pointer ${ timeline === "today" ? 'text-black' : 'text-slate-400' }`}>Today</p>
+                <p onClick={ () => setTimeline("week") } className={`mr-2 cursor-pointer ${ timeline === "week" ? 'text-black' : 'text-slate-400' }`}>This Week</p>
+                <p onClick={ () => setTimeline("all") } className={`cursor-pointer ${ timeline === "all" ? 'text-black' : 'text-slate-400' }`}>
+                    All Time {`(${ viewHistory ? Object.keys(viewHistory).length : '0' })`}
+                </p>
+            </div>
         )
-        
       }
     
     const getDateXDaysAgo = (numOfDays: number, date = new Date()) => {
@@ -71,7 +73,6 @@ function History() {
 
         let viewHistorySorted = Object.keys(viewHistory).sort((a,b) => (viewHistory[b].totalTime - viewHistory[a].totalTime))
         let totalTimeForLastWeek: any = {}
-        
 
         if (timeline === 'today') {
             return Object.keys(viewHistory).filter(a => viewHistory[a].dates[todayString]).sort((a,b) => (viewHistory[b].dates[todayString] - viewHistory[a].dates[todayString]))
@@ -153,8 +154,6 @@ function History() {
                     )
                 })
         }
-
-        
     }
 
     const filterHistory = async () => {

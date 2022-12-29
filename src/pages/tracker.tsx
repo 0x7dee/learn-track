@@ -155,16 +155,16 @@ const Tracker = ({ link, setCurrentPage, setEditMode }: any) => {
           </div>
         </div>
         
-        <div className="edit-delete fixed bottom-4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-row items-center">
-        <button 
-            className='w-28 rounded-md mt-2 text-sm py-1 px-2 mb-5 mr-2 border text-emerald-400 border-emerald-400 hover:text-neutral-100 hover:bg-emerald-400 transition ease-in-out duration-300' 
+        <div className="edit-delete fixed bottom-2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-row items-center">
+          <button 
+            className='w-28 rounded-md mt-2 text-sm py-1 px-2 mr-2 border text-emerald-400 border-emerald-400 hover:text-neutral-100 hover:bg-emerald-400 transition ease-in-out duration-300' 
             onClick={ () => {
               setCurrentPage('newTracker')
               setEditMode(true)
             } }
           >Edit</button>
           <button 
-            className='w-28 rounded-md mt-2 text-sm py-1 px-2 mb-5 border text-rose-400 border-rose-400  hover:text-neutral-100 hover:bg-rose-400 transition ease-in-out duration-300' 
+            className='w-28 rounded-md mt-2 text-sm py-1 px-2 border text-rose-400 border-rose-400  hover:text-neutral-100 hover:bg-rose-400 transition ease-in-out duration-300' 
             onClick={ () => deleteLink() }
           >Delete</button>
         </div>
