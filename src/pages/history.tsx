@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { BsArrowDownShort, BsArrowUpShort } from 'react-icons/bs'
 
 
 function History() {
@@ -73,19 +74,31 @@ function History() {
 
         let viewHistorySorted = Object.keys(viewHistory).sort((a,b) => (viewHistory[b].totalTime - viewHistory[a].totalTime))
         let totalTimeForLastWeek: any = {}
+        let yesterdaysDate = getDateXDaysAgo(1).toLocaleDateString()
 
         if (timeline === 'today') {
-            return Object.keys(viewHistory).filter(a => viewHistory[a].dates[todayString]).sort((a,b) => (viewHistory[b].dates[todayString] - viewHistory[a].dates[todayString]))
+            return Object.keys(viewHistory)
+            .filter(a => viewHistory[a].dates[todayString]).sort((a,b) => (viewHistory[b].dates[todayString] - viewHistory[a].dates[todayString]))
             .map(item => {
-                if (viewHistory[item].dates[todayString] < 60 || !viewHistory[item].dates[todayString]) return
+                let todayTime = viewHistory[item].dates[todayString]
+                let yesterdayTime = viewHistory[item].dates[yesterdaysDate]
+
+                if (todayTime < 60 || !todayTime) return
                 return (
                     <div key={item}>
                         <span className='group flex flex-row justify-between items-center mb-1'>
                             <span className='flex flex-row items-center'>
                                 <a href={`https://${item}`} target={"_blank"}>{item}</a>
+                                { 
+                                    todayTime > yesterdayTime ? 
+                                    <BsArrowUpShort className='text-green-400 ml-2 text-sm' /> :
+                                    todayTime < yesterdayTime ? 
+                                    <BsArrowDownShort className='text-red-400 ml-2 text-sm' /> :
+                                    ''
+                                }
                                 <p onClick={() => removeItemFromHistory(item)} className='text-red-400 ml-2 hidden group-hover:block cursor-pointer'>x</p>
                             </span>
-                            <p>{totalTime(viewHistory[item].dates[todayString])}</p>
+                            <p>{totalTime(todayTime)}</p>
                         </span>
                     </div>
                 )
@@ -119,11 +132,16 @@ function History() {
                     if (viewHistory[item].totalTime < 60 || totalTimeForLastWeek[item] < 60 ) return
 
                     let timeForLast7Days = 0
+                    let timeForPriorWeek = 0
                     
                     let last7days = [0,1,2,3,4,5,6].forEach(daysAgo => {
                         let day = getDateXDaysAgo(daysAgo)
                         let timeOnPastDay = viewHistory[item].dates[day.toLocaleDateString()]
                         if (timeOnPastDay) timeForLast7Days += timeOnPastDay
+
+                        let dayPastWeek = getDateXDaysAgo(daysAgo + 7)
+                        let timeOnPastDayPriorWeek = viewHistory[item].dates[dayPastWeek.toLocaleDateString()]
+                        if ( timeOnPastDayPriorWeek ) timeForPriorWeek += timeOnPastDayPriorWeek
                     })
 
                     return (
@@ -131,6 +149,15 @@ function History() {
                             <span className='group flex flex-row justify-between mb-1'>
                                 <span className=' flex flex-row items-center'>
                                     <a href={`https://${item}`} target={"_blank"}>{item}</a>
+                                    { 
+                                        timeForPriorWeek === 0 ? 
+                                        '' :
+                                        timeForLast7Days > timeForPriorWeek ? 
+                                        <BsArrowUpShort className='text-green-400 ml-2 text-sm' /> :
+                                        timeForLast7Days < timeForPriorWeek ? 
+                                        <BsArrowDownShort className='text-red-400 ml-2 text-sm' /> :
+                                        ''
+                                    }
                                 <p onClick={() => removeItemFromHistory(item)} className='text-red-400 ml-2 hidden group-hover:block cursor-pointer'>x</p>
                             </span>
                                 <p>{totalTime(timeForLast7Days)}</p>
@@ -172,7 +199,7 @@ function History() {
     const displayFilter = () => {
         if ( timeline === 'week' || timeline === 'today' ) return
         return (
-            <div className="filterHistory mb-3 flex flex-row items-center justify-between">
+            <div className="filterHistory flex flex-row items-center justify-between w-full">
                 <div className="flex flex-row items-center">
                     <p>Clear items less than: </p>
                     <input className='w-10 mx-2' type="number" name="minutes" value={ filterMinutes.toString() } onChange={ (e) => setFilterMinutes(parseInt(e.target.value)) } />
@@ -189,7 +216,7 @@ function History() {
         <div className="h-72 overflow-scroll pr-5">
             { displayHistory() }
         </div>   
-        <div className="absolute bottom-1 z-10">
+        <div className="mt-3 pr-5">
             { displayFilter() }
         </div> 
         

@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { AiFillEdit, AiFillDelete } from 'react-icons/ai'
+import { MdDelete, MdEdit } from 'react-icons/md'
 
 
 const Tracker = ({ link, setCurrentPage, setEditMode }: any) => {
@@ -129,11 +131,11 @@ const Tracker = ({ link, setCurrentPage, setEditMode }: any) => {
           { displayTime() }
         </div>
 
-        <div className="flex flex-row mb-6">
+        <div className="flex flex-row justify-between mb-6">
           <div className='mr-3'>
             { autotrack ? 
               <p className='text-red-400 cursor-pointer hover:underline-offset-2 hover:underline' onClick={() => toggleAutotrack()}>turn off autotrack</p> : 
-              <p className='text-emerald-400 cursor-pointer hover:underline-offset-2 hover:underline' onClick={() => toggleAutotrack()}>turn on autotrack</p> }
+              <p className='text-sky-400 cursor-pointer hover:underline-offset-2 hover:underline' onClick={() => toggleAutotrack()}>turn on autotrack</p> }
           </div>
           {/* 
           <div>
@@ -142,6 +144,20 @@ const Tracker = ({ link, setCurrentPage, setEditMode }: any) => {
               <p className='text-emerald-400 cursor-pointer hover:underline-offset-2 hover:underline' onClick={() => toggleFocusMode()}>turn on focus mode</p> }
           </div>
           */}
+
+          <div className="flex flex-row">
+              <p 
+                className='text-emerald-400 cursor-pointer hover:underline-offset-2 hover:underline mr-2'
+                onClick={ () => {
+                  setCurrentPage('newTracker')
+                  setEditMode(true)
+                } }  
+              >Edit</p>
+              <p 
+                className='text-red-400 cursor-pointer hover:underline-offset-2 hover:underline'
+                onClick={ () => deleteLink() }  
+              >Delete</p>
+          </div>
         </div>
         
 
@@ -155,7 +171,8 @@ const Tracker = ({ link, setCurrentPage, setEditMode }: any) => {
           </div>
         </div>
         
-        <div className="edit-delete fixed bottom-2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-row items-center">
+        {/*
+        <div className="edit-delete fixed bottom-5 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-row items-center">
           <button 
             className='w-28 rounded-md mt-2 text-sm py-1 px-2 mr-2 border text-emerald-400 border-emerald-400 hover:text-neutral-100 hover:bg-emerald-400 transition ease-in-out duration-300' 
             onClick={ () => {
@@ -168,6 +185,7 @@ const Tracker = ({ link, setCurrentPage, setEditMode }: any) => {
             onClick={ () => deleteLink() }
           >Delete</button>
         </div>
+          */}
         
         { displaySuccess() }
         { displayErrors() }

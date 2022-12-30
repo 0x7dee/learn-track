@@ -145,11 +145,17 @@ const StudyPlan = () => {
   const displayStudyPlan = () => {
     if (!links || !studyOnDay) return
 
+    let today = new Date()
+    let dayOfWeek = today.getDay()
+    let daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+
+
     return Object.keys(studyOnDay).map((day, index) => {
+      console.log(daysOfWeek[dayOfWeek])
       return (
         <div key={`${index}${day}`} className='grid grid-cols-12'>
           <div className="col-span-3">
-            <h1>{ day }</h1>
+            <h1 className={ daysOfWeek[dayOfWeek] === day ? 'text-sky-400 font-bold' : ''}>{ day }</h1>
           </div>
           <div className="flex flex-row col-span-9 rounded-full overflow-hidden items-center">
             { displayDayData(studyOnDay[day]) }
