@@ -261,11 +261,11 @@ const NewTracker: any = ({ link, editMode }: any) => {
         { /* URLS */ }
         <div className="urls mb-3">
             <div className="addUrls -mb-4 flex flex-row items-center">
-              <label className='text-base mr-2'>Add URLs</label>
+              <label className='text-base mr-2'>Add URL Prefixs</label>
               <div className="relative flex flex-row items-center h-full w-16">
                 <AiOutlineQuestionCircle className='peer' />
                 <div className="absolute w-48 h-36 -bottom-36 left-0 bg-white z-10 hidden peer-hover:block overflow-hidden px-4 py-2 rounded-md border-slate-100 border-2">
-                  <p>Enter substrings of the URLs that you would like to match i.e. https://mysite.com will match URLs such as https://mysite.com/about</p>
+                  <p>Enter prefix of the URLs that you would like to match i.e. https://google.com will match URLs such as https://google.com/about</p>
                 </div>
               </div>
             </div>

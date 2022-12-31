@@ -162,7 +162,7 @@ const Tracker = ({ link, setCurrentPage, setEditMode }: any) => {
         
 
         <div className="tracker__main-details">
-          <div className="tracker__urls relative mb-6 max-h-48 overscroll-contain overflow-y-auto">
+          <div className="tracker__urls relative mb-3 max-h-48 overscroll-contain overflow-y-auto">
               { displayUrls() }
           </div>
 

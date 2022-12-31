@@ -85,26 +85,26 @@ function Home() {
     return (
       <nav className="relative flex flex-row items-center justify-between mt-2">
         <button 
-          className={`${ currentPage === 'home' ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
+          className={`${ currentPage === 'home' ? 'text-black' : 'text-slate-400'} mr-2 hover:text-black`}
           onClick={() => {
             setCurrentPage("home")
             setEditMode(false)
             setSelectedLink({})
           }}>home</button>
           <button 
-            className={`${ currentPage === 'studyPlan' ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
+            className={`${ currentPage === 'studyPlan' ? 'text-black' : 'text-slate-400'} mr-2 hover:text-black`}
             onClick={() => setCurrentPage('studyPlan')}
             >study plan</button>
           <button 
-            className={`${ currentPage === 'history' ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
+            className={`${ currentPage === 'history' ? 'text-black' : 'text-slate-400'} mr-2 hover:text-black`}
             onClick={() => setCurrentPage('history')}
             >time tracker</button>
           <button 
-            className={`${ currentPage === 'privacy' ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
+            className={`${ currentPage === 'privacy' ? 'text-black' : 'text-slate-400'} mr-2 hover:text-black`}
             onClick={() => setCurrentPage('privacy')}
             >privacy</button>
           <button 
-            className={`${ currentPage === 'settings' ? 'text-black' : 'text-slate-400'} mr-2 hover:underline-offset-2 hover:underline`}
+            className={`${ currentPage === 'settings' ? 'text-black' : 'text-slate-400'} mr-2 hover:text-black`}
             onClick={() => setCurrentPage('settings')}
             >settings</button>
       </nav>
@@ -283,7 +283,11 @@ function Home() {
   const displayProBanner = () => {
     return (
       <div className="fixed z-10 bottom-0 flex flex-row items-center py-2 pr-8 pl-8 w-full border-dashed border-slate-300 border-t-2">
-        <p><a href='https://google.com' target={'_blank'} className="text-sky-400 cursor-pointer">Join Pro</a> today for only $3/m and 10x your productivity!</p>
+        <p className="flex flex-row items-center">
+          <span className="text-lg mr-1">🎉</span> 
+          <a href='https://google.com' target={'_blank'} className="text-sky-400 cursor-pointer font-bold mr-1 hover:underline hover:underline-offset-2 hover:decoration-text-sky-400">Join today</a> 
+          <p>and 10x your productivity for only $3/m!</p>
+        </p>
       </div>
     )
   }
@@ -297,13 +301,12 @@ function Home() {
           <a className="font-serif mr-4" href="https://learntrack.co" rel='noopener' target='_blank'>
             LearnTrack 
           </a> 
-          <div className="flex flex-row items-center">
-            <p className="mr-2">📚</p> 
-            <p className="mr-2">🤓</p> 
-            <p className="mr-2">🧠</p>
-            <p className="mr-2">🤑</p>
-            <p className="mr-2">✍</p>
-            
+          <div className="flex flex-row items-center justify-between w-full">
+            <p className="">📚</p> 
+            <p className="">🤓</p> 
+            <p className="">🧠</p>
+            <p className="">🤑</p>
+            <p className="">✍</p>
           </div>
         </div>
         
