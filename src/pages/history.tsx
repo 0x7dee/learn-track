@@ -60,7 +60,7 @@ function History() {
                         <p><BsArrowDownShort className='text-red-400 text-sm inline' /> shows when it has decreased</p>
                     </div>
                     </div>
-              </div>
+                </div>
             </div>
         )
       }

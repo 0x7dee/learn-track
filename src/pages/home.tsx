@@ -285,7 +285,7 @@ function Home() {
       <div className="fixed z-10 bottom-0 flex flex-row items-center py-2 pr-8 pl-8 w-full border-dashed border-slate-300 border-t-2">
         <p className="flex flex-row items-center">
           <span className="text-lg mr-1">🎉</span> 
-          <a href='https://google.com' target={'_blank'} className="text-sky-400 cursor-pointer font-bold mr-1 hover:underline hover:underline-offset-2 hover:decoration-text-sky-400">Join today</a> 
+          <a href='https://learntrack.gumroad.com/l/oznrag' target={'_blank'} className="text-sky-400 cursor-pointer font-bold mr-1 hover:underline hover:underline-offset-2 hover:decoration-text-sky-400">Join today</a> 
           <p>and 10x your productivity for only $3/m!</p>
         </p>
       </div>

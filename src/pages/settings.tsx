@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { AiOutlineQuestionCircle } from 'react-icons/ai'
+import { BsArrowDownShort, BsArrowUpShort } from 'react-icons/bs'
 
 const Settings = () => {
   let [showDeletePopup, setShowDeletePopup] = useState(false)
@@ -32,8 +34,15 @@ const Settings = () => {
 
   return (
     <div>
-        
-        <h1 className='mb-3 text-sm'>My Account</h1>
+        <div className='mb-3 flex flex-row items-center'>
+        <h1 className='mr-2 text-sm'>My Account</h1>
+          <div className="relative flex flex-row items-center h-full w-16">
+                <AiOutlineQuestionCircle className='peer' />
+                <div className="absolute w-48 -bottom-20 -left-3/4 bg-white z-10 hidden peer-hover:block overflow-hidden px-4 py-2 rounded-md border-slate-100 border-2">
+                  <p>Enter your account number and select verify account to become a pro member</p>
+                </div>
+            </div>
+        </div>
         <form className='mb-3' onSubmit={() => {}}>
           <input 
             className='rounded-md text-xs py-2 px-2 mb-3 w-full border border-gray-400 transition ease-in-out duration-300' 
@@ -46,8 +55,15 @@ const Settings = () => {
           </button>  
         </form>
         
-
-        <h1 className='mb-3 text-sm'>My Data</h1>
+        <div className='mb-3 flex flex-row items-center'>
+        <h1 className='mr-2 text-sm'>My Data</h1>
+          <div className="relative flex flex-row items-center h-full w-16">
+                <AiOutlineQuestionCircle className='peer' />
+                <div className="absolute w-48 -bottom-24 -left-3/4 bg-white z-10 hidden peer-hover:block overflow-hidden px-4 py-2 rounded-md border-slate-100 border-2">
+                  <p><span className='text-red-400'>Caution: importing data will override your existing application data, this cannot be overridden.</span></p>
+                </div>
+            </div>
+        </div>
         <button className='rounded-md text-xs py-2 px-0 mb-3 w-full border text-blue-400 border-blue-400 hover:text-neutral-100 hover:bg-blue-400 transition ease-in-out duration-300'>
           <label 
             htmlFor="file-upload" 

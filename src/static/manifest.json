@@ -28,6 +28,7 @@
         "alarms",
         "notifications",
         "activeTab",
-        "tabs"
+        "tabs",
+        "*://api.gumroad.com/*"
     ]
 }
