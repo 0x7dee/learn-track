@@ -214,7 +214,7 @@ const StudyPlan = () => {
       let denominator = 0
 
 
-      if (dates[currDate.toLocaleDateString()]) {
+      if (dates && currDate && dates[currDate.toLocaleDateString()]) {
         Object.keys(dates[currDate.toLocaleDateString()]).forEach(topic => {
           denominator++
           if ( dates[currDate.toLocaleDateString()][topic] ) numerator++

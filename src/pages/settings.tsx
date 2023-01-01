@@ -16,6 +16,7 @@ const Settings = () => {
   const clearData = async () => {
     await chrome.storage.local.set({ links: null });
     await chrome.storage.local.set({ dates: {} })
+    await chrome.storage.local.set({ viewHistory: {} })
   }
 
   const exportData = async () => {
@@ -26,10 +27,25 @@ const Settings = () => {
     setData(JSON.stringify({ links, dates, viewHistory }))
   }
 
+  async function parseJsonFile(file: any) {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader()
+      fileReader.onload = (event: any) => resolve(JSON.parse(event.target.result))
+      fileReader.onerror = error => reject(error)
+      fileReader.readAsText(file)
+    })
+  }
+
   const importData = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return
-    console.log(e.target.files[0])
-    setImportFile(e.target.files[0])
+    
+    let parsedFile: any = await parseJsonFile(e.target.files[0])
+    console.log(parsedFile)
+
+    if (parsedFile.dates) await chrome.storage.local.set({ 'dates': parsedFile.dates })
+    if (parsedFile.links) await chrome.storage.local.set({ 'links': parsedFile.links })
+    if (parsedFile.viewHistory) await chrome.storage.local.set({ 'viewHistory': parsedFile.viewHistory })
+    
   }
 
   return (
