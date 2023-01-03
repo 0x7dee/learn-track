@@ -59,14 +59,15 @@ const Settings = () => {
                 </div>
             </div>
         </div>
-        <form className='mb-3' onSubmit={() => {}}>
+        <form className='mb-3 flex flex-col' onSubmit={() => {}}>
           <input 
-            className='rounded-md text-xs py-2 px-2 mb-3 w-full border border-gray-400 transition ease-in-out duration-300' 
+            className='rounded-md text-xs py-2 px-2 w-full border border-gray-400 transition ease-in-out duration-300' 
             placeholder='Enter your member number' 
             onChange={ (e) => setMemberNumber(e.target.value) }
           />
+          <a className='text-blue-400 text-xs self-end' href="https://learntrack.gumroad.com/l/oznrag" target={'_blank'}>Manage Account</a>
           <button 
-            className='rounded-md text-xs py-2 px-0 w-full border text-blue-400 border-blue-400 hover:text-neutral-100 hover:bg-blue-400 transition ease-in-out duration-300'>
+            className='rounded-md mt-3 text-xs py-2 px-0 w-full border text-blue-400 border-blue-400 hover:text-neutral-100 hover:bg-blue-400 transition ease-in-out duration-300'>
             Verify Account 
           </button>  
         </form>
