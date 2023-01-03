@@ -7,16 +7,56 @@ const Settings = () => {
   let [data, setData] = useState('')
   let [importedData, setImportedData] = useState('')
   let [importFile, setImportFile]: any = useState('')
-  let [memberNumber, setMemberNumber]: any = useState(null)
+  let [memberNumber, setMemberNumber]: any = useState('')
+  let [validMember, setValidMember] = useState(false)
 
   useEffect(() => {
     exportData()
+    getMemberNumber()
   }, [])
+
+  useEffect(() => {
+    validateMemberNumber()
+  }, [memberNumber])
 
   const clearData = async () => {
     await chrome.storage.local.set({ links: null });
     await chrome.storage.local.set({ dates: {} })
     await chrome.storage.local.set({ viewHistory: {} })
+    await chrome.storage.local.set({ memberNumber: '' })
+  }
+
+  async function postData(url = '', data = {}) {
+    // Default options are marked with *
+    const response = await fetch(url, {
+      method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      mode: 'cors', // no-cors, *cors, same-origin
+      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: 'same-origin', // include, *same-origin, omit
+      headers: {
+        'Content-Type': 'application/json'
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      redirect: 'follow', // manual, *follow, error
+      referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+      body: JSON.stringify(data) // body data type must match "Content-Type" header
+    });
+    return response.json(); // parses JSON response into native JavaScript objects
+  }
+
+  const validateMemberNumber = async () => {
+    let result = await postData('https://api.gumroad.com/v2/licenses/verify', { product_id: 'HawIDI4UI0PjYogg_n_QRA==', license_key: memberNumber })
+    setValidMember(result.success)
+  }
+
+  const getMemberNumber = async () => {
+    let number = await chrome.storage.local.get('memberNumber')
+    setMemberNumber(number.memberNumber)
+  }
+
+  const updateMemberNumber = async (number: string) => {
+    await chrome.storage.local.set({ memberNumber: number })
+    setMemberNumber(number)
   }
 
   const exportData = async () => {
@@ -61,15 +101,21 @@ const Settings = () => {
         </div>
         <form className='mb-3 flex flex-col' onSubmit={() => {}}>
           <input 
-            className='rounded-md text-xs py-2 px-2 w-full border border-gray-400 transition ease-in-out duration-300' 
+            className={
+              `rounded-md text-xs py-2 px-2 w-full border transition ease-in-out duration-300 
+              ${ memberNumber === '' ? 'border-gray-400' : validMember ? 'border-green-400' : 'border-red-400' }`
+            }
             placeholder='Enter your member number' 
-            onChange={ (e) => setMemberNumber(e.target.value) }
+            onChange={ (e) => updateMemberNumber(e.target.value) }
+            value={ memberNumber }
           />
           <a className='text-blue-400 text-xs self-end' href="https://learntrack.gumroad.com/l/oznrag" target={'_blank'}>Manage Account</a>
+          {/*
           <button 
             className='rounded-md mt-3 text-xs py-2 px-0 w-full border text-blue-400 border-blue-400 hover:text-neutral-100 hover:bg-blue-400 transition ease-in-out duration-300'>
             Verify Account 
           </button>  
+          */}
         </form>
         
         <div className='mb-3 flex flex-row items-center'>
