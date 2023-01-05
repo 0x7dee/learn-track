@@ -78,7 +78,7 @@ const resetAllTimeLapsed = async (links: any) => {
 }
 
 const updateLapsedTime = async (linkData: any, lastTab: any) => {
-    if ( !linkData ) return
+    if ( !linkData || linkData.includes(null) ) return
 
     let todaysDate = new Date();
     let today = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][todaysDate.getDay()]
@@ -105,6 +105,7 @@ const updateLapsedTime = async (linkData: any, lastTab: any) => {
     let urlFound = false // we only want one increment per second
     linkData.forEach((link: { urls: any[], title: string }, index: number) => {
         link.urls.forEach( async (url: any) => {
+            if(!url) return
             let timeLeft = linkData[index].timeLapsed <= linkData[index].time
             let urlsIsValid = compareUrls(url, lastTab.tab.url)
             let isStudyDay = linkData[index].days[today]

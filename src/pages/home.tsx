@@ -60,7 +60,7 @@ function Home() {
     return width
   }
 
-  const timeLeft = (time: number, timeLapsed: number) => {
+  const timeLeft = (time: number, timeLapsed: number, title: string) => {
     /* 7500 sec, 125 mins, 2hr 5mins */
     let secondsLeft = time - timeLapsed
     let hoursLeft = Math.floor(secondsLeft / 60 / 60)
@@ -77,6 +77,7 @@ function Home() {
 
       return `${hoursLeft}hr ${minsLeft}min`
     } else {
+      toggleAutotrackOff(title)
       return "Complete"
     }
   }
@@ -170,6 +171,19 @@ function Home() {
     await chrome.storage.local.set({links: []})
   }
 
+  const toggleAutotrackOff = async (title: any) => {
+
+    let linkData: any = await chrome.storage.local.get('links')
+
+    if ( linkData.links && title ) {
+      let updateAutotrack = await linkData.links.map((currLink: any) => {
+        if ( title === currLink.title ) currLink['autotrack'] = false
+        return currLink
+      })
+      await chrome.storage.local.set({ links: updateAutotrack })
+    }
+  }
+
   const displayPage = () => {
     
     if (!isMember) return <ProPlan />
@@ -204,6 +218,7 @@ function Home() {
     }
 
     if (existingLinks && existingLinks.length > 0) {
+      if (!existingLinks || existingLinks.includes(null) ) return
       let todaysDate = new Date();
       let today = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][todaysDate.getDay()]
       let anyLinksForToday = existingLinks.reduce((prev: number, link: any) => prev + (link.days[today] === true ? 1 : 0), 0)
@@ -264,7 +279,7 @@ function Home() {
                   />
                 </div>     
                 <div className="col-span-3 justify-self-end items-center self-center">
-                  <p>{ timeLeft(link.time, link.timeLapsed) }</p>
+                  <p>{ timeLeft(link.time, link.timeLapsed, link.title) }</p>
                 </div>
             </div>
             )

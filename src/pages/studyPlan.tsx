@@ -31,7 +31,7 @@ const StudyPlan = () => {
   }
 
   const formatStudyDays = () => {
-    if (!links) return
+    if (!links || links.includes(null)) return
 
     let days: any = {
       Monday: [],
