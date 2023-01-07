@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { AiOutlineQuestionCircle } from 'react-icons/ai'
 import { BsArrowDownShort, BsArrowUpShort } from 'react-icons/bs'
 
-const Settings = ({ setIsMember }: any) => {
+const Settings = ({ isMember, setIsMember }: any) => {
   let [showDeletePopup, setShowDeletePopup] = useState(false)
   let [data, setData] = useState('')
   let [importedData, setImportedData] = useState('')
   let [importFile, setImportFile]: any = useState('')
   let [memberNumber, setMemberNumber]: any = useState('')
-  let [validMember, setValidMember] = useState(false)
 
   useEffect(() => {
     exportData()
@@ -42,17 +41,15 @@ const Settings = ({ setIsMember }: any) => {
 
   const validateMemberNumber = async (number: string) => {
     setMemberNumber(number)
-    if (number.length < 15) return
+    if (number.length < 30) return
     
     let result = await postData('https://api.gumroad.com/v2/licenses/verify', { product_id: 'HawIDI4UI0PjYogg_n_QRA==', license_key: number })
     if ( result.success ) {
       await chrome.storage.local.set({ memberNumber: number })
-      setIsMember(true)
     } else {
       await chrome.storage.local.set({ memberNumber: '' })
-      setIsMember(false)
     }
-    setValidMember(result.success)
+    setIsMember(result.success)
   }
 
   const getMemberNumber = async () => {
@@ -60,11 +57,12 @@ const Settings = ({ setIsMember }: any) => {
     if (number.memberNumber) {
       validateMemberNumber(number.memberNumber)
       setMemberNumber(number.memberNumber)
-    }
-    
+    } 
   }
 
   const exportData = async () => {
+    if (!isMember) return
+
     let { links } = await chrome.storage.local.get('links')
     let { dates } = await chrome.storage.local.get('dates')
     let { viewHistory } = await chrome.storage.local.get('viewHistory')
@@ -83,7 +81,7 @@ const Settings = ({ setIsMember }: any) => {
   }
 
   const importData = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return
+    if (!isMember || !e.target.files) return
     
     let parsedFile: any = await parseJsonFile(e.target.files[0])
     console.log(parsedFile)
@@ -109,7 +107,7 @@ const Settings = ({ setIsMember }: any) => {
           <input 
             className={
               `rounded-md text-xs py-2 px-2 w-full border transition ease-in-out duration-300 
-              ${ memberNumber === '' ? 'border-gray-400' : validMember ? 'border-green-400' : 'border-red-400' }`
+              ${ memberNumber === '' ? 'border-gray-400' : isMember ? 'border-green-400' : 'border-red-400' }`
             }
             placeholder='Enter your member number' 
             onChange={ (e) => validateMemberNumber(e.target.value) }

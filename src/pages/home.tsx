@@ -204,7 +204,7 @@ function Home() {
 
     if (currentPage === 'history' ) return <History />
 
-    if ( currentPage === 'settings' ) return <Settings setIsMember={setIsMember} />
+    if ( currentPage === 'settings' ) return <Settings isMember={isMember} setIsMember={setIsMember} />
 
     if ( currentPage === 'proPlan' ) return <ProPlan />
     
