@@ -17,12 +17,13 @@ function Home() {
   const [link, setSelectedLink]: any = useState({})
   const [editMode, setEditMode] = useState(false)
   const [onlyShowToday, setOnlyShowToday] = useState(true)
-  const [isMember, setIsMember] = useState(true)
+  const [isMember, setIsMember] = useState(false)
   const [currTab, setCurrTab] = useState('')
 
   useEffect(() => {
     setCurrentTab()
-    updateLinks();
+    updateLinks()
+    checkIfMember()
 
     if (loading) {
       setLoading(false)
@@ -41,6 +42,11 @@ function Home() {
     return () => clearInterval(secondInterval)
     
   }, [existingLinks])
+
+  const checkIfMember = async () => {
+    let number = await chrome.storage.local.get('memberNumber')
+    if (number.memberNumber) setIsMember(true)
+  }
 
   const setCurrentTab = async () => {
     let tab: any = await getCurrentTab()
@@ -186,7 +192,7 @@ function Home() {
 
   const displayPage = () => {
     
-    if (!isMember) return <ProPlan />
+    if (!isMember && !['settings', 'privacy'].includes(currentPage)) return <ProPlan />
     
     if ( loading ) {
       return <p>Loading...</p>
@@ -198,24 +204,13 @@ function Home() {
 
     if (currentPage === 'history' ) return <History />
 
-    if ( currentPage === 'settings' ) return <Settings />
+    if ( currentPage === 'settings' ) return <Settings setIsMember={setIsMember} />
 
     if ( currentPage === 'proPlan' ) return <ProPlan />
     
-    if ( currentPage === 'tracker' ) {
-      return <Tracker 
-                link={link} 
-                setCurrentPage={setCurrentPage} 
-                setEditMode={setEditMode}
-              />
-    }
+    if ( currentPage === 'tracker' ) return <Tracker link={link} setCurrentPage={setCurrentPage} setEditMode={setEditMode} />
 
-    if ( currentPage === 'newTracker' ) {
-      return <NewTracker 
-                link={link} 
-                editMode={editMode}
-              />
-    }
+    if ( currentPage === 'newTracker' ) return <NewTracker link={link} editMode={editMode} />
 
     if (existingLinks && existingLinks.length > 0) {
       if (!existingLinks || existingLinks.includes(null) ) return

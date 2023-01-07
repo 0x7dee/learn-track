@@ -1,7 +1,4 @@
 import React, { useState } from 'react'
-import { AiFillEdit, AiFillDelete } from 'react-icons/ai'
-import { MdDelete, MdEdit } from 'react-icons/md'
-
 
 const Tracker = ({ link, setCurrentPage, setEditMode }: any) => {
   const [errors, setErrors] = useState<string[]>([])

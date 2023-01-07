@@ -92,6 +92,7 @@ const updateLapsedTime = async (linkData: any, lastTab: any) => {
     /* If it's a new day then reset time lapsed for all links */
     if ( today !== currentDay ) {        
         await resetAllTimeLapsed(linkData)
+
     }
     await chrome.storage.local.set({ currentDay: today })
 

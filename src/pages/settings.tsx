@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { AiOutlineQuestionCircle } from 'react-icons/ai'
 import { BsArrowDownShort, BsArrowUpShort } from 'react-icons/bs'
 
-const Settings = () => {
+const Settings = ({ setIsMember }: any) => {
   let [showDeletePopup, setShowDeletePopup] = useState(false)
   let [data, setData] = useState('')
   let [importedData, setImportedData] = useState('')
@@ -14,10 +14,6 @@ const Settings = () => {
     exportData()
     getMemberNumber()
   }, [])
-
-  useEffect(() => {
-    validateMemberNumber()
-  }, [memberNumber])
 
   const clearData = async () => {
     await chrome.storage.local.set({ links: null });
@@ -44,27 +40,37 @@ const Settings = () => {
     return response.json(); // parses JSON response into native JavaScript objects
   }
 
-  const validateMemberNumber = async () => {
-    let result = await postData('https://api.gumroad.com/v2/licenses/verify', { product_id: 'HawIDI4UI0PjYogg_n_QRA==', license_key: memberNumber })
+  const validateMemberNumber = async (number: string) => {
+    setMemberNumber(number)
+    if (number.length < 15) return
+    
+    let result = await postData('https://api.gumroad.com/v2/licenses/verify', { product_id: 'HawIDI4UI0PjYogg_n_QRA==', license_key: number })
+    if ( result.success ) {
+      await chrome.storage.local.set({ memberNumber: number })
+      setIsMember(true)
+    } else {
+      await chrome.storage.local.set({ memberNumber: '' })
+      setIsMember(false)
+    }
     setValidMember(result.success)
   }
 
   const getMemberNumber = async () => {
     let number = await chrome.storage.local.get('memberNumber')
-    setMemberNumber(number.memberNumber)
-  }
-
-  const updateMemberNumber = async (number: string) => {
-    await chrome.storage.local.set({ memberNumber: number })
-    setMemberNumber(number)
+    if (number.memberNumber) {
+      validateMemberNumber(number.memberNumber)
+      setMemberNumber(number.memberNumber)
+    }
+    
   }
 
   const exportData = async () => {
     let { links } = await chrome.storage.local.get('links')
     let { dates } = await chrome.storage.local.get('dates')
     let { viewHistory } = await chrome.storage.local.get('viewHistory')
+    let { memberNumber } = await chrome.storage.local.get('memberNumber')
 
-    setData(JSON.stringify({ links, dates, viewHistory }))
+    setData(JSON.stringify({ links, dates, viewHistory, memberNumber }))
   }
 
   async function parseJsonFile(file: any) {
@@ -106,7 +112,7 @@ const Settings = () => {
               ${ memberNumber === '' ? 'border-gray-400' : validMember ? 'border-green-400' : 'border-red-400' }`
             }
             placeholder='Enter your member number' 
-            onChange={ (e) => updateMemberNumber(e.target.value) }
+            onChange={ (e) => validateMemberNumber(e.target.value) }
             value={ memberNumber }
           />
           <a className='text-blue-400 text-xs self-end' href="https://learntrack.gumroad.com/l/oznrag" target={'_blank'}>Manage Account</a>
