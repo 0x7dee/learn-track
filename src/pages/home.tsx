@@ -308,6 +308,7 @@ function Home() {
 
       <div className="header pt-6 pb-6 pr-8 pl-8 border-dashed border-slate-300 border-b-2">
         <div className="flex flex-row items-center text-2xl">
+          {/*<img className="w-5 h-5 mr-3" src={require('../static/icon.png')} alt="not working" />*/}
           <a className="font-serif mr-4" href="https://learntrack.co" rel='noopener' target='_blank'>
             LearnTrack 
           </a> 
@@ -318,6 +319,7 @@ function Home() {
             <p className="">🤑</p>
             <p className="">✍</p>
           </div>
+          
         </div>
         
         { displayNavigation() }

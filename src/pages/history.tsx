@@ -97,8 +97,8 @@ function History() {
                 return (
                     <div key={item}>
                         <span className='group flex flex-row justify-between items-center mb-1'>
-                            <span className='flex flex-row items-center'>
-                                <a href={`https://${item}`} target={"_blank"}>{item}</a>
+                            <span className='flex flex-row items-center max-w-full overflow-hidden'>
+                                <a href={`https://${item}`} target={"_blank"}>{ item.length > 30 ? item.slice(0, 30)+'...' : item }</a>
                                 { 
                                     todayTime > yesterdayTime ? 
                                     <BsArrowUpShort className='text-green-400 ml-2 text-sm' /> :
@@ -158,7 +158,7 @@ function History() {
                         <div key={item}>
                             <span className='group flex flex-row justify-between mb-1'>
                                 <span className=' flex flex-row items-center'>
-                                    <a href={`https://${item}`} target={"_blank"}>{item}</a>
+                                    <a href={`https://${item}`} target={"_blank"}>{ item.length > 30 ? item.slice(0, 30)+'...' : item }</a>
                                     { 
                                         timeForPriorWeek === 0 ? 
                                         '' :
@@ -182,7 +182,7 @@ function History() {
                         <div key={item}>
                             <span className='group flex flex-row justify-between mb-1'>
                                 <span className='flex flex-row items-center'>
-                                    <a href={`https://${item}`} target={"_blank"}>{item}</a>
+                                    <a href={`https://${item}`} target={"_blank"}>{ item.length > 30 ? item.slice(0, 30)+'...' : item }</a>
                                 <p onClick={() => removeItemFromHistory(item)} className='text-red-400 ml-2 hidden group-hover:block cursor-pointer'>x</p>
                             </span>
                                 <p>{totalTime(viewHistory[item].totalTime)}</p>
