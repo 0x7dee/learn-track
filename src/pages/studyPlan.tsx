@@ -211,7 +211,7 @@ const StudyPlan = () => {
       }
     })
 
-    return Math.floor(success / (success + failure) * 100)
+    return " - " + Math.floor(success / (success + failure) * 100) + "%"
 
   }
 
@@ -264,10 +264,10 @@ const StudyPlan = () => {
             'bg-slate-100' 
           } 
           rounded-sm relative group cursor-default`}>
-          <div className={`whitespace-nowrap break-keep absolute -top-6 ${ xIndex > 10 ? 'right-5' : 'left-5' } bg-slate-50 rounded-md px-2 py-2 z-10 hidden ${ daysAgo < 0 ? '' : 'group-hover:block' } cursor-default`}>
+          <div className={`whitespace-nowrap break-keep absolute -top-4 ${ xIndex > 10 ? 'right-5' : 'left-5' } bg-slate-50 rounded-md px-2 py-2 z-10 hidden ${ daysAgo < 0 ? '' : 'group-hover:block' } cursor-default`}>
             <div className="flex flex-col flex-nowrap">
               
-              <p className='mb-2'>{ currDate.toLocaleDateString() } - { displaySuccessRateForDay(dates[currDate.toLocaleDateString()]) }%</p>
+              <p className='mb-2'>{ currDate.toLocaleDateString() } { displaySuccessRateForDay(dates[currDate.toLocaleDateString()]) }</p>
              
               <div className='flex flex-col flex-nowrap'>
                 { displayResultOnHistoricalDay(dates[currDate.toLocaleDateString()]) }
