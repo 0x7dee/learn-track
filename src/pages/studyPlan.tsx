@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { RxCross2 } from 'react-icons/rx'
 
 const StudyPlan = () => {
   const [links, setLinks] = useState<any[]>([])
@@ -186,6 +187,34 @@ const StudyPlan = () => {
     return daysAgo;
   }
 
+  const displayResultOnHistoricalDay = (date: any) => {
+    if (!date) return
+    return Object.keys(date).map(key => {
+      if (date[key]) {
+        return <span className='text-xs text-green-400 inline-block'>{key}</span>
+      } else {
+        return <span className='text-xs text-red-400 inline-block'>{key}</span>
+      }
+    })
+  }
+
+  const displaySuccessRateForDay = (date: any) => {
+    if (!date) return
+    let success = 0
+    let failure = 0 
+    
+    Object.keys(date).forEach(key => {
+      if (date[key]) {
+        success += 1
+      } else {
+        failure += 1
+      }
+    })
+
+    return Math.floor(success / (success + failure) * 100)
+
+  }
+
   const displayProgress = () => {
 
     let weeks = 18
@@ -235,7 +264,16 @@ const StudyPlan = () => {
             'bg-slate-100' 
           } 
           rounded-sm relative group cursor-default`}>
-          <div className={`absolute -top-6 ${ xIndex > 12 ? '-left-12' : '' } bg-slate-50 rounded-md px-1 py-1 z-10 hidden ${ daysAgo < 0 ? '' : 'group-hover:block' } cursor-default`}>{ currDate.toLocaleDateString() }</div>
+          <div className={`whitespace-nowrap break-keep absolute -top-6 ${ xIndex > 10 ? 'right-5' : 'left-5' } bg-slate-50 rounded-md px-2 py-2 z-10 hidden ${ daysAgo < 0 ? '' : 'group-hover:block' } cursor-default`}>
+            <div className="flex flex-col flex-nowrap">
+              
+              <p className='mb-2'>{ currDate.toLocaleDateString() } - { displaySuccessRateForDay(dates[currDate.toLocaleDateString()]) }%</p>
+             
+              <div className='flex flex-col flex-nowrap'>
+                { displayResultOnHistoricalDay(dates[currDate.toLocaleDateString()]) }
+              </div>
+            </div>   
+          </div>
         </div>)
     })
   }

@@ -303,15 +303,16 @@ function Home() {
   }
 
   return (
-    <div className="w-96 min-h-[34rem] max-h-[42rem] relative rounded-md overflow-hidden">
-      { displayProBanner() } 
+    <div className="w-96 min-h-[32rem] max-h-[42rem] relative rounded-md overflow-hidden">
+      { /*displayProBanner()*/ } 
 
       <div className="header pt-6 pb-6 pr-8 pl-8 border-dashed border-slate-300 border-b-2">
         <div className="flex flex-row items-center text-2xl">
-          {/*<img className="w-5 h-5 mr-3" src={require('../static/icon.png')} alt="not working" />*/}
+          {/*<img className="w-5 h-5 mr-3" src={require('../static/icon.png')} alt="learntrack logo" />*/}
           <a className="font-serif mr-4" href="https://learntrack.co" rel='noopener' target='_blank'>
             LearnTrack 
           </a> 
+          {/* 
           <div className="flex flex-row items-center justify-between w-full">
             <p className="">📚</p> 
             <p className="">🤓</p> 
@@ -319,7 +320,7 @@ function Home() {
             <p className="">🤑</p>
             <p className="">✍</p>
           </div>
-          
+          */}
         </div>
         
         { displayNavigation() }
