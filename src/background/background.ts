@@ -66,6 +66,18 @@ const updateHistory = async (lastTab: any, todayString: string) => {
     await chrome.storage.local.set({'viewHistory': viewHistory})
 }
 
+const turnOffAllAutotracks = async () => {
+    let linkData: any = await chrome.storage.local.get('links')
+
+    if ( linkData.links ) {
+      let updateAutotrack = await linkData.links.map((currLink: any) => {
+        currLink['autotrack'] = false
+        return currLink
+      })
+      await chrome.storage.local.set({ links: updateAutotrack })
+    }
+}
+
 const resetAllTimeLapsed = async (links: any) => {
     let existingLinks = await chrome.storage.local.get('links')
     if ( existingLinks.links ) {
@@ -92,7 +104,7 @@ const updateLapsedTime = async (linkData: any, lastTab: any) => {
     /* If it's a new day then reset time lapsed for all links */
     if ( today !== currentDay ) {        
         await resetAllTimeLapsed(linkData)
-
+        await turnOffAllAutotracks()
     }
     await chrome.storage.local.set({ currentDay: today })
 
