@@ -7,7 +7,7 @@ import Settings from "./settings";
 import StudyPlan from "./studyPlan";
 import History from "./history";
 import { compareUrls, getCurrentTab } from "../utils/functions";
-import Privacy from "./privacy";
+import Help from "./help";
 
 
 function Home() {
@@ -107,13 +107,14 @@ function Home() {
             onClick={() => setCurrentPage('history')}
             >time tracker</button>
           <button 
-            className={`${ currentPage === 'privacy' ? 'text-black' : 'text-slate-400'} mr-2 hover:text-black`}
-            onClick={() => setCurrentPage('privacy')}
-            >privacy</button>
-          <button 
             className={`${ currentPage === 'settings' ? 'text-black' : 'text-slate-400'} mr-2 hover:text-black`}
             onClick={() => setCurrentPage('settings')}
             >settings</button>
+          <button 
+            className={`${ currentPage === 'help' ? 'text-black' : 'text-slate-400'} mr-2 hover:text-black`}
+            onClick={() => setCurrentPage('help')}
+            >help</button>
+          
       </nav>
     )
   }
@@ -192,13 +193,13 @@ function Home() {
 
   const displayPage = () => {
     
-    if (!isMember && !['settings', 'privacy'].includes(currentPage)) return <ProPlan />
+    if (!isMember && !['settings', 'help'].includes(currentPage)) return <ProPlan />
     
     if ( loading ) {
       return <p>Loading...</p>
     }
 
-    if ( currentPage === 'privacy' ) return <Privacy />
+    if ( currentPage === 'help' ) return <Help />
 
     if ( currentPage === 'studyPlan' ) return <StudyPlan />
 

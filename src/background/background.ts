@@ -89,6 +89,9 @@ const resetAllTimeLapsed = async (links: any) => {
     }
 }
 
+// turn off autotrack when chrome is closed
+//chrome.windows.onRemoved.addListener(() => turnOffAllAutotracks())
+
 const updateLapsedTime = async (linkData: any, lastTab: any) => {
     if ( !linkData || linkData.includes(null) ) return
 

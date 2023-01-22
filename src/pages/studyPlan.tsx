@@ -191,9 +191,9 @@ const StudyPlan = () => {
     if (!date) return
     return Object.keys(date).map(key => {
       if (date[key]) {
-        return <span className='text-xs text-green-400 inline-block'>{key}</span>
+        return <span key={'historicalResult'+key} className='text-xs text-green-400 inline-block'>{key}</span>
       } else {
-        return <span className='text-xs text-red-400 inline-block'>{key}</span>
+        return <span key={'historicalResult'+key} className='text-xs text-red-400 inline-block'>{key}</span>
       }
     })
   }
