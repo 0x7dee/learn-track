@@ -88,7 +88,8 @@ function History() {
 
         if (timeline === 'today') {
             return Object.keys(viewHistory)
-            .filter(a => viewHistory[a].dates[todayString]).sort((a,b) => (viewHistory[b].dates[todayString] - viewHistory[a].dates[todayString]))
+            .filter(a => viewHistory[a].dates[todayString])
+            .sort((a,b) => (viewHistory[b].dates[todayString] - viewHistory[a].dates[todayString]))
             .map(item => {
                 let todayTime = viewHistory[item].dates[todayString]
                 let yesterdayTime = viewHistory[item].dates[yesterdaysDate]

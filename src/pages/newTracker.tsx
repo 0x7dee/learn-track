@@ -194,10 +194,11 @@ const NewTracker: any = ({ link, editMode }: any) => {
           existingLinks.links = await existingLinks.links.filter((link: { title: string }) => link.title !== editTitle)
 
           // if updating title then remove the title from dates
-          if (title !== link.title) {
+          let today = new Date()
+          let todayString = today.toLocaleDateString()
+          let daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+          if (title !== link.title || !days[daysOfWeek[today.getDay()]]) {
             // Remove topic from todays date
-            let today = new Date()
-            let todayString = today.toLocaleDateString()
             let getDates = await chrome.storage.local.get('dates')
             delete getDates.dates[todayString][link.title]
             await chrome.storage.local.set({ dates: getDates.dates })

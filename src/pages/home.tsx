@@ -222,8 +222,16 @@ function Home() {
       if (onlyShowToday && anyLinksForToday === 0) {
         return <p>No links for today...</p>
       }
-
-      return existingLinks.map(
+ 
+      return existingLinks
+      .sort((a: any, b: any) => { 
+        let itemA = a.title.toUpperCase()
+        let itemB =  b.title.toUpperCase()
+        if (itemA < itemB) return -1
+        if (itemA > itemB) return 1
+        return 0
+      })
+      .map(
         (link: {
           urls: any,
           title: string,
