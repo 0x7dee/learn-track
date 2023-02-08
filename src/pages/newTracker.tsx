@@ -128,7 +128,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
     if ( urls.length < 1 ) errors.push("No urls are set")
     
     /* Check days are selected */
-    if ( JSON.stringify(days) === JSON.stringify(defaultDays) ) errors.push("No days are selected")
+    //if ( JSON.stringify(days) === JSON.stringify(defaultDays) ) errors.push("No days are selected")
 
     /* Check time, timeElapsed exists */
     if ( !time ) errors.push("Time must not be empty")

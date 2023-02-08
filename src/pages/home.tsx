@@ -7,7 +7,6 @@ import Settings from "./settings";
 import StudyPlan from "./studyPlan";
 import History from "./history";
 import { compareUrls, getCurrentTab } from "../utils/functions";
-import Help from "./help";
 
 
 function Home() {
@@ -111,8 +110,8 @@ function Home() {
             onClick={() => setCurrentPage('settings')}
             >settings</button>
           <button 
-            className={`${ currentPage === 'help' ? 'text-black' : 'text-slate-400'} mr-2 hover:text-black`}
-            onClick={() => setCurrentPage('help')}
+            className='text-slate-400'
+            onClick={() => {}}
             >help</button>
           
       </nav>
@@ -193,13 +192,11 @@ function Home() {
 
   const displayPage = () => {
     
-    if (!isMember && !['settings', 'help'].includes(currentPage)) return <ProPlan />
+    if (!isMember && !['settings'].includes(currentPage)) return <ProPlan />
     
     if ( loading ) {
       return <p>Loading...</p>
     }
-
-    if ( currentPage === 'help' ) return <Help />
 
     if ( currentPage === 'studyPlan' ) return <StudyPlan />
 
