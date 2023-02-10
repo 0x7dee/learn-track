@@ -7,7 +7,7 @@
  * viewHistory -> store of hostnames user has visited
  */
 
-import { getCurrentTab, compareUrls } from "../utils/functions";
+import { getCurrentTab, compareUrls, getDateXDaysAgo } from "../utils/functions";
 
 /* LearnTrack time track functionality */
 let url: string = '';
@@ -54,12 +54,14 @@ const updateHistory = async (lastTab: any, todayString: string) => {
     
     // If hostname doesn't exist in history add it
     if (!viewHistory[url.hostname]) {
-        viewHistory = {...viewHistory, [url.hostname]: {totalTime: 1, dates: { [todayString]: 1 }}}
+        viewHistory = {...viewHistory, [url.hostname]: {totalTime: 1, timeThisWeek: 1, dates: { [todayString]: 1 }}}
     } else if (!viewHistory[url.hostname].dates[todayString]) {
         viewHistory[url.hostname].totalTime += 1
+        viewHistory[url.hostname].timeThisWeek += 1
         viewHistory[url.hostname].dates = { ...viewHistory[url.hostname].dates, [todayString]: 1 }
     } else {
         viewHistory[url.hostname].totalTime += 1
+        viewHistory[url.hostname].timeThisWeek += 1
         viewHistory[url.hostname].dates[todayString] += 1          
     }
 
@@ -108,6 +110,7 @@ const updateLapsedTime = async (linkData: any, lastTab: any) => {
     if ( today !== currentDay ) {        
         await resetAllTimeLapsed(linkData)
         await turnOffAllAutotracks()
+        await updateTimeThisWeek()
     }
     await chrome.storage.local.set({ currentDay: today })
 
@@ -149,4 +152,23 @@ const updateLapsedTime = async (linkData: any, lastTab: any) => {
         urlFound = false
     })
 }
+
+const updateTimeThisWeek = async () => {
+    let { viewHistory } = await chrome.storage.local.get('viewHistory')
+
+    if (!viewHistory) return
+    
+    Object.keys(viewHistory).forEach((item: string) => {
+        let timeForLast7Days = 0;
+        [0,1,2,3,4,5,6].forEach(daysAgo => {
+            let day = getDateXDaysAgo(daysAgo)
+            let timeOnPastDay = viewHistory[item].dates[day.toLocaleDateString()]
+            if (timeOnPastDay) timeForLast7Days += timeOnPastDay
+        })
+        viewHistory[item]["timeThisWeek"] = timeForLast7Days || 0
+    })
+
+    await chrome.storage.local.set({ 'viewHistory': viewHistory })
+}
+
 

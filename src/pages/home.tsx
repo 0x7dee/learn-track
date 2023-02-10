@@ -263,7 +263,7 @@ function Home() {
               }} className="grid grid-cols-12 content-center mb-5 cursor-pointer" >
                 <div className="col-span-5 grid grid-cols-6 self-center content-center">
                   <img
-                    className="h-5 w-5 justify-self-start self-center col-span-1"
+                    className="h-4 w-4 justify-self-start self-center col-span-1"
                     src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${link.urls[0]}`}
                     alt="favicon"
                   />

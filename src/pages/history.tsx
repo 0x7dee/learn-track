@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { AiOutlineQuestionCircle } from 'react-icons/ai'
 import { BsArrowDownShort, BsArrowUpShort } from 'react-icons/bs'
+import { getDateXDaysAgo } from '../utils/functions'
 
 
 function History() {
@@ -64,14 +65,6 @@ function History() {
             </div>
         )
       }
-    
-    const getDateXDaysAgo = (numOfDays: number, date = new Date()) => {
-        const daysAgo = new Date(date.getTime());
-
-        daysAgo.setDate(date.getDate() - numOfDays);
-
-        return daysAgo;
-    }
 
     const removeItemFromHistory = async (item: any) => {
         let removeItem = structuredClone(viewHistory)
@@ -83,7 +76,7 @@ function History() {
         if (!viewHistory || Object.keys(viewHistory).length === 0) return <div>Loading history...</div>
 
         let viewHistorySorted = Object.keys(viewHistory).sort((a,b) => (viewHistory[b].totalTime - viewHistory[a].totalTime))
-        let totalTimeForLastWeek: any = {}
+        //let totalTimeForLastWeek: any = {}
         let yesterdaysDate = getDateXDaysAgo(1).toLocaleDateString()
 
         if (timeline === 'today') {
@@ -118,7 +111,7 @@ function History() {
             
             return Object.keys(viewHistory)
                 .sort((a, b) => {
-
+                    /*
                     let timeForLast7DaysA = 0
                     
                     let last7daysA = [0,1,2,3,4,5,6].forEach(daysAgo => {
@@ -138,9 +131,11 @@ function History() {
                     totalTimeForLastWeek = { ...totalTimeForLastWeek, [a]: timeForLast7DaysA }
                     
                     return timeForLast7DaysB - timeForLast7DaysA
+                    */
+                   return viewHistory[b].timeThisWeek - viewHistory[a].timeThisWeek
                 })
                 .map(item => {
-                    if (viewHistory[item].totalTime < 60 || totalTimeForLastWeek[item] < 60 ) return
+                    if (viewHistory[item].totalTime < 60 || viewHistory[item].timeThisWeek < 60 ) return
 
                     let timeForLast7Days = 0
                     let timeForPriorWeek = 0

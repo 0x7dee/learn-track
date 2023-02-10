@@ -77,10 +77,10 @@ const NewTracker: any = ({ link, editMode }: any) => {
 
   const displayUrls = () => {
     return urls.map(url => (
-        <div key={url} className="grid grid-cols-10 align-items-center mb-1 w-full">
-            <img className="h-5 w-5 cols-span-1" src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${url}`} alt="favicon" />
+        <div key={url} className="grid grid-cols-10 items-center mb-1 w-full">
+            <img className="h-4 w-4 cols-span-1" src={`https://s2.googleusercontent.com/s2/favicons?domain_url=${url}`} alt="favicon" />
             <div className='mr-3 col-span-8 break-words'>
-              <p>{formatUrl(url)}</p>
+              <p>{ url }</p>
             </div>      
             <div className="text-red-600 cursor-pointer cols-span-1" onClick={() => removeUrl(url)}>x</div>
         </div>
@@ -222,12 +222,6 @@ const NewTracker: any = ({ link, editMode }: any) => {
     } else {
       setDays({ ...days, [day]: false })
     }
-  }
-
-  const formatUrl = (url: string) => {
-    let removeHttps = url.replace(/^https?:\/\//, '')
-    let removeHttp = removeHttps.replace(/^http?:\/\//, '')
-    return removeHttp
   }
 
   const includesProtocol = (url: string): boolean => {
