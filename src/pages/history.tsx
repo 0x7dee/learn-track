@@ -55,7 +55,7 @@ function History() {
                 </p>
                 <div className="relative flex flex-row items-center h-full w-16">
                     <AiOutlineQuestionCircle className='peer' />
-                    <div className="absolute w-48 -bottom-28 -left-3/4 bg-white z-10 hidden peer-hover:block overflow-hidden px-4 py-2 rounded-md border-slate-100 border-2">
+                    <div className="absolute w-48 top-3 -left-3/4 bg-white z-10 hidden peer-hover:block overflow-hidden px-4 py-2 rounded-md border-slate-100 border-2">
                     <div>
                         <p><BsArrowUpShort className='text-green-400 text-sm inline' /> is displayed when your view time has increased from the prior day or week</p>
                         <p><BsArrowDownShort className='text-red-400 text-sm inline' /> shows when it has decreased</p>
