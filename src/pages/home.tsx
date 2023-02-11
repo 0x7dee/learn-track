@@ -7,6 +7,8 @@ import Settings from "./settings";
 import StudyPlan from "./studyPlan";
 import History from "./history";
 import { compareUrls, getCurrentTab } from "../utils/functions";
+import { MdOutlineOpenInNew } from 'react-icons/md'
+
 
 
 function Home() {
@@ -109,10 +111,13 @@ function Home() {
             className={`${ currentPage === 'settings' ? 'text-black' : 'text-slate-400'} mr-2 hover:text-black`}
             onClick={() => setCurrentPage('settings')}
             >settings</button>
-          <button 
-            className='text-slate-400'
+          <a 
+            href="https://learntrack.co#contact"
+            target={"_blank"}
+            className='text-slate-400 flex flex-rows items-center'
             onClick={() => {}}
-            >help</button>
+            >
+              <span className="mr-[2px]">help</span> <MdOutlineOpenInNew className="h-3 w-3" /></a>
           
       </nav>
     )
