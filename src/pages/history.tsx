@@ -112,8 +112,8 @@ function History() {
     let yesterdaysDate = getDateXDaysAgo(1).toLocaleDateString();
 
     if (timeline === "today") {
-      return Object.keys(viewHistory)
-        .filter((a) => viewHistory[a].dates[todayString])
+      let watchedToday = Object.keys(viewHistory).filter((a) => viewHistory[a].dates[todayString])
+      return watchedToday
         .sort(
           (a, b) =>
             viewHistory[b].dates[todayString] -
@@ -123,7 +123,8 @@ function History() {
           let todayTime = viewHistory[item].dates[todayString];
           let yesterdayTime = viewHistory[item].dates[yesterdaysDate];
 
-          if (todayTime < 60 || !todayTime) return;
+          if (!todayTime) return;
+          if (todayTime < 60 && watchedToday.length > 10 ) return;
           return (
             <div key={item}>
               <span className="group flex flex-row justify-between items-center mb-1">
@@ -151,35 +152,13 @@ function History() {
           );
         });
     } else if (timeline === "week") {
-      return Object.keys(viewHistory)
-        .sort((a, b) => {
-          /*
-                    let timeForLast7DaysA = 0
-                    
-                    let last7daysA = [0,1,2,3,4,5,6].forEach(daysAgo => {
-                        let day = getDateXDaysAgo(daysAgo)
-                        let timeOnPastDay = viewHistory[a].dates[day.toLocaleDateString()]
-                        if (timeOnPastDay) timeForLast7DaysA += timeOnPastDay
-                    })
-
-                    let timeForLast7DaysB = 0
-                    
-                    let last7daysB = [0,1,2,3,4,5,6].forEach(daysAgo => {
-                        let day = getDateXDaysAgo(daysAgo)
-                        let timeOnPastDay = viewHistory[b].dates[day.toLocaleDateString()]
-                        if (timeOnPastDay) timeForLast7DaysB += timeOnPastDay
-                    })
-
-                    totalTimeForLastWeek = { ...totalTimeForLastWeek, [a]: timeForLast7DaysA }
-                    
-                    return timeForLast7DaysB - timeForLast7DaysA
-                    */
-          return viewHistory[b].timeThisWeek - viewHistory[a].timeThisWeek;
-        })
+      let watchedThisWeek = Object.keys(viewHistory).filter((a) => viewHistory[a].timeThisWeek > 0)
+      return watchedThisWeek
+        .sort((a, b) => (viewHistory[b].timeThisWeek - viewHistory[a].timeThisWeek))
         .map((item) => {
           if (
-            viewHistory[item].totalTime < 60 ||
-            viewHistory[item].timeThisWeek < 60
+            (viewHistory[item].totalTime < 60 || viewHistory[item].timeThisWeek < 60) &&
+            watchedThisWeek.length > 10
           )
             return;
 

@@ -221,7 +221,8 @@ function Home() {
       let today = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][todaysDate.getDay()]
       let anyLinksForToday = existingLinks.reduce((prev: number, link: any) => prev + (link.days[today] === true ? 1 : 0), 0)
 
-      if (onlyShowToday && anyLinksForToday === 0) {
+      // Only display special case for Welcome link
+      if (onlyShowToday && anyLinksForToday === 0 && !(existingLinks.length === 1 && existingLinks[0].title === "Welcome")) {
         return <p>No links for today...</p>
       }
  
@@ -245,14 +246,12 @@ function Home() {
           autotrack: any
         }, index: number) => {
             
-            {/* Filter out days */}
-            if ( onlyShowToday && !link.days[today] ) return
+            {/* Filter out days except for special case for Welcome task */}
+            if ( onlyShowToday && !link.days[today] && !(existingLinks.length === 1 && existingLinks[0].title === "Welcome") ) return
 
-            //console.log(link)
             let { urls, days, autotrack } = link
             let isToday = days[today]
             let urlsContainCurrUrl = false
-
             
             urls.forEach((url: string) => {
               if ( compareUrls(url, currTab) ) urlsContainCurrUrl = true
@@ -306,19 +305,9 @@ function Home() {
 
       <div className="header pt-6 pb-6 pr-8 pl-8 border-dashed border-slate-300 border-b-2">
         <div className="flex flex-row items-center text-2xl">
-          {/*<img className="w-5 h-5 mr-3" src={require('../static/icon.png')} alt="learntrack logo" />*/}
           <a className="font-serif font-normal tracking-wide mr-4" href="https://learntrack.co" rel='noopener' target='_blank'>
             LearnTrack 
           </a> 
-          {/* 
-          <div className="flex flex-row items-center justify-between w-full">
-            <p className="">📚</p> 
-            <p className="">🤓</p> 
-            <p className="">🧠</p>
-            <p className="">🤑</p>
-            <p className="">✍</p>
-          </div>
-          */}
         </div>
         
         { displayNavigation() }
