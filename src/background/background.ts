@@ -5,6 +5,7 @@
  * currentDay -> current day
  * dates -> records all dates that the application has been in use, used for showing completion rate
  * viewHistory -> store of hostnames user has visited
+ * memberNumber -> members verification code if they are a member
  */
 
 import { getCurrentTab, compareUrls, getDateXDaysAgo } from "../utils/functions";
@@ -28,9 +29,12 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 
        let lastTab = await chrome.storage.local.get('tab');
 
+       /* Check if member */
+       let { memberNumber } = await chrome.storage.local.get('memberNumber') || null
+
        /* Get link data and match to current url */
        let getLinkData = await chrome.storage.local.get('links');
-       updateLapsedTime(getLinkData.links, lastTab)
+       updateLapsedTime(getLinkData.links, lastTab, memberNumber)
 
        /* Update history */
        updateHistory(lastTab, todayString)
@@ -94,8 +98,8 @@ const resetAllTimeLapsed = async (links: any) => {
 // turn off autotrack when chrome is closed
 //chrome.windows.onRemoved.addListener(() => turnOffAllAutotracks())
 
-const updateLapsedTime = async (linkData: any, lastTab: any) => {
-    if ( !linkData || linkData.includes(null) ) return
+const updateLapsedTime = async (linkData: any, lastTab: any, memberNumber: string) => {
+    if ( !linkData || linkData.includes(null) || !memberNumber ) return
 
     let todaysDate = new Date();
     let today = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][todaysDate.getDay()]

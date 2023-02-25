@@ -114,6 +114,18 @@ const StudyPlan = () => {
   }
 
   const displayDayData = (day: any[]) => {
+    if ( day.length === 0 ) {
+      return [0,1,2,3,4,5,6].map((data, index) => {
+        return (
+          <div 
+            key={`${index}`} 
+            className={`${index+1 === 7 ? 'rounded-r-full' : ''} ${index === 0 ? 'rounded-l-full' : ''} h-3 bg-slate-100`} 
+            style={{ width: `100%` }}
+          ></div>
+        )
+      })
+    }
+
     if (!longestTime || longestTime < 1) return
 
     let totalTime = 0
@@ -144,7 +156,7 @@ const StudyPlan = () => {
   }
 
   const displayStudyPlan = () => {
-    if (!links || !studyOnDay) return
+    if (!studyOnDay) return
 
     let today = new Date()
     let dayOfWeek = today.getDay()
@@ -152,7 +164,6 @@ const StudyPlan = () => {
 
 
     return Object.keys(studyOnDay).map((day, index) => {
-      console.log(daysOfWeek[dayOfWeek])
       return (
         <div key={`${index}${day}`} className='grid grid-cols-12'>
           <div className="col-span-3">

@@ -130,9 +130,9 @@ function Home() {
           <p onClick={ () => setOnlyShowToday(true) } className={`mr-2 cursor-pointer ${ onlyShowToday ? 'text-black' : 'text-slate-400' }`}>Today</p>
           <p onClick={ () => setOnlyShowToday(false) } className={`cursor-pointer ${ !onlyShowToday ? 'text-black' : 'text-slate-400' }`}>Show all {`(${ existingLinks ? existingLinks.length : '0' })`}</p>
            <button 
-            className='ml-auto rounded-md text-xs py-1 px-0 w-16 border text-sky-400 border-sky-400 hover:text-neutral-100 hover:bg-sky-400 transition ease-in-out duration-300'
+            className='ml-auto rounded-md text-xs py-1 px-0 w-24 border text-sky-400 border-sky-400 hover:text-neutral-100 hover:bg-sky-400 transition ease-in-out duration-300'
             onClick={() => setCurrentPage("newTracker")}
-            >New</button>
+            >New Task</button>
         </div>
       )
     }
@@ -301,21 +301,8 @@ function Home() {
     }
   };
 
-  const displayProBanner = () => {
-    return (
-      <div className="fixed z-10 bottom-0 flex flex-row items-center py-2 pr-8 pl-8 w-full border-dashed border-slate-300 border-t-2">
-        <div className="flex flex-row items-center">
-          <span className="text-lg mr-1">🎉</span> 
-          <a href='https://learntrack.gumroad.com/l/oznrag' target={'_blank'} className="text-sky-400 cursor-pointer font-bold mr-1 hover:underline hover:underline-offset-2 hover:decoration-text-sky-400">Join today</a> 
-          <p>and 10x your productivity for only $3/m!</p>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="w-96 min-h-[32rem] max-h-[42rem] relative rounded-md overflow-hidden">
-      { /*displayProBanner()*/ } 
 
       <div className="header pt-6 pb-6 pr-8 pl-8 border-dashed border-slate-300 border-b-2">
         <div className="flex flex-row items-center text-2xl">

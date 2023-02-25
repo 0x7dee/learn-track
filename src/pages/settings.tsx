@@ -44,7 +44,6 @@ const Settings = ({ isMember, setIsMember }: any) => {
     setMemberNumber(number)
     
     let result = await postData('https://api.gumroad.com/v2/licenses/verify', { product_id: 'HcIl1HHJ_XBLD9_kRDS-tw==', license_key: number })
-    console.log(result)
     if ( result.success ) {
       await chrome.storage.local.set({ memberNumber: number })
       await chrome.storage.local.set({ subscriptionId: result.purchase.subscription_id })
