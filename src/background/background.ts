@@ -126,33 +126,46 @@ const updateLapsedTime = async (linkData: any, lastTab: any, memberNumber: strin
 
     /* Increment timeLapsed */
     let urlFound = false // we only want one increment per second
-    linkData.forEach((link: { urls: any[], title: string }, index: number) => {
-        link.urls.forEach( async (url: any) => {
-            if(!url) return
-            let timeLeft = linkData[index].timeLapsed <= linkData[index].time
-            let urlsIsValid = compareUrls(url, lastTab.tab.url)
-            let isStudyDay = linkData[index].days[today]
+    /* Loop over links and update time */
+    linkData.forEach(async (link: { urls: any[], title: string, autotrack: string }, index: number) => {
+        let timeLeft = linkData[index].timeLapsed <= linkData[index].time
+        let isStudyDay = linkData[index].days[today]
 
-            /* Add topic if doesn't already exist in todays date */
-            if (isStudyDay && updatedDates[todayString] && !updatedDates[todayString][link.title]) {
-                updatedDates[todayString] = { ...updatedDates[todayString], [link.title]: false }
-                await chrome.storage.local.set({ dates: updatedDates })
-            }
+        /* Add task to today value in dates if it is not already there */
+        if (isStudyDay && updatedDates[todayString] && !updatedDates[todayString][link.title]) {
+            updatedDates[todayString] = { ...updatedDates[todayString], [link.title]: false }
+            await chrome.storage.local.set({ dates: updatedDates })
+        }
 
-            /* Update topic completion for today */
-            if (isStudyDay) {
-                updatedDates[todayString] = { ...updatedDates[todayString], [link.title]: !timeLeft }
-                await chrome.storage.local.set({ dates: updatedDates })
-            }
+        /* Update topic completion for today */
+        if (isStudyDay || linkData[index].autotrack) {
+            updatedDates[todayString] = { ...updatedDates[todayString], [link.title]: !timeLeft }
+            await chrome.storage.local.set({ dates: updatedDates })
+        }
 
-            /* Compare current url to urls specified in link, if there is no time left then ignore */
-            if( timeLeft && !urlFound && ( linkData[index].autotrack || (urlsIsValid && isStudyDay) ) ) {
-                let updatedLinkData = linkData;
-                updatedLinkData[index].timeLapsed += 1
-                chrome.storage.local.set({'links': updatedLinkData})  
-                urlFound = true
-            }
-        })
+        /* If autotrack is on we don't need to check the URLs */
+        if ( linkData[index].autotrack && timeLeft && isStudyDay ) {
+            let updatedLinkData = linkData;
+            updatedLinkData[index].timeLapsed += 1
+            chrome.storage.local.set({'links': updatedLinkData})  
+            urlFound = true
+        } else {
+            /* Loop over each url and if you are on that URL increment the time value */
+            link.urls.forEach( async (url: any) => {
+                if(!url) return
+
+                let urlsIsValid = compareUrls(url, lastTab.tab.url)
+
+                /* Compare current url to urls specified in link, if there is no time left then ignore */
+                if( timeLeft && !urlFound && ( linkData[index].autotrack || (urlsIsValid && isStudyDay) ) ) {
+                    let updatedLinkData = linkData;
+                    updatedLinkData[index].timeLapsed += 1
+                    chrome.storage.local.set({'links': updatedLinkData})  
+                    urlFound = true
+                }
+            })
+        }
+
         urlFound = false
     })
 }

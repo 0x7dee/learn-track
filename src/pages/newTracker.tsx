@@ -107,7 +107,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
         refreshDay.checked = false
       }
     })
-    setSuccess(editMode ? "Updated link successfully!" : "New link created successfully!")
+    setSuccess(editMode ? "Updated task successfully!" : "New task created successfully!")
   }
 
   const validateLink = async (link: any, links: any) => {

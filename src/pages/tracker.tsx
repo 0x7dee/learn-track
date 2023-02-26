@@ -96,9 +96,9 @@ const Tracker = ({ link, setCurrentPage, setEditMode }: any) => {
       delete getDates.dates[todayString][link.title]
       await chrome.storage.local.set({ dates: getDates.dates })
 
-      setSuccess('Deleted link successfully!')
+      setSuccess('Deleted task successfully!')
     } else {
-      setErrors(['Unable to delete link...'])
+      setErrors(['Unable to delete task...'])
     }
   }
 
