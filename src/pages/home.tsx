@@ -221,9 +221,8 @@ function Home() {
       let today = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][todaysDate.getDay()]
       let anyLinksForToday = existingLinks.reduce((prev: number, link: any) => prev + (link.days[today] === true ? 1 : 0), 0)
 
-      // Only display special case for Welcome link
-      if (onlyShowToday && anyLinksForToday === 0 && !(existingLinks.length === 1 && existingLinks[0].title === "Welcome")) {
-        return <p>No links for today...</p>
+      if (onlyShowToday && anyLinksForToday === 0) {
+        return <p>No tasks for today...</p>
       }
  
       return existingLinks
@@ -246,8 +245,8 @@ function Home() {
           autotrack: any
         }, index: number) => {
             
-            {/* Filter out days except for special case for Welcome task */}
-            if ( onlyShowToday && !link.days[today] && !(existingLinks.length === 1 && existingLinks[0].title === "Welcome") ) return
+            {/* Filter out days */}
+            if ( onlyShowToday && !link.days[today] ) return
 
             let { urls, days, autotrack } = link
             let isToday = days[today]
@@ -294,7 +293,7 @@ function Home() {
     } else {
       return (
         <div>
-          <h1>No links available...</h1>
+          <h1>Add a task to get started...</h1>
         </div>
       );
     }

@@ -104,16 +104,20 @@ const StudyPlan = () => {
 
     Object.keys(studyOnDay).forEach(day => {
       studyOnDay[day].forEach((data: { hours: number; mins: number }) => {
-        totalTime += ((data.hours * 60 * 60) + (data.mins * 60))
+        if (!data.hours) data.hours = 0
+        if (!data.mins) data.mins = 0
+        totalTime += ((data.hours * 60 * 60) + (data.mins * 60)) // total time in seconds
       })
       if (totalTime > highestTime) highestTime = totalTime
       totalTime = 0
     })
-
+    console.log(studyOnDay)
     setLongestTime(highestTime)
   }
 
   const displayDayData = (day: any[]) => {
+
+    /* If there are no tasks on that day display blank line */
     if ( day.length === 0 ) {
       return [0,1,2,3,4,5,6].map((data, index) => {
         return (
@@ -128,6 +132,7 @@ const StudyPlan = () => {
 
     if (!longestTime || longestTime < 1) return
 
+    /* Display tasks on specific day in GUI */
     let totalTime = 0
     day.forEach(data => totalTime += ((data.hours * 60 * 60) + (data.mins * 60)))
 

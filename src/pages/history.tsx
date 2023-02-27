@@ -100,8 +100,8 @@ function History() {
   const displayHistory = () => {
     if (!viewHistory || Object.keys(viewHistory).length === 0) {
       return (
-        <div className="text-sm center">
-          Start browsing the web and you will begin to see content appear here after you spend more than one minute on a website
+        <div className="">
+          Start browsing the web and you will begin to see content appear here...
         </div>
       );
     }

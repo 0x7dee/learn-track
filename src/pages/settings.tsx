@@ -19,7 +19,6 @@ const Settings = ({ isMember, setIsMember }: any) => {
     await chrome.storage.local.set({ links: null });
     await chrome.storage.local.set({ dates: {} })
     await chrome.storage.local.set({ viewHistory: {} })
-    await chrome.storage.local.set({ memberNumber: '' })
   }
 
   async function postData(url = '', data = {}) {
