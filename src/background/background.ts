@@ -18,6 +18,8 @@ chrome.alarms.create('urlTimer', {
 })
 
 chrome.alarms.onAlarm.addListener(async (alarm) => {
+    await setupData()
+
     let todaysDate = new Date();
     let todayString = todaysDate.toLocaleDateString()
 
@@ -49,15 +51,15 @@ chrome.storage.local.get('timer', (res) => {
 const updateHistory = async (lastTab: any, todayString: string) => {
     // ViewHistory
     if (!lastTab || !lastTab.tab.url) return
-    
+
+    let url: any = new URL(lastTab.tab.url)
     let getViewHistory = await chrome.storage.local.get('viewHistory')
     let viewHistory = getViewHistory.viewHistory
-    let url: any = new URL(lastTab.tab.url)
 
     if (["newtab", "extensions"].includes(url.hostname)) return 
     
     // If hostname doesn't exist in history add it
-    if (!viewHistory[url.hostname]) {
+    if (!viewHistory || !viewHistory[url.hostname]) {
         viewHistory = {...viewHistory, [url.hostname]: {totalTime: 1, timeThisWeek: 1, dates: { [todayString]: 1 }}}
     } else if (!viewHistory[url.hostname].dates[todayString]) {
         viewHistory[url.hostname].totalTime += 1
@@ -95,9 +97,6 @@ const resetAllTimeLapsed = async (links: any) => {
     }
 }
 
-// turn off autotrack when chrome is closed
-//chrome.windows.onRemoved.addListener(() => turnOffAllAutotracks())
-
 const updateLapsedTime = async (linkData: any, lastTab: any, memberNumber: string) => {
     if ( !linkData || linkData.includes(null) || !memberNumber ) return
 
@@ -119,7 +118,7 @@ const updateLapsedTime = async (linkData: any, lastTab: any, memberNumber: strin
     await chrome.storage.local.set({ currentDay: today })
 
     /* Add date if doesn't exist */
-    if ( !updatedDates[todayString] ) {
+    if ( !updatedDates || !updatedDates[todayString] ) {
         updatedDates = { ...updatedDates, [todayString]: {} }
         await chrome.storage.local.set({ dates: updatedDates })
     }
@@ -188,4 +187,23 @@ const updateTimeThisWeek = async () => {
     await chrome.storage.local.set({ 'viewHistory': viewHistory })
 }
 
+const setupData = async () => {
+    let dates = chrome.storage.local.get('dates')
+    let links = chrome.storage.local.get('links')
+    let viewHistory = chrome.storage.local.get('viewHistory')
+
+    if (!dates) {
+        await chrome.storage.local.set({'dates': {}})
+    }
+
+    if (!links) {
+        await chrome.storage.local.set({'links': []})
+    }
+
+    if (!viewHistory) {
+        await chrome.storage.local.set({'viewHistory': {}})
+    }
+
+    
+}
 

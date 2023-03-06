@@ -23,7 +23,12 @@ const StudyPlan = () => {
 
   const getDates = async () => {
     let getDates = await chrome.storage.local.get('dates')
-    setDates(getDates.dates)
+    if ( getDates.dates ){
+      setDates(getDates.dates)
+    } else {
+      setDates({})
+    }
+    
   }
 
   const getLinks = async () => {
@@ -111,7 +116,6 @@ const StudyPlan = () => {
       if (totalTime > highestTime) highestTime = totalTime
       totalTime = 0
     })
-    console.log(studyOnDay)
     setLongestTime(highestTime)
   }
 
@@ -188,6 +192,13 @@ const StudyPlan = () => {
 
     let hours = Math.ceil(Math.floor(longestTime / 60) / 60)
 
+    let primes = [ 2, 3, 5, 7, 11, 13, 17, 19, 23 ]
+    let inPrimes = primes.includes(hours)
+
+    if ( hours > 7 ) {
+      
+    }
+
     return Array.from(Array(hours+1).keys()).map((key, index) => {
       if ( key === 0 ) return <span key={`timeAxis${key}${index}`}>{ key }</span>
       return <span key={`timeAxis${index}${key}`} className=''>{ `${key}hr` }</span>
@@ -227,6 +238,7 @@ const StudyPlan = () => {
       }
     })
 
+    if (success + failure === 0) return
     return " - " + Math.floor(success / (success + failure) * 100) + "%"
 
   }
@@ -241,6 +253,7 @@ const StudyPlan = () => {
     let xIndex = 0
     let yIndex = 0
 
+    // Get the start date for the UI display and increment forward until present day
     return Array.from(Array(weeks*7).keys()).map((key) => {
       if ( xIndex > weeks-1 ) {
         xIndex = 0
@@ -258,7 +271,7 @@ const StudyPlan = () => {
       let numerator = 0
       let denominator = 0
 
-
+      // Determine how many tasks have been completed today (used for color coding progress)
       if (dates && currDate && dates[currDate.toLocaleDateString()]) {
         Object.keys(dates[currDate.toLocaleDateString()]).forEach(topic => {
           denominator++
@@ -273,6 +286,7 @@ const StudyPlan = () => {
           className={`col-span-1 row-span-1 
           ${ 
             daysAgo < 0 ? 'bg-white' : 
+            !dates[currDate.toLocaleDateString()] ? 'bg-slate-100' :
             completenessScore >= 1 ? 'bg-green-600' : 
             completenessScore >= 0.75 ? 'bg-green-500' : 
             completenessScore >= 0.5 ? 'bg-green-400' : 

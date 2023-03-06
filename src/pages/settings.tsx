@@ -16,7 +16,7 @@ const Settings = ({ isMember, setIsMember }: any) => {
   }, [])
 
   const clearData = async () => {
-    await chrome.storage.local.set({ links: null });
+    await chrome.storage.local.set({ links: [] });
     await chrome.storage.local.set({ dates: {} })
     await chrome.storage.local.set({ viewHistory: {} })
   }

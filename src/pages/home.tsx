@@ -145,43 +145,6 @@ function Home() {
     return title
   }
 
-  const getLinks = async () => {
-    let links = await chrome.storage.local.get('links')
-    console.log(links)
-  }
-
-  const getDates = async () => {
-    let dates = await chrome.storage.local.get('dates')
-    console.log(dates)
-  }
-  
-  const getViewHistory = async () => {
-    let viewHistory = await chrome.storage.local.get('viewHistory')
-    console.log(viewHistory)
-  }
-
-  const clearViewHistory = async () => {
-    await chrome.storage.local.set({'viewHistory': {}})
-  }
-
-  const setDummyData = async () => {
-    
-    let getDates = await chrome.storage.local.get('dates')
-    getDates.dates['08/09/2022'] = { "a": true } 
-    getDates.dates['09/09/2022'] = { "a": false, "b": true }
-    getDates.dates['11/09/2022'] = { "a": false, "b": false, "c": true }
-
-    await chrome.storage.local.set({ dates: getDates.dates })
-  } 
-
-  const clearDates = async () => {
-    await chrome.storage.local.set({dates: {}})
-  }
-
-  const clearLinks = async () => {
-    await chrome.storage.local.set({links: []})
-  }
-
   const toggleAutotrackOff = async (title: any) => {
 
     let linkData: any = await chrome.storage.local.get('links')
@@ -317,20 +280,6 @@ function Home() {
           { displayPage() }
         </div>
       </div>
-      
-      
-      {/* 
-      <button onClick={() => getViewHistory()}>Get History</button><br />
-      <button onClick={() => getLinks()}>Get Links</button><br />
-      <button onClick={() => clearLinks()}>Clear Links</button><br />
-      
-      <button onClick={() => clearViewHistory()}>Clear History</button><br />
-      
-      <button onClick={() => getDates()}>Get Dates</button>
-       
-      <button onClick={() => setDummyData()}>Set Dummy Data</button>
-      <button onClick={() => deleteData()}>Delete Data</button>
-      */}
     </div>
   );
 }
