@@ -192,14 +192,24 @@ const StudyPlan = () => {
 
     let hours = Math.ceil(Math.floor(longestTime / 60) / 60)
 
-    let primes = [ 2, 3, 5, 7, 11, 13, 17, 19, 23 ]
+    let primes = [ 11, 13, 17, 19, 23 ]
     let inPrimes = primes.includes(hours)
 
+    let hoursArray = [...Array(hours+1).keys()]
+    
     if ( hours > 7 ) {
-      
+      if ( hours % 2 === 0 ) {
+        hoursArray = hoursArray.filter(x => {
+          return x % 2 === 0 || x === 0 || x === hours
+        })
+      } else {
+        hoursArray = hoursArray.filter(x => {
+          return x % 2 === 1 || x === 0 || x === hours
+        })
+      }
     }
 
-    return Array.from(Array(hours+1).keys()).map((key, index) => {
+    return hoursArray.map((key, index) => {
       if ( key === 0 ) return <span key={`timeAxis${key}${index}`}>{ key }</span>
       return <span key={`timeAxis${index}${key}`} className=''>{ `${key}hr` }</span>
     })
@@ -268,16 +278,16 @@ const StudyPlan = () => {
 
       let completenessScore = 0
 
-      let numerator = 0
-      let denominator = 0
+      let completedTasksInDay = 0
+      let totalTasksInDay = 0
 
       // Determine how many tasks have been completed today (used for color coding progress)
       if (dates && currDate && dates[currDate.toLocaleDateString()]) {
         Object.keys(dates[currDate.toLocaleDateString()]).forEach(topic => {
-          denominator++
-          if ( dates[currDate.toLocaleDateString()][topic] ) numerator++
+          totalTasksInDay++
+          if ( dates[currDate.toLocaleDateString()][topic] ) completedTasksInDay++
         })
-        completenessScore = numerator / denominator
+        completenessScore = completedTasksInDay / totalTasksInDay
       }
 
       return (

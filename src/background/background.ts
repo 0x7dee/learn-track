@@ -127,7 +127,7 @@ const updateLapsedTime = async (linkData: any, lastTab: any, memberNumber: strin
     let urlFound = false // we only want one increment per second
     /* Loop over links and update time */
     linkData.forEach(async (link: { urls: any[], title: string, autotrack: string }, index: number) => {
-        let timeLeft = linkData[index].timeLapsed <= linkData[index].time
+        let timeLeft = linkData[index].timeLapsed < linkData[index].time
         let isStudyDay = linkData[index].days[today]
 
         /* Add task to today value in dates if it is not already there */

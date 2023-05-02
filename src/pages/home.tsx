@@ -18,13 +18,13 @@ function Home() {
   const [link, setSelectedLink]: any = useState({})
   const [editMode, setEditMode] = useState(false)
   const [onlyShowToday, setOnlyShowToday] = useState(true)
-  const [isMember, setIsMember] = useState(false)
+  //const [isMember, setIsMember] = useState(false)
   const [currTab, setCurrTab] = useState('')
 
   useEffect(() => {
     setCurrentTab()
     updateLinks()
-    checkIfMember()
+    //checkIfMember()
 
     if (loading) {
       setLoading(false)
@@ -44,10 +44,12 @@ function Home() {
     
   }, [existingLinks])
 
+  /*
   const checkIfMember = async () => {
     let number = await chrome.storage.local.get('memberNumber')
     if (number.memberNumber) setIsMember(true)
   }
+  */
 
   const setCurrentTab = async () => {
     let tab: any = await getCurrentTab()
@@ -124,7 +126,7 @@ function Home() {
   }
 
   const displayLinkToggle = () => {
-    if ( currentPage === 'home' && isMember ) {
+    if ( currentPage === 'home' ) {
       return (
         <div className="displayPage__toggle mb-6 flex flex-row items-center w-full">
           <p onClick={ () => setOnlyShowToday(true) } className={`mr-2 cursor-pointer ${ onlyShowToday ? 'text-black' : 'text-slate-400' }`}>Today</p>
@@ -160,7 +162,7 @@ function Home() {
 
   const displayPage = () => {
     
-    if (!isMember && !['settings'].includes(currentPage)) return <ProPlan />
+    //if (!isMember && !['settings'].includes(currentPage)) return <ProPlan />
     
     if ( loading ) {
       return <p>Loading...</p>
@@ -170,7 +172,7 @@ function Home() {
 
     if (currentPage === 'history' ) return <History />
 
-    if ( currentPage === 'settings' ) return <Settings isMember={isMember} setIsMember={setIsMember} />
+    if ( currentPage === 'settings' ) return <Settings />
 
     if ( currentPage === 'proPlan' ) return <ProPlan />
     
