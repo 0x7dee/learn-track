@@ -111,12 +111,11 @@ const NewTracker: any = ({ link, editMode }: any) => {
   }
 
   const validateLink = async (link: any, links: any) => {
-
     let { title, urls, days, time, timeLapsed } = link;
     let errors: string[] = [];
 
     /* Check if title already exists */
-    if (!editMode && links) {
+    if (!editMode) {
       await links.map((link: { title: string; }) => {
         if (link.title == title) errors.push("title already exists")
       })
@@ -133,8 +132,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
 
     /* Check time, timeElapsed exists */
     if ( !time ) errors.push("Time must not be empty")
-    if ( time < 60 || timeLapsed !== 0 ) errors.push("Time must be at least 1 minute")
-    if ( time > (60 * 60 * 24) ) errors.push("Can't set more than 24 hours in a day")
+    if ( time < 1 || timeLapsed !== 0 ) errors.push("Time must be greater than 1")
 
     if ( errors.length > 0 ) {
       setErrors(errors)
@@ -178,12 +176,10 @@ const NewTracker: any = ({ link, editMode }: any) => {
 
     const existingLinks: any = await chrome.storage.local.get("links");
 
-    let linkIsValid = await validateLink(newLink, existingLinks.links)
-    if ( !linkIsValid ) return
-
     /* If array already exists then add the new link */
     if ( existingLinks && Array.isArray(existingLinks.links) && existingLinks.links.length > 0 ) {
-      
+      let linkIsValid = await validateLink(newLink, existingLinks.links)
+      if ( !linkIsValid ) return
 
       if ( existingLinks.links.length > 0 ) {
         if ( editMode ) {
@@ -261,7 +257,7 @@ const NewTracker: any = ({ link, editMode }: any) => {
           <br />
           <input 
               className='h-8 w-full border border-neutral-200 rounded-md pl-2 pr-2 focus:border-sky-300 focus:outline-none'
-              placeholder="Pick a name for your new task..." 
+              placeholder="Pick a name for your new link..." 
               type="text" 
               maxLength={18}
               value={title} 

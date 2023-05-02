@@ -16,10 +16,17 @@ const Settings = ({ isMember, setIsMember }: any) => {
   }, []);
 
   const clearData = async () => {
+<<<<<<< HEAD
     await chrome.storage.local.set({ links: [] });
     await chrome.storage.local.set({ dates: {} });
     await chrome.storage.local.set({ viewHistory: {} });
   };
+=======
+    await chrome.storage.local.set({ links: null });
+    await chrome.storage.local.set({ dates: {} })
+    await chrome.storage.local.set({ viewHistory: {} })
+  }
+>>>>>>> parent of 116130b (minor bug fixes)
 
   async function postData(url = "", data = {}) {
     // Default options are marked with *
