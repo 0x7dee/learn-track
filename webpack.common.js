@@ -13,7 +13,6 @@ module.exports = {
         home: path.resolve('src/pages/home.tsx'),
         newTracker: path.resolve('src/pages/newTracker.tsx'),
         tracker: path.resolve('src/pages/tracker.tsx'),
-        proPlan: path.resolve('src/pages/proPlan.tsx'),
         studyPlan: path.resolve('src/pages/studyPlan.tsx'),
         history: path.resolve('src/pages/history.tsx'),
         help: path.resolve('src/pages/help.tsx')
@@ -53,7 +52,6 @@ module.exports = {
             'home',
             'newTracker',
             'tracker',
-            'proPlan',
             'studyPlan',
             'history',
             'help'
