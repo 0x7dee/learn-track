@@ -60,7 +60,6 @@ const Settings = () => {
     if (!e.target.files) return;
 
     let parsedFile: any = await parseJsonFile(e.target.files[0]);
-    console.log(parsedFile);
 
     if (parsedFile.dates)
       await chrome.storage.local.set({ dates: parsedFile.dates });
