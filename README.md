@@ -1,3 +1,9 @@
+# LearnTrack
+Chrome extension designed to improve time management and productivity. 
+
+https://learntrack.co 
+
+
 # React Chrome Extension Boilerplate
 
 ## Getting Started
