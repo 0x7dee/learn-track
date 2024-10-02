@@ -1,10 +1,8 @@
 # LearnTrack
-Chrome extension designed to improve time management and productivity. 
 
-https://learntrack.co 
+LearnTrack is a chrome extension that helps you stay organized by tracking your daily tasks and the time spent on each. It monitors which websites you spend time on and shows you how your time is distributed. You can also track your progress by viewing completed tasks over time in your study plan.
 
-
-# React Chrome Extension Boilerplate
+Learntrack was originally hosted on the chrome webstore but has since be removed due to a lack of time to work on the project. I'm leaving it on Github for the benefit of those who would like to use it or would like to continue to develop it.
 
 ## Getting Started
 
